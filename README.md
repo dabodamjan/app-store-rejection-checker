@@ -3,8 +3,9 @@
 # app-store-rejection-checker
 
 A Claude Code skill that audits your iOS or iPadOS app before App Store submission
-and tells you what is likely to get rejected: the guideline number, the evidence it
-found in your repo, a concrete fix, and an honest confidence level.
+and tells you what is likely to get rejected: the guideline number (or the upload
+validation it trips), the evidence it found in your repo, a concrete fix, and an
+honest confidence level.
 
 - **Live guidelines, not a frozen rule list.** Every audit starts by fetching the
   current App Store Review Guidelines from Apple's site.
@@ -63,7 +64,8 @@ a Claude Code plugin, the skill loads namespaced as
 
 ## Example finding
 
-Every finding in the report looks like this:
+Every finding in the report looks like this, headed by the guideline number it
+cites (or the upload validation it trips):
 
 ```
 ### [5.1.1(v)] Account creation without in-app account deletion
