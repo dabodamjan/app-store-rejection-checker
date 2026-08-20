@@ -32,20 +32,27 @@ Non-negotiable output rules:
 Do this before running any checklist.
 
 Fetch https://developer.apple.com/app-store/review/guidelines/ with WebFetch. The page is
-long and fetch results may truncate near the end (section 5.4 and later), so fetch it
-more than once with targeted prompts:
+long and fetch results may truncate near the end (section 5.4 and later). Fetch results
+are typically cached per URL, so fetching again retrieves the same snapshot; what a
+targeted prompt changes is which part of that snapshot gets extracted. Use targeted
+prompts to pull each area out of the snapshot:
 
 1. Sections 1 and 2 (Safety, Performance): ask for the subsection structure and any
    wording relevant to the app under audit.
 2. Sections 3 and 4 (Business, Design): same.
-3. Section 5 (Legal): same. If the result cuts off before 5.4, note in the report that
-   the tail of the live text could not be confirmed this run.
+3. Section 5 (Legal): same. If the result cuts off before 5.4, re-prompting will not
+   recover text beyond the truncation point. Fall back to a web search for the
+   specific subsection wording, label it a secondary source in the report, and note
+   that the tail of the live text could not be confirmed this run.
 
 Then check https://developer.apple.com/news/ for review-related announcements newer than
 the reference files (they were last verified against the live text on 2026-08-20). Pay
 attention to anything touching payments, privacy, age ratings, or AI, since those moved
 repeatedly in 2024-2026; [references/recent-changes.md](references/recent-changes.md)
-lists the changes already covered. This news check is a headline scan, not exhaustive:
+lists the changes already covered. When a headline plausibly applies to the app under
+audit, fetch the announcement and assess its applicability like any other check;
+headlines that do not apply get one line in the verification note, nothing more. This
+news check is a headline scan, not exhaustive:
 Apple also updates auxiliary policy pages that the news feed does not always announce.
 When a finding depends on one of these surfaces, fetch the relevant page too:
 
@@ -54,6 +61,13 @@ When a finding depends on one of these surfaces, fetch the relevant page too:
 - Age ratings: developer.apple.com/help/app-store-connect/reference/age-ratings/
 - Required-reason APIs:
   developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api
+
+Pages under developer.apple.com/documentation/ are rendered client-side; a plain fetch
+often returns an empty shell. When that happens, fall back to a web search for the
+specific fact, corroborated by a primary source (an Apple page that does fetch, or an
+Apple staff answer in the developer forums), and label it a secondary source. If no
+corroboration is found, say the fact could not be verified this run instead of citing
+memory.
 
 While auditing, whenever a finding rests on exact guideline wording, quote the wording
 from the live fetch, not from memory and not from the reference files.
@@ -75,11 +89,16 @@ Classify the app: does it have accounts, payments, subscriptions, UGC, chat or A
 features, web content, kids targeting, health/medical/finance/gambling/VPN exposure?
 The classification decides which checks below are load-bearing.
 
+If the project also builds for other platforms (macOS, watchOS, visionOS, tvOS
+targets, or shared entitlements carrying their keys), state in the report that only
+the iOS/iPadOS surface is audited and the other platforms are out of scope.
+
 If App Store Connect metadata is not in the repo, ask the user to paste the app name,
 subtitle, description, keywords, age rating, screenshots description, and the App Review
 Information fields (notes and demo account). The metadata checks are real rejection
-surfaces; skipping them silently would understate risk. If the user declines, mark those
-checks "not audited" in the report.
+surfaces; skipping them silently would understate risk. If the user declines, or there
+is no user to ask (a non-interactive or CI run), mark those checks "not audited" in the
+report and continue. Never invent metadata to audit.
 
 ## Step 3: static checks
 
@@ -98,6 +117,7 @@ mechanically verifiable surface:
   subscription disclosure, loot box odds.
 - Account deletion path when account creation exists.
 - App Tracking Transparency wiring vs tracking SDKs.
+- Analytics consent: analytics SDKs initialized collection-on with no consent flow.
 - Third-party AI data flows: personal data shared with third-party LLM or ML APIs
   without disclosure and consent wiring.
 - Web-wrapper fingerprints (guideline 4.2).
@@ -124,7 +144,7 @@ This is the part a linter cannot do. Read the code and the copy, then judge:
   third-party AI service (an external LLM or ML API), verify the app discloses this
   and obtains explicit permission before doing so, and that the privacy labels and
   privacy policy cover it. First-party or on-device processing, and flows that carry
-  no personal data, are not automatic 5.1.2(i) triggers — but judge whether the
+  no personal data, are not automatic 5.1.2(i) triggers, but judge whether the
   content sent could contain personal data in practice, and say which side of the
   line the app falls on.
 - **Review notes and demo account quality**: judge them against the checklist in
@@ -153,7 +173,11 @@ Produce the report as markdown. Structure:
 
 1. **Summary**: app classification, overall risk picture in two or three sentences, the
    top three findings.
-2. **Findings**, ordered by severity then confidence. Each finding:
+2. **Findings**, ordered by severity then confidence. Severity means likely rejection
+   impact: how likely the finding, shipped as-is, is to block approval or force a
+   resubmission. It is not the taxonomy file's cluster ranking, which reflects
+   frequency; a rare special-category miss outranks a frequent metadata nit. Each
+   finding:
 
    ```
    ### [guideline number] short title
@@ -169,12 +193,17 @@ Produce the report as markdown. Structure:
      linked API, or a missing required-reason declaration), **and** the evidence
      reflects what actually ships: an archive, `.app`, or `.ipa`, or target-resolved
      build settings for the shipping target. Source or lockfile evidence alone never
-     reaches this level — conditional compilation, unused targets, files excluded
+     reaches this level: conditional compilation, unused targets, files excluded
      from the shipping target, and packaging-time manifests can all make it false.
-     Cap such findings at review-risk with an explicit "needs build verification"
-     note.
+     In a pre-submission repo audit with no built product, expect this level to go
+     unused; that is correct, not a gap.
    - **review-risk**: a pattern human reviewers reject frequently, backed by the
      taxonomy file or the live guideline text; not mechanical, but well evidenced.
+     When the issue would be mechanically blocked by upload validation if shipped
+     as-is but the evidence is source or lockfile only, mark the sub-form explicitly:
+     `review-risk (validator-blocking if shipped as-is; needs build verification)`.
+     This keeps a genuinely missing purpose string triageable apart from soft
+     judgment-adjacent patterns in the same bucket.
    - **judgment-call**: a semantic assessment (differentiation, metadata accuracy,
      copy quality) where a reasonable reviewer could go either way.
 

@@ -8,10 +8,10 @@ Evidence standard for **validator-certain** (defined in SKILL.md Step 6): the up
 validators run against the built product, not the repository. Conditional compilation,
 unused targets, files excluded from the shipping target, and packaging-time manifests
 can all make source or lockfile evidence wrong about what ships. So a finding reaches
-validator-certain only when the evidence reflects the merged shipping target — an
+validator-certain only when the evidence reflects the merged shipping target: an
 archive, `.app`, or `.ipa`, or build settings resolved for that target. From source and
-lockfiles alone, report the same finding as review-risk with an explicit "needs build
-verification" note.
+lockfiles alone, report the same finding with the marked sub-form from SKILL.md Step 6:
+`review-risk (validator-blocking if shipped as-is; needs build verification)`.
 
 Contents:
 
@@ -23,9 +23,10 @@ Contents:
 6. [Payments and IAP wiring (3.1.x)](#6-payments-and-iap-wiring-31x)
 7. [Account deletion (5.1.1(v))](#7-account-deletion-511v)
 8. [App Tracking Transparency (5.1.2(i))](#8-app-tracking-transparency-512i)
-9. [Third-party AI data flows (5.1.2(i))](#9-third-party-ai-data-flows-512i)
-10. [Web-wrapper fingerprints (4.2)](#10-web-wrapper-fingerprints-42)
-11. [Dynamic code and deprecated APIs](#11-dynamic-code-and-deprecated-apis)
+9. [Analytics consent (5.1.1(ii))](#9-analytics-consent-511ii)
+10. [Third-party AI data flows (5.1.2(i))](#10-third-party-ai-data-flows-512i)
+11. [Web-wrapper fingerprints (4.2)](#11-web-wrapper-fingerprints-42)
+12. [Dynamic code and deprecated APIs](#12-dynamic-code-and-deprecated-apis)
 
 ## 1. Permission purpose strings
 
@@ -49,9 +50,9 @@ the string must explain the actual use.
 | `NSCameraUsageDescription` | `AVCaptureDevice`, `UIImagePickerController` (camera source), AVFoundation capture |
 | `NSMicrophoneUsageDescription` | `AVAudioSession` recording, `AVCaptureDevice` audio |
 | `NSLocationWhenInUseUsageDescription`, `NSLocationAlwaysAndWhenInUseUsageDescription` | CoreLocation, `CLLocationManager` |
-| `NSPhotoLibraryUsageDescription` (read), `NSPhotoLibraryAddUsageDescription` (write-only) | direct PhotoKit library access: `PHPhotoLibrary`, `PHAsset` fetches — but **not** `PHPickerViewController` (see note below) |
+| `NSPhotoLibraryUsageDescription` (read), `NSPhotoLibraryAddUsageDescription` (write-only) | direct PhotoKit library access: `PHPhotoLibrary`, `PHAsset` fetches, but **not** `PHPickerViewController` (see note below) |
 | `NSContactsUsageDescription` | Contacts, ContactsUI |
-| `NSUserTrackingUsageDescription` | AppTrackingTransparency, `ATTrackingManager.requestTrackingAuthorization`, SDKs configured to use the IDFA (SDK presence alone is not proof — check the configuration) |
+| `NSUserTrackingUsageDescription` | AppTrackingTransparency, `ATTrackingManager.requestTrackingAuthorization`, SDKs configured to use the IDFA (SDK presence alone is not proof; check the configuration) |
 | `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription` | HealthKit, `HKHealthStore` |
 | `NSBluetoothAlwaysUsageDescription` | CoreBluetooth, `CBCentralManager`, `CBPeripheralManager` |
 | `NSFaceIDUsageDescription` | LocalAuthentication with Face ID biometry |
@@ -96,18 +97,27 @@ Required-reason API categories and their triggers:
 
 Checks:
 
-1. Any category's API used (in app code or a linked SDK) but not declared in
-   `NSPrivacyAccessedAPITypes`: upload will be flagged (missing API declaration).
+1. Any category's API used but not declared in `NSPrivacyAccessedAPITypes`: upload
+   will be flagged (missing API declaration). Scan the app's own source and any
+   dependency source actually present in the repo (vendored SDKs, checked-in package
+   sources). Linked SDKs usually cannot be scanned from a bare repository: SPM
+   checkouts live in DerivedData, and CocoaPods sources may not be committed. For
+   those, the check falls to Xcode's archive upload validation; say so in the
+   report's "Not checked" section rather than implying the SDK half was scanned.
 2. Reason codes: do not validate codes from memory. Fetch the current approved list
    from Apple's "Describing use of required reason API" page
    (developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api
    and its per-category subpages) and check declared codes against it. Examples of
-   currently valid codes: `C56D.1` (UserDefaults), `35F9.1` (SystemBootTime).
+   currently valid codes: `C56D.1` (UserDefaults), `35F9.1` (SystemBootTime). These
+   pages are rendered client-side, so a plain fetch may return an empty shell. When
+   it does, fall back to a web search for the code, corroborated by a primary source
+   (an Apple page or an Apple staff forum answer); if no corroboration is found,
+   state in the report that declared reason codes were not validated this run.
 3. Third-party SDKs on Apple's commonly-used-SDKs list must ship their own privacy
    manifest, and the **signature** requirement applies to SDKs added as binary
    dependencies (XCFrameworks), not to those compiled from source. A lockfile entry
    names the dependency but proves nothing about what manifest or signature ends up in
-   the bundle — treat it as a prompt to inspect the resolved artifact (the checked-out
+   the bundle; treat it as a prompt to inspect the resolved artifact (the checked-out
    package or downloaded XCFramework, or the built app), not as evidence in itself.
    The list is linked from the same Apple page.
 4. `NSPrivacyTracking` true with empty `NSPrivacyTrackingDomains`, or tracking SDKs
@@ -125,8 +135,14 @@ Read `*.entitlements` and, when a built product is available,
   (`registerForRemoteNotifications`, `UNUserNotificationCenter`), or push code present
   with no entitlement: the latter is flagged by upload validation ("Missing Push
   Notification Entitlement").
-- App group, iCloud, or Sign in with Apple entitlements that the code never uses:
-  cleanup findings, low severity.
+- Entitlements that the code never justifies: cleanup findings, low severity. Common
+  examples, not an exhaustive list: app groups, iCloud, Sign in with Apple, `siri`
+  (justified by SiriKit or App Intents adoption), App Attest. Apply the same
+  present-vs-used comparison to any entitlement key found.
+- Shared entitlements files in multi-platform projects can carry keys for another
+  platform (macOS sandbox keys are the common case). Attribute keys to the right
+  target before flagging them, and remember other platforms are out of scope for
+  this audit (SKILL.md Step 2).
 
 ## 4. Login services (4.8)
 
@@ -208,31 +224,56 @@ Static signals:
 - Ad, attribution, or analytics SDKs configured to use the IDFA with no
   `ATTrackingManager.requestTrackingAuthorization` call and no
   `NSUserTrackingUsageDescription`: review-risk needing build verification. Apple
-  documents the key as required when the ATT API is called — calling without it risks
-  a runtime crash — but a linked SDK's API reference alone is not a deterministic
-  upload block, so the missing key stays review-risk rather than validator-certain.
+  documents the key as required when the ATT API is called, but a linked SDK's API
+  reference alone is not a deterministic upload block, so the missing key stays
+  review-risk rather than validator-certain.
   SDK presence alone is not proof of tracking; check whether the SDK is actually
   configured to use the IDFA.
 - Tracking initialized before the ATT prompt result is known: review-risk.
 - Gating app functionality or rewards on enabling tracking (or push or location):
   prohibited; judgment on the flow, evidence from code.
 
-## 9. Third-party AI data flows (5.1.2(i))
+## 9. Analytics consent (5.1.1(ii))
+
+Live text: "Apps that collect user or usage data must secure user consent for the
+collection, even if such data is considered to be anonymous at the time of or
+immediately following collection." The same subsection requires "an easily accessible
+and understandable way to withdraw consent."
+
+Distinct from section 8: ATT governs cross-app tracking via the IDFA; 5.1.1(ii)
+covers plain analytics collection with no IDFA involved, which is why an app can
+pass every ATT check and still fail here. The common indie-app shape is an analytics
+SDK that starts collecting at launch with no consent step. Static signals, each
+verifiable from source:
+
+- An analytics SDK initialized with collection on by default (Firebase Analytics,
+  Mixpanel, Amplitude, PostHog, or similar), and
+- no consent gate on the init or send path (no stored consent flag checked before
+  initializing the SDK or sending events), and
+- no consent surface in onboarding or first-run UI.
+
+All three together: **review-risk**. Aggravating signal worth its own line in the
+finding: a settings toggle whose stored default says analytics are off while the SDK
+is already collecting, which misreports the actual behavior to the user. Also check
+withdrawal: a consent flow with no way to turn collection off afterwards is still
+incomplete under the same subsection.
+
+## 10. Third-party AI data flows (5.1.2(i))
 
 Live text (added November 2025): "You must clearly disclose where personal data will be
 shared with third parties, including with third-party AI, and obtain explicit
 permission before doing so."
 
 The third-party-AI sentence triggers on **personal data shared with a third-party AI
-service** — not any user content sent to any LLM. But 5.1.2(i) is broader than that
+service**, not any user content sent to any LLM. But 5.1.2(i) is broader than that
 sentence: its opening line bars using, transmitting, or sharing personal data without
 permission, so first-party or self-hosted model processing of personal data still
-needs consent and privacy-policy coverage under the same guideline — it just isn't a
+needs consent and privacy-policy coverage under the same guideline; it just isn't a
 third-party-sharing finding. Flows whose input carries no personal data fall outside
 5.1.2(i); judge, don't auto-flag. Static signals:
 third-party AI API clients or endpoints in code (api.openai.com, api.anthropic.com,
 generativelanguage.googleapis.com, openrouter.ai, and similar, or their SDKs) carrying
-data that identifies or relates to the user — free-form user text, photos, audio,
+data that identifies or relates to the user: free-form user text, photos, audio,
 health data, contacts. For those flows verify: is the sharing disclosed in-app before
 it happens, is there an explicit consent step, and do the privacy policy and App Store
 privacy labels cover it? Absent consent flow: **review-risk**, rising, since the
@@ -242,7 +283,7 @@ If AI features can produce sensitive content, also check the age rating answer s
 (see metadata-and-review-notes.md): the questionnaire asks about AI assistant and
 chatbot impact on sensitive-content frequency.
 
-## 10. Web-wrapper fingerprints (4.2)
+## 11. Web-wrapper fingerprints (4.2)
 
 Guideline 4.2: the app should include "features, content, and UI that elevate it beyond
 a repackaged website." The recurring rejection sentence developers report is that the
@@ -259,7 +300,7 @@ A full fingerprint is a strong **review-risk**; report which native capabilities
 and which are missing so the fix is actionable. The judgment side (is the native layer
 substantial enough) belongs to the semantic pass.
 
-## 11. Dynamic code and deprecated APIs
+## 12. Dynamic code and deprecated APIs
 
 - **2.5.2**: apps may not download, install, or execute code that introduces or changes
   features, including other apps. Flags: hot-patching frameworks, `dlopen` on
@@ -270,7 +311,7 @@ substantial enough) belongs to the semantic pass.
   governed by 4.7 and its conditions, not exempted by being web-delivered.
 - **UIWebView**: Apple stopped accepting apps containing UIWebView references; a
   reference in the submitted binary blocks upload (ITMS-90809). Only the binary is
-  determinative — a match in source or an old dependency is review-risk needing build
+  determinative: a match in source or an old dependency is review-risk needing build
   verification (the code may not compile into the shipping target), while a reference
   confirmed in the built product is validator-certain. Replace with `WKWebView`.
 - **Private API use**: symbols from private frameworks or selector-string obfuscation

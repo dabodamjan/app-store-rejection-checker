@@ -34,7 +34,7 @@ services: an app sending personal data to an external LLM or ML API needs a
 disclosed, consented data flow plus matching privacy labels and policy. First-party
 processing and non-personal input are not automatic triggers, but the line deserves a
 look in any AI-integrated app. New wording, enforcement still maturing. Check
-procedure: static-checks.md section 9.
+procedure: static-checks.md section 10.
 
 ## Age rating overhaul (2025, deadline January 2026)
 
@@ -48,7 +48,7 @@ functionality" affect the frequency of sensitive content. Note when auditing ans
 Messaging and Chat, User-Generated Content, and Social Media are three **separate**
 capabilities in the questionnaire (direct user-to-user communication; broad
 distribution of user-created content; redistribution or amplification through a
-social feed) — a chat feature without a UGC declaration is not automatically a
+social feed); a chat feature without a UGC declaration is not automatically a
 mismatch. Sources: developer.apple.com/news/?id=ks775ehf and
 developer.apple.com/help/app-store-connect/reference/age-ratings/. Audit angle:
 rating answers vs actual features (metadata-and-review-notes.md).
@@ -79,7 +79,7 @@ compliance surfaces for EU-distributed apps:
   services in apps distributed via alternative marketplaces or Web Distribution. The
   EUR 10M global / EUR 1M lifetime EU waiver is narrow: it applies only to qualifying
   small **marketplace operators**, and only to the fees their own marketplace app
-  charges (download price or subscription to access the marketplace) — not to
+  charges (download price or subscription to access the marketplace), not to
   alternative-distribution sales generally.
 - Kids Category apps cannot offer out-of-app purchase links, and purchase flows using
   alternative payment must sit behind a parental gate; for under-13 users (age varies
@@ -89,7 +89,7 @@ compliance surfaces for EU-distributed apps:
   rejection surface from App Review.
 - From October 1, 2026, a legal entity or establishment in the EU is no longer
   required to operate an alternative app marketplace or use Web Distribution
-  (eligibility criteria still apply — financial-stability or scale bars per the
+  (eligibility criteria still apply: financial-stability or scale bars per the
   linked page). This is scoped to those two distribution channels, not a general
   App Store change.
 
