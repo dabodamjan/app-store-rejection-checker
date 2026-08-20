@@ -252,11 +252,25 @@ verifiable from source:
   initializing the SDK or sending events), and
 - no consent surface in onboarding or first-run UI.
 
-All three together: **review-risk**. Aggravating signal worth its own line in the
-finding: a settings toggle whose stored default says analytics are off while the SDK
-is already collecting, which misreports the actual behavior to the user. Also check
-withdrawal: a consent flow with no way to turn collection off afterwards is still
-incomplete under the same subsection.
+Calibration: collection on by default with a Settings opt-out is extremely common in
+shipping apps, and Apple rarely enforces this sentence against anonymous first-party
+analytics; enforcement attention goes to ATT and IDFA tracking (section 8). So all
+three signals together land at **judgment-call** by default: the guideline text is
+real and the finding is worth reporting, but a default review-risk rating here would
+flag most real apps. Raise to review-risk only with aggravating factors: the
+analytics carry sensitive or identifying data, the privacy labels or policy claim no
+collection happens, or the UI misrepresents the actual behavior to the user.
+
+That misrepresentation signal needs verification before it can be claimed. A
+settings toggle that reads as off while the SDK collects is a misreport only if the
+stored default the toggle actually reads is false. Before concluding that, check
+`register(defaults:)` calls (often in an analytics manager's initializer), defaulted
+property wrappers such as `@AppStorage` with a default value, and SDK-side defaults.
+A `bool(forKey:)` read that falls back to false is not evidence on its own;
+registered defaults commonly set the key to true, in which case the toggle agrees
+with the SDK. Also check withdrawal regardless of rating: the withdraw-consent
+sentence still binds, and a consent or opt-out surface with no way to turn
+collection off afterwards is incomplete under the same subsection.
 
 ## 10. Third-party AI data flows (5.1.2(i))
 
