@@ -260,11 +260,14 @@ verifiable from source:
 - no consent surface in onboarding or first-run UI.
 
 Calibration: first check for a declared lawful basis. The exception quoted above
-means an app that declares it collects analytics under legitimate interest per GDPR
-or a similar statute (typically stated in its privacy policy) is not violating the
-consent sentence at all; with such a declaration, do not report consentless
-collection as a finding, beyond a note if the declaration looks inconsistent with
-the actual data flows. Absent a declared basis: collection on by default with a
+conditions on complying "with all terms of that law", and this audit cannot
+adjudicate GDPR compliance. So a declaration of legitimate interest per GDPR or a
+similar statute (typically stated in the privacy policy) moves the finding out of
+missing-consent territory but never earns a silent pass: still note the declared
+basis in the report, state that its GDPR compliance was not and cannot be verified
+here, and flag any inconsistency between the declared basis and the actual data
+flows (for example, a policy declaring legitimate-interest analytics while the SDK
+sends identifying or sensitive events). Absent a declared basis: collection on by default with a
 Settings opt-out is extremely common in shipping apps, and Apple rarely enforces
 this sentence against anonymous first-party analytics; enforcement attention goes to
 ATT and IDFA tracking (section 8). So all three signals together land at
@@ -281,9 +284,13 @@ stored default the toggle actually reads is false. Before concluding that, check
 property wrappers such as `@AppStorage` with a default value, and SDK-side defaults.
 A `bool(forKey:)` read that falls back to false is not evidence on its own;
 registered defaults commonly set the key to true, in which case the toggle agrees
-with the SDK. Also check withdrawal regardless of rating: the withdraw-consent
-sentence still binds, and a consent or opt-out surface with no way to turn
-collection off afterwards is incomplete under the same subsection.
+with the SDK. Also check withdrawal, scoped to the basis of collection: where the
+app collects on the strength of consent, the withdraw-consent sentence binds
+regardless of the finding's rating, and a consent or opt-out surface with no way to
+turn collection off afterwards is incomplete under the same subsection. Under a
+declared no-consent lawful basis there is no consent to withdraw; the equivalent
+check is whether the app honors the opt-out or objection mechanism its own privacy
+policy describes.
 
 ## 10. Third-party AI data flows (5.1.2(i))
 

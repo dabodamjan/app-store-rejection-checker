@@ -187,7 +187,8 @@ Produce the report as markdown. Structure:
    ### [guideline number] short title
    Confidence: validator-certain | review-risk | judgment-call
    Evidence: what was found, with file paths or metadata fields
-   Why it matters: one or two sentences, citing the live guideline text
+   Why it matters: one or two sentences, citing the live guideline text (or, for a
+   section the live fetch truncated, the labeled secondary source per rule 4)
    Fix: the concrete change to make
    ```
 
@@ -221,5 +222,8 @@ Produce the report as markdown. Structure:
    anything driven by remote configuration. Never imply these were verified.
 4. **Verification note**: state that guideline citations were checked against the live
    guidelines during this run, and list any section the live fetch could not confirm.
+   For each such section, say whether any finding quotes search-derived wording
+   instead, labeled as a secondary source; that labeled quote is acceptable only for
+   the truncated sections, per rule 4.
 
 Do not pad the report. A clean area gets one line ("no findings in X"), not a section.
