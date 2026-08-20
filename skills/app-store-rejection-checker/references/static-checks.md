@@ -11,7 +11,8 @@ can all make source or lockfile evidence wrong about what ships. So a finding re
 validator-certain only when the evidence reflects the merged shipping target: an
 archive, `.app`, or `.ipa`, or build settings resolved for that target. From source and
 lockfiles alone, report the same finding with the marked sub-form from SKILL.md Step 6:
-`review-risk (validator-blocking if shipped as-is; needs build verification)`.
+`review-risk (validator-blocking if shipped as-is; needs build verification)`. The
+sub-form is the review-risk level with a qualifier, not a fourth confidence level.
 
 Contents:
 
@@ -138,7 +139,10 @@ Read `*.entitlements` and, when a built product is available,
 - Entitlements that the code never justifies: cleanup findings, low severity. Common
   examples, not an exhaustive list: app groups, iCloud, Sign in with Apple, `siri`
   (justified by SiriKit or App Intents adoption), App Attest. Apply the same
-  present-vs-used comparison to any entitlement key found.
+  present-vs-used comparison to other developer-selected capability keys, but not to
+  signing-generated ones: code signing injects entitlements no source ever references
+  (`application-identifier`, `com.apple.developer.team-identifier`, `get-task-allow`,
+  `beta-reports-active`), and flagging those is noise.
 - Shared entitlements files in multi-platform projects can carry keys for another
   platform (macOS sandbox keys are the common case). Attribute keys to the right
   target before flagging them, and remember other platforms are out of scope for
@@ -238,7 +242,10 @@ Static signals:
 Live text: "Apps that collect user or usage data must secure user consent for the
 collection, even if such data is considered to be anonymous at the time of or
 immediately following collection." The same subsection requires "an easily accessible
-and understandable way to withdraw consent."
+and understandable way to withdraw consent," and then carves out a lawful-basis
+exception: "Apps that collect data for a legitimate interest without consent by
+relying on the terms of the European Union's General Data Protection Regulation
+("GDPR") or similar statute must comply with all terms of that law."
 
 Distinct from section 8: ATT governs cross-app tracking via the IDFA; 5.1.1(ii)
 covers plain analytics collection with no IDFA involved, which is why an app can
@@ -252,14 +259,20 @@ verifiable from source:
   initializing the SDK or sending events), and
 - no consent surface in onboarding or first-run UI.
 
-Calibration: collection on by default with a Settings opt-out is extremely common in
-shipping apps, and Apple rarely enforces this sentence against anonymous first-party
-analytics; enforcement attention goes to ATT and IDFA tracking (section 8). So all
-three signals together land at **judgment-call** by default: the guideline text is
-real and the finding is worth reporting, but a default review-risk rating here would
-flag most real apps. Raise to review-risk only with aggravating factors: the
-analytics carry sensitive or identifying data, the privacy labels or policy claim no
-collection happens, or the UI misrepresents the actual behavior to the user.
+Calibration: first check for a declared lawful basis. The exception quoted above
+means an app that declares it collects analytics under legitimate interest per GDPR
+or a similar statute (typically stated in its privacy policy) is not violating the
+consent sentence at all; with such a declaration, do not report consentless
+collection as a finding, beyond a note if the declaration looks inconsistent with
+the actual data flows. Absent a declared basis: collection on by default with a
+Settings opt-out is extremely common in shipping apps, and Apple rarely enforces
+this sentence against anonymous first-party analytics; enforcement attention goes to
+ATT and IDFA tracking (section 8). So all three signals together land at
+**judgment-call** by default: the guideline text is real and the finding is worth
+reporting, but a default review-risk rating here would flag most real apps. Raise to
+review-risk only with aggravating factors: the analytics carry sensitive or
+identifying data, the privacy labels or policy claim no collection happens, or the
+UI misrepresents the actual behavior to the user.
 
 That misrepresentation signal needs verification before it can be claimed. A
 settings toggle that reads as off while the SDK collects is a misreport only if the

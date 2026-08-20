@@ -6,7 +6,7 @@ compatibility: Needs network access to fetch the live App Store Review Guideline
 metadata:
   author: dabodamjan
   homepage: https://github.com/dabodamjan/app-store-rejection-checker
-allowed-tools: Read Grep Glob Bash WebFetch
+allowed-tools: Read Grep Glob Bash WebFetch WebSearch
 ---
 
 # App Store review preflight
@@ -25,7 +25,9 @@ Non-negotiable output rules:
    Passing this audit reduces known risks; it does not guarantee anything.
 4. The live guidelines text fetched in Step 1 is the authority. The bundled reference
    files are a map of the rejection landscape (verified 2026-08-20); on any conflict,
-   the live text wins, and the report should note the discrepancy.
+   the live text wins, and the report should note the discrepancy. When the live fetch
+   truncates before a section, a finding may quote wording recovered via the Step 1
+   web-search fallback instead, labeled as a secondary source.
 
 ## Step 1: fetch the live guidelines
 
@@ -70,7 +72,9 @@ corroboration is found, say the fact could not be verified this run instead of c
 memory.
 
 While auditing, whenever a finding rests on exact guideline wording, quote the wording
-from the live fetch, not from memory and not from the reference files.
+from the live fetch, not from memory and not from the reference files. The one
+exception is a section the live fetch could not confirm because of truncation: there,
+quote the search-derived wording and label it a secondary source in the finding.
 
 ## Step 2: inventory the project
 
@@ -207,8 +211,10 @@ Produce the report as markdown. Structure:
    - **judgment-call**: a semantic assessment (differentiation, metadata accuracy,
      copy quality) where a reasonable reviewer could go either way.
 
-   The `Confidence:` line uses only these three levels; never carry the taxonomy
-   file's per-cluster labels (high, medium-high, medium confidence) into a finding.
+   The `Confidence:` line uses only these three levels. The marked sub-form above is
+   the review-risk level with a parenthetical qualifier, not a fourth level. Never
+   carry the taxonomy file's per-cluster labels (high, medium-high, medium
+   confidence) into a finding.
 
 3. **Not checked**: list what this audit cannot see. At minimum: runtime crashes,
    broken links, restore-purchase behavior, live server content, OAuth flows, and
