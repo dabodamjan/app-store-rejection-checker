@@ -29,14 +29,14 @@ Contents:
   tiers), answers were due by January 31, 2026, and the questionnaire asks how AI
   assistant and chatbot features affect the frequency of sensitive content. When
   checking answers, remember Messaging and Chat, User-Generated Content, and Social
-  Media are separate questionnaire capabilities — chat without a UGC declaration is
+  Media are separate questionnaire capabilities; chat without a UGC declaration is
   not automatically a mismatch. Real mismatch flags: a capability clearly present in
   the code but not declared (a social feed with no Social Media answer), or ad SDKs
   with no matching content descriptors.
 - **Name and keywords (2.3.7)**: app name at most 30 characters; no pricing or
   irrelevant phrases in name, subtitle, or keywords. On trademarks, the rule targets
-  **unauthorized** or discovery-gaming use — other developers' trademarks or popular
-  app names used without permission or with no relevant content in the app — not
+  **unauthorized** or discovery-gaming use (other developers' trademarks or popular
+  app names used without permission or with no relevant content in the app), not
   every trademark reference (naming a service the app legitimately integrates with
   is not itself a violation).
 - **All-audiences metadata (2.3.8)**: icons, screenshots, and previews must be
@@ -77,7 +77,7 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
 - **Metadata Rejected** concerns only the store listing (text, images, review
   information). Fix the flagged fields and resubmit; the same binary is reused, no new
   upload needed.
-- A general **Rejected** verdict does not by itself require a new build — the
+- A general **Rejected** verdict does not by itself require a new build; the
   remediation determines that. Rejections resolved by fixing metadata, App Review
   Information, demo access, or a backend issue can be resubmitted on the same binary;
   a new upload is required when the fix is in the binary itself (crashes, missing

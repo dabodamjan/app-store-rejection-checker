@@ -45,7 +45,7 @@ submission" vs "update" marks when the trap usually springs.
 ### 1. Completeness, crashes, broken demo access (2.1): high confidence
 
 Ranked first because Performance (section 2) dominates Apple's section-level counts
-and 2.1 is that section's most-reported member in developer threads — a judgment
+and 2.1 is that section's most-reported member in developer threads: a judgment
 call, since Apple publishes no per-guideline numbers. Live text: "We will reject
 incomplete app bundles and binaries that crash or exhibit obvious technical
 problems." Recurring forms:
