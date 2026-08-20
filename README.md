@@ -141,11 +141,11 @@ publishes plus a confidence-labeled ranking, and an MIT license.
 
 ## Who made this
 
-I am [Damjan Dabo](https://dabo.dev), an indie iOS developer in Croatia. I ship my
-own apps on the App Store ([Itemlist](https://getitemlist.app),
-[QRGenie](https://qrgenie.app), [BarcodeCraft](https://barcodecraft.com)) and have
-been submitting to App Review for eight-plus years; this skill distills what those
-submissions taught me, built and reviewed with Claude Code. I write about building
+I am [Damjan Dabo](https://dabo.dev), an indie iOS developer in Croatia. I have
+been shipping my own apps on the App Store since 2022 ([Itemlist](https://getitemlist.app),
+[QRGenie](https://qrgenie.app), [BarcodeCraft](https://barcodecraft.com)); this
+skill distills what those submissions taught me, built and reviewed with Claude
+Code. I write about building
 iOS apps and working with AI tooling at [dabo.dev](https://dabo.dev), and I am on
 [LinkedIn](https://www.linkedin.com/in/damjan-dabo/) and
 [X](https://x.com/DamjanDabo).
