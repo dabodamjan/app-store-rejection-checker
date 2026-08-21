@@ -23,44 +23,28 @@ honest confidence level.
 
 ## Install
 
+Paste this into Claude Code or Codex inside your app repo:
+
+```
+Install the skill from https://github.com/dabodamjan/app-store-rejection-checker and check this app for App Store rejection risks.
+```
+
+The agent fetches the repo and takes it from there. The audit covers more if you
+paste your App Store Connect metadata (description, keywords, age rating, review
+notes, demo account) when asked; the store listing is a real rejection surface,
+not decoration.
+
+**Manual install**, if you want the skill permanently in place:
+
 ```bash
 git clone https://github.com/dabodamjan/app-store-rejection-checker.git
 mkdir -p ~/.claude/skills
 cp -R app-store-rejection-checker/skills/app-store-rejection-checker ~/.claude/skills/
 ```
 
-Then, in a Claude Code session inside your app repo:
-
-```
-/app-store-rejection-checker
-```
-
-or just ask, naming the skill so it triggers reliably:
-
-```
-Check my app for App Store rejection risks before I submit using app-store-rejection-checker.
-```
-
-The audit covers more if you paste your App Store Connect metadata (description,
-keywords, age rating, review notes, demo account) when asked; the store listing is
-a real rejection surface, not decoration.
-
-<details>
-<summary>Other install options: per-project, plugin</summary>
-
-**Project (one repo):**
-
-```bash
-git clone https://github.com/dabodamjan/app-store-rejection-checker.git
-mkdir -p .claude/skills
-cp -R app-store-rejection-checker/skills/app-store-rejection-checker .claude/skills/
-```
-
-**Plugin:** the `skills/` layout is plugin-compatible; if you package this repo as
-a Claude Code plugin, the skill loads namespaced as
-`<plugin-name>:app-store-rejection-checker`.
-
-</details>
+Then run `/app-store-rejection-checker` in a Claude Code session inside your app
+repo. Use `.claude/skills/` instead to install for a single project; the `skills/`
+layout is also plugin-compatible.
 
 ## Example finding
 
