@@ -1,7 +1,7 @@
 # Rejection taxonomy: what actually gets apps rejected, ranked
 
 Prioritization for the audit report: spend attention where rejections actually
-happen. Compiled 2026-08-20 from Apple's transparency report, Apple Developer Forum
+happen. Compiled 2026-08-20 and re-verified 2026-10-17 from Apple's transparency report, Apple Developer Forum
 threads, and developer-community postmortems; confidence is labeled per cluster.
 Guideline numbers verified against the live guidelines the same day.
 
@@ -104,16 +104,29 @@ in forum threads; no frequency data. First-submission trap. Statically detectabl
 ### 8. Metadata accuracy (2.3): medium confidence
 
 Descriptions claiming features the app lacks, screenshots not showing the app in use,
-hidden or undocumented features (2.3.1), undisclosed IAP in metadata (2.3.2), keyword
-stuffing and trademark use (2.3.7). "Metadata Rejected" outcomes resolve without a new
-binary, so they are cheaper, but they still stall releases.
+undisclosed IAP in metadata (2.3.2), keyword stuffing and trademark use (2.3.7), and,
+since October 2026, creative assets that carry pricing or unverifiable claims
+(2.3.14). "Metadata Rejected" outcomes resolve without a new binary, so they are
+cheaper, but they still stall releases.
+
+Hidden, dormant, or undocumented features used to sit in this cluster under 2.3.1.
+Since October 16, 2026 they are 2.5.19, whose text names code obfuscation and
+account termination, and Apple's companion announcement ties the rule to
+"bait-and-switch" apps and to the 193K developer accounts it terminated the previous
+year. Treat a 2.5.19 finding as account-level exposure, not a metadata nit: rank it
+by severity in the report even though its frequency is unknown. Static signals:
+static-checks.md section 13.
 
 ### 9. UGC moderation and age rating (1.2, 2.3.6): medium confidence
 
 UGC apps missing the required moderation set (filtering, reporting with timely
 response, user blocking, published contact info). Tightening pressure from the
 2025-2026 age-rating overhaul, which added mandatory questionnaire answers (deadline
-January 31, 2026) including AI chatbot impact on sensitive content.
+January 31, 2026) including AI chatbot impact on sensitive content. The 1.2 scope
+widened twice in 2026: random or anonymous chat was pulled in on February 6, and the
+October 16 revision explicitly covers "AI content creation apps" and nonconsensual
+intimate imagery, with a remediate-after-notice clause that escalates to the
+Developer Code of Conduct. AI generators with no moderation set are the new exposure.
 
 ### 10. Long tail worth one look each: lower frequency
 

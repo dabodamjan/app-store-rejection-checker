@@ -1,19 +1,120 @@
 # Recent changes: rejection surfaces added or reshaped 2024-2026
 
 The moving parts. Each entry: what changed, since when, and what to check. Verified
-against the live guidelines and the linked Apple pages on 2026-08-20. During an audit,
+against the live guidelines and the linked Apple pages on 2026-10-17. During an audit,
 Step 1's news check covers anything newer than this file.
 
 Contents:
 
-1. [Privacy manifests and required-reason APIs (May 2024)](#privacy-manifests-and-required-reason-apis-may-2024)
-2. [Third-party AI disclosure in 5.1.2(i) (November 2025)](#third-party-ai-disclosure-in-512i-november-2025)
-3. [Age rating overhaul (2025, deadline January 2026)](#age-rating-overhaul-2025-deadline-january-2026)
-4. [4.3(b) saturated-category tightening (June 2026)](#43b-saturated-category-tightening-june-2026)
-5. [EU DMA terms (August-October 2026)](#eu-dma-terms-august-october-2026)
-6. [External purchase links in the US (in flux)](#external-purchase-links-in-the-us-in-flux)
-7. [Login services relaxation (January 2024)](#login-services-relaxation-january-2024)
-8. [Account deletion (since June 2022, still a top trap)](#account-deletion-since-june-2022-still-a-top-trap)
+1. [October 16, 2026 revision: hidden features, creative assets, UGC remediation](#october-16-2026-revision-hidden-features-creative-assets-ugc-remediation)
+2. [2026 guideline revisions before October](#2026-guideline-revisions-before-october)
+3. [Privacy manifests and required-reason APIs (May 2024)](#privacy-manifests-and-required-reason-apis-may-2024)
+4. [Third-party AI disclosure in 5.1.2(i) (November 2025)](#third-party-ai-disclosure-in-512i-november-2025)
+5. [Age rating overhaul (2025, deadline January 2026)](#age-rating-overhaul-2025-deadline-january-2026)
+6. [4.3(b) saturated-category tightening (June 2026)](#43b-saturated-category-tightening-june-2026)
+7. [EU DMA terms (August-October 2026)](#eu-dma-terms-august-october-2026)
+8. [External purchase links in the US (in flux)](#external-purchase-links-in-the-us-in-flux)
+9. [Login services relaxation (January 2024)](#login-services-relaxation-january-2024)
+10. [Account deletion (since June 2022, still a top trap)](#account-deletion-since-june-2022-still-a-top-trap)
+
+## October 16, 2026 revision: hidden features, creative assets, UGC remediation
+
+Apple revised the guidelines on October 16, 2026 (changelog:
+developer.apple.com/news/?id=92th7e5i; companion post on the intent:
+developer.apple.com/news/?id=vvzx6cul). The page footer now reads "Last Updated:
+October 16, 2026"; the previous revision was June 8, 2026. What moved, verified
+against the live text and an archived copy of the previous text:
+
+- **2.5.19 (new) takes over hidden, dormant, and undocumented features from 2.3.1.**
+  Live text: "Don't include any hidden, dormant, or undocumented features in your app;
+  your app's functionality should be clear to end users and App Review. Attempting to
+  hide undocumented features in your app binary, such as through code obfuscation or
+  other methods, is grounds for removal of your app from the App Store and termination
+  of your developer account." The first sentence was lifted out of 2.3.1(a) unchanged;
+  the second sentence is new and names obfuscation and account termination. Apple's
+  companion post frames the rule as the "longstanding prohibition on apps
+  misrepresenting what they do during the App Review process and then changing after
+  approval," with "adding features or functionality that weren't included in the
+  version of the app that was submitted" as the example, and removal from the
+  Developer Program as the consequence. Cite **2.5.19**, not 2.3.1, for hidden-feature
+  findings from now on. What the text does not say: it does not name remote
+  configuration, feature flags, or A/B testing, in either direction. Data-driven
+  changes to copy, layout, or pricing presentation of a paywall whose code shipped in
+  the reviewed binary are not what the sentence describes; features that ship dark
+  and switch on after approval are. Check procedure: static-checks.md section 13.
+- **2.3.1(a) keeps the review-notes and misleading-marketing rules.** It still
+  requires all new features and product changes to be "described with specificity in
+  the Notes for Review section" and "accessible for review", and still makes
+  misleading marketing grounds for removal and termination. The hidden-feature
+  sentence is the only thing that left.
+- **2.3.14 (new): creative assets.** The App Store now accepts promotional assets
+  beyond app-in-use screenshots and previews (product page header, search results;
+  announced October 5, 2026, with an Asset Library in App Store Connect). Live text:
+  creative assets "must pertain to your app's content and functionality or
+  overarching brand, follow standard metadata guidelines, and be appropriate for all
+  audiences" and "should not include inappropriate content, references to other apps
+  with an intent to mislead, unverifiable product claims, or specific or discounted
+  pricing information." Apple's detailed rules live at
+  developer.apple.com/app-store/asset-best-practices/. Audit angle:
+  metadata-and-review-notes.md.
+- **1.2 widens scope and adds a remediation-after-notice clause.** The opening now
+  covers "apps that enable users to create, generate, upload, share, or otherwise
+  contribute content", naming "social media, user-generated content platforms, and AI
+  content creation apps", and lists "nonconsensual intimate imagery" among the harms
+  (the companion post says this includes imagery generated with AI tools). New
+  sentence: "Developers who fail to implement appropriate safeguards or fail to
+  remediate identified violations after notice may be considered in violation of the
+  Developer Code of Conduct." The four required mechanisms (filtering, reporting with
+  timely responses, blocking, published contact information) are unchanged. An AI
+  image or text generator with no moderation set is now squarely a 1.2 app. Audit
+  angle: special-categories.md, user-generated content.
+- **3.1.1(a): links go to "a permitted destination".** The separate Music Streaming
+  Services Entitlements bullet was folded into the StoreKit External Purchase Link
+  bullet; links now point to "a permitted destination" rather than "the developer's
+  website", "approved destinations may vary by region", and the entitlements apply
+  "only in specific storefronts of the App Store, and only on certain platforms in
+  each of those storefronts." The live text remains the only safe source for external
+  link mechanics (see the US section below).
+- **Section 5 intro:** apps facilitating human trafficking or child exploitation
+  "will be removed from the App Store and blocked from alternative distribution", in
+  addition to authorities being notified.
+- **Unannounced edits worth knowing:** 2.3.3 (screenshots), 4.1(c) (copycats), and
+  5.1.1(ii) (purpose strings) each gained a "Learn more" link to App Review help
+  pages (developer.apple.com/help/app-review/); the 2.3.3 help page states App Review
+  approves only submissions "where more than half of screenshots show the app in
+  use". 3.1.3(f) was reworded to say free stand-alone companion apps to paid
+  web-based VoIP, cloud storage, email, or web hosting tools do not need IAP. "e.g."
+  became "such as" or "for example" across the document, so quote wording from the
+  live fetch rather than from older copies. "Before You Submit" gained "Provide
+  required documentation for apps and features that require regulatory approval."
+
+Context Apple gave with the revision: in the previous year it "prevented over 150K
+apps with safety issues from reaching customers and terminated over 193K developer
+accounts for engaging in fraud and abuse", tracing violations to actors "working to
+conceal harmful content that only becomes active once an app is approved." That is
+the enforcement posture behind 2.5.19: an app whose behavior changes after approval
+is treated as fraud, not as a metadata nit.
+
+Separate but adjacent, from the October 5, 2026 iPhone Duo announcement: "Starting
+April 2027, any apps or games submitted will need to include screenshots for iPhone
+Duo." Not a guideline change, but a submission blocker from that date.
+
+## 2026 guideline revisions before October
+
+Two earlier 2026 revisions, both verified from Apple's news posts:
+
+- **February 6, 2026** (developer.apple.com/news/?id=d75yllv4): "apps with random or
+  anonymous chat are subject to the 1.2 User-Generated Content guideline." A
+  random-chat or anonymous-chat feature needs the full 1.2 moderation set.
+- **June 8, 2026** (developer.apple.com/news/?id=a233fmpw): the 4.3(b) tightening
+  covered in its own section below, plus: the Introduction's kid and teen safety
+  guidance was revised; 1.2 gained a paragraph on developer responsibility for
+  violating content (the October revision extended it with the remediation clause
+  above); 4.3(a) and 4.3(b) gained examples; and 4.5.3 now says Live Activities may
+  not be used "to spam, phish, or send unsolicited messages". The same post revised
+  the Developer Program License Agreement (Foundation Models framework terms, a new
+  AI and machine learning subsection 3.3.11, identity-verification duties in 3.1 and
+  14.8); the agreement is behind sign-in and not audited by this skill.
 
 ## Privacy manifests and required-reason APIs (May 2024)
 

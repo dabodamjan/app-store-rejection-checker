@@ -2,7 +2,7 @@
 
 Apply the matching section when Step 2 classifies the app into one of these. Each
 carries requirements that are near-certain rejections when missed. Guideline numbers
-verified against the live guidelines on 2026-08-20; quotes for 5.4 taken verbatim from
+verified against the live guidelines on 2026-10-17; quotes for 5.4 taken verbatim from
 the live text. Always re-read the matching live section during the audit; these are
 summaries.
 
@@ -59,16 +59,35 @@ Category app; `SKAdNetwork` identifiers; outbound links without a parental gate.
 
 ## User-generated content (1.2)
 
+Scope, per the October 16, 2026 text: "Apps that enable users to create, generate,
+upload, share, or otherwise contribute content", which "includes social media,
+user-generated content platforms, and AI content creation apps." Random or anonymous
+chat was explicitly pulled under 1.2 on February 6, 2026. So an AI image, video, or
+text generator is a 1.2 app even with no social feed.
+
 Required, all four: a method for filtering objectionable material; a mechanism to
 report offensive content with timely responses; the ability to block abusive users;
-published contact information. Apps used primarily for objectionable content
-(pornography, objectification, harassment, anonymous-chat abuse patterns) can be
-removed outright regardless of moderation tooling. Creator-content apps additionally
-need an age-restriction mechanism when content can exceed the app's rating (1.2.1,
-4.7.5 for embedded software).
+published contact information. The harms the text names now include "nonconsensual
+intimate imagery" (Apple's announcement: including imagery generated with AI tools)
+alongside IP infringement and anonymous bullying. Apps used primarily for
+objectionable content (pornography, objectification, harassment, anonymous-chat abuse
+patterns) can be removed outright regardless of moderation tooling. Creator-content
+apps additionally need an age-restriction mechanism when content can exceed the app's
+rating (1.2.1, 4.7.5 for embedded software).
 
-Static signals: chat, comments, profiles, or upload features in code with no report,
-block, or moderation surface anywhere.
+Enforcement, new in October 2026: "Developers who fail to implement appropriate
+safeguards or fail to remediate identified violations after notice may be considered
+in violation of the Developer Code of Conduct." Apple asks for removal plus a
+compliance plan; the app can be pulled until improvements are shown, and "egregious
+or repeated behavior" is grounds for removal from the Developer Program. A missing
+moderation set in a generator app is therefore an account-level risk, not only a
+rejection.
+
+Static signals: chat, comments, profiles, upload, or generation features in code with
+no report, block, or moderation surface anywhere; an AI generation endpoint (OpenAI,
+Replicate, Stability, or similar, or an on-device generator) with no output
+filtering (no safety classifier call, no blocklist, no Sensitive Content Analysis
+framework use) and no report path for generated content.
 
 ## Gambling, contests, real-money gaming (5.3)
 

@@ -2,7 +2,7 @@
 
 Checks that can be decided from files in the repository: build settings, plists,
 entitlements, lockfiles, and source. Guideline numbers were verified against the live
-guidelines on 2026-08-20; re-verify against the Step 1 fetch when citing them.
+guidelines on 2026-10-17; re-verify against the Step 1 fetch when citing them.
 
 Evidence standard for **validator-certain** (defined in SKILL.md Step 6): the upload
 validators run against the built product, not the repository. Conditional compilation,
@@ -28,6 +28,7 @@ Contents:
 10. [Third-party AI data flows (5.1.2(i))](#10-third-party-ai-data-flows-512i)
 11. [Web-wrapper fingerprints (4.2)](#11-web-wrapper-fingerprints-42)
 12. [Dynamic code and deprecated APIs](#12-dynamic-code-and-deprecated-apis)
+13. [Hidden, dormant, and undocumented features (2.5.19)](#13-hidden-dormant-and-undocumented-features-2519)
 
 ## 1. Permission purpose strings
 
@@ -351,3 +352,85 @@ substantial enough) belongs to the semantic pass.
 - **Private API use**: symbols from private frameworks or selector-string obfuscation
   patterns are a hard rejection surface (2.5.1); a reliable static scan needs the
   compiled binary, so from source alone flag only clear cases.
+
+## 13. Hidden, dormant, and undocumented features (2.5.19)
+
+Live text (new guideline, October 16, 2026; the first sentence moved here from
+2.3.1(a), the second is new): "Don't include any hidden, dormant, or undocumented
+features in your app; your app's functionality should be clear to end users and App
+Review. Attempting to hide undocumented features in your app binary, such as through
+code obfuscation or other methods, is grounds for removal of your app from the App
+Store and termination of your developer account." Apple's announcement frames it as
+the rule against apps that misrepresent what they do during review and change after
+approval ("bait-and-switch"). 2.3.1(a) still requires every new feature to be
+"described with specificity in the Notes for Review" and "accessible for review";
+the Introduction still says trying "to trick the review process" gets the developer
+expelled. Cite 2.5.19 for hidden-feature findings and 2.3.1(a) for the missing
+disclosure.
+
+What the text does not say: it names neither remote configuration, nor feature
+flags, nor A/B testing, in either direction. The test it sets is whether
+functionality is "clear to end users and App Review" and whether anything is hidden
+"in your app binary". So the audit question is not "does this app use remote config"
+but "is there functionality in the binary the reviewer cannot see or was not told
+about, and is any of it concealed on purpose". Remote changes to data (paywall copy,
+prices, layout order) for code that shipped in the reviewed binary fall outside the
+sentence; a screen, tab, or capability that exists only after a server-side switch
+falls inside it. That reading is an inference from the text plus Apple's "features
+that weren't included in the version submitted" framing, not a quoted rule; say so
+when a finding depends on it.
+
+Static signals, each from source, lockfiles, or build settings:
+
+- **Reviewer detection** (review-risk, account-level exposure): code that changes
+  behavior when it believes App Review is looking. Grep for identifiers like
+  `isReview`, `reviewMode`, `appReview`, `isAppleReviewer`, `underReview`; Apple IP
+  ranges or ASN strings (`17.0.0.0/8`); geo checks against Cupertino; date gates that
+  unlock a feature after a planned review window; and StoreKit environment checks
+  (`appStoreReceiptURL` ending in `sandboxReceipt`, `AppTransaction.environment`)
+  whose result reaches view or feature branches rather than receipt validation or
+  server selection. Sandbox detection for purchase validation is legitimate; the
+  finding is the data flow into UI.
+- **Dark-shipped features** (review-risk): a remote flag (Firebase Remote Config,
+  LaunchDarkly, Statsig, GrowthBook, ConfigCat, Optimizely, custom JSON) or a local
+  default gating a whole screen, tab, or capability with the default off, and no
+  entry in the review notes explaining how to reach it. Read the flag defaults
+  (`setDefaults`, bundled defaults plist, `@AppStorage` defaults) and trace which
+  flags feed navigation or feature registration. A flag that only reorders
+  onboarding or swaps paywall copy is not this finding.
+- **Hidden entry points** (review-risk): debug or developer menus reachable in
+  Release builds (shake handlers in `motionEnded`, secret tap-count gestures,
+  long-press easter eggs), URL-scheme or deep-link handlers that flip feature flags,
+  and admin screens gated on `isAdmin` or role checks that the reviewer's demo
+  account cannot reach. `#if DEBUG` around the surface is the fix; its absence is
+  the signal. An Apple DTS engineer's forum guidance (December 2025) is the closest
+  Apple statement: submitted apps "should not contain hidden features or debugging
+  options that alter the intended user experience for the general public".
+- **Obfuscated feature code** (review-risk, the sentence names it): selectors and
+  class names assembled from decoded strings (`NSClassFromString`,
+  `NSSelectorFromString`, `performSelector` with runtime-built names), base64 or XOR
+  blobs decoded into symbol names, `dlopen`/`dlsym` on bundled or downloaded paths,
+  and obfuscator build phases. Ordinary string encryption of API keys is not feature
+  hiding; the finding needs a feature behind the obfuscation. Overlaps section 12
+  (2.5.1, 2.5.2); cite both where both apply.
+- **Post-review payment swaps** (review-risk, also 3.1.1): a remote toggle that
+  replaces IAP with a web checkout or external SDK after approval, or a hard paywall
+  that can be switched on remotely after a freemium submission. Signals: network-
+  sourced checkout URLs opened from paywall code; a payment SDK present with no
+  external-purchase-link entitlement and a storefront check around its call site.
+- **Undisclosed experiments** (judgment-call): paywall or onboarding variants
+  configured in a paywall SDK (RevenueCat, Superwall, Adapty) or an experimentation
+  SDK that the default flow never shows. Not a 2.5.19 violation by text, but each
+  variant the reviewer may land on must itself pass 3.1.2 and 2.1(b), and 2.3.1(a)
+  wants it described. The fix is a review-notes line naming the variants and what
+  each shows, plus confirming every variant is reachable in the submitted build.
+- **Regional or account gating** (judgment-call unless undisclosed): feature branches
+  on `Storefront.current`, `SKStorefront.countryCode`, `Locale.current.region`, or
+  the signed-in user's plan, with no review-notes explanation. Apple's complete-
+  review help page asks for regional differences to be described or ruled out.
+
+Calibration: remote-config SDK presence alone is not a finding; list it in the
+report's "Not checked" section (anything driven by remote configuration is outside
+what a repository audit can see). Reviewer detection and obfuscated feature code are
+the two patterns to report at the top of the findings regardless of frequency, since
+the live text ties both to account termination.
