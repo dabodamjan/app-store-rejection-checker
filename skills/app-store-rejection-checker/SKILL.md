@@ -92,15 +92,18 @@ Build a picture of what the app actually is before judging it:
 
 Classify the app: does it have accounts, payments, subscriptions, UGC, chat or AI
 features, web content, kids targeting, health/medical/finance/gambling/VPN exposure?
-The classification decides which checks below are load-bearing.
+The classification decides which checks below are load-bearing. Since October 2026,
+AI content generators (image, video, or text) count as 1.2 user-generated content
+apps, and random or anonymous chat has since February 2026; classify them as UGC.
 
 If the project also builds for other platforms (macOS, watchOS, visionOS, tvOS
 targets, or shared entitlements carrying their keys), state in the report that only
 the iOS/iPadOS surface is audited and the other platforms are out of scope.
 
 If App Store Connect metadata is not in the repo, ask the user to paste the app name,
-subtitle, description, keywords, age rating, screenshots description, and the App Review
-Information fields (notes and demo account). The metadata checks are real rejection
+subtitle, description, keywords, age rating, screenshots description, creative assets
+(product page header and search result images or videos, if any are configured), and
+the App Review Information fields (notes and demo account). The metadata checks are real rejection
 surfaces; skipping them silently would understate risk. If the user declines, or there
 is no user to ask (a non-interactive or CI run), mark those checks "not audited" in the
 report and continue. Never invent metadata to audit.
@@ -147,10 +150,14 @@ This is the part a linter cannot do. Read the code and the copy, then judge:
   the binary reachable and documented for the reviewer? Look for debug switches live
   in Release, features shipped dark behind a remote flag with no mention in the
   review notes, reviewer or sandbox detection that changes what the app shows, and
-  endpoints that serve different content by region or date. Remote configuration
-  that changes data (paywall copy, prices, layout) for code that shipped in the
-  reviewed binary is not what 2.5.19 describes; a feature that only exists after a
-  server-side switch is. Static signals: static-checks.md section 13.
+  endpoints that serve different content by region or date. The text names neither
+  remote configuration nor A/B testing. Remote changes to data (paywall copy, price
+  display, layout order) for code that shipped in the reviewed binary read as outside
+  the sentence, and a feature that only exists after a server-side switch reads as
+  inside it; that is an inference from the text and Apple's announcement, not a
+  quoted rule, so label findings that rest on it. A remotely changed price also
+  touches 2.3.1(a) ("promoting a false price"). Static signals: static-checks.md
+  section 13.
 - **4.2 minimum functionality / 4.3 differentiation**: for thin apps, wrappers, and apps
   in categories Apple names as saturated (dating, flashlight, sound effects, wallpaper,
   simple timers, fortune telling), form a view on what this app does that existing apps
@@ -181,8 +188,8 @@ Work through [references/metadata-and-review-notes.md](references/metadata-and-r
 for the App Store Connect surface: name and keyword rules (2.3.7), screenshot rules
 (2.3.3), IAP disclosure in metadata (2.3.2), age rating (2.3.6 and the 2025-2026
 questionnaire overhaul), creative assets (2.3.14), review notes (2.3.1), and demo
-credentials. It also explains
-what "Metadata Rejected" means mechanically and what to expect from review timing.
+credentials. It also explains what "Metadata Rejected" means mechanically and what to
+expect from review timing.
 
 ## Step 6: report
 

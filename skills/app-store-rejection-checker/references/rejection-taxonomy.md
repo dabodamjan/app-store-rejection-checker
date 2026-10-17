@@ -1,9 +1,9 @@
 # Rejection taxonomy: what actually gets apps rejected, ranked
 
 Prioritization for the audit report: spend attention where rejections actually
-happen. Compiled 2026-08-20 and re-verified 2026-10-17 from Apple's transparency report, Apple Developer Forum
+happen. Compiled 2026-08-20 from Apple's transparency report, Apple Developer Forum
 threads, and developer-community postmortems; confidence is labeled per cluster.
-Guideline numbers verified against the live guidelines the same day.
+Guideline numbers re-verified against the live guidelines on 2026-10-17.
 
 **The ranking is an editorial heuristic, not measured frequency.** Apple publishes
 only the section-level counts below; per-guideline frequency cannot be derived from
@@ -112,10 +112,10 @@ cheaper, but they still stall releases.
 Hidden, dormant, or undocumented features used to sit in this cluster under 2.3.1.
 Since October 16, 2026 they are 2.5.19, whose text names code obfuscation and
 account termination, and Apple's companion announcement ties the rule to
-"bait-and-switch" apps and to the 193K developer accounts it terminated the previous
-year. Treat a 2.5.19 finding as account-level exposure, not a metadata nit: rank it
-by severity in the report even though its frequency is unknown. Static signals:
-static-checks.md section 13.
+"bait-and-switch" apps and cites 193K developer accounts terminated for fraud and
+abuse in the previous year. Treat a 2.5.19 finding as account-level exposure, not a
+metadata nit: rank it by severity in the report even though its frequency is
+unknown. Static signals: static-checks.md section 13.
 
 ### 9. UGC moderation and age rating (1.2, 2.3.6): medium confidence
 

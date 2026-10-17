@@ -38,18 +38,21 @@ against the live text and an archived copy of the previous text:
   version of the app that was submitted" as the example, and removal from the
   Developer Program as the consequence. Cite **2.5.19**, not 2.3.1, for hidden-feature
   findings from now on. What the text does not say: it does not name remote
-  configuration, feature flags, or A/B testing, in either direction. Data-driven
-  changes to copy, layout, or pricing presentation of a paywall whose code shipped in
-  the reviewed binary are not what the sentence describes; features that ship dark
-  and switch on after approval are. Check procedure: static-checks.md section 13.
+  configuration, feature flags, or A/B testing, in either direction. Remote changes
+  to data (paywall copy, price display, layout order) for code that shipped in the
+  reviewed binary read as outside the sentence, and features that ship dark and
+  switch on after approval read as inside it; that is an inference from the text
+  and Apple's announcement, not a quoted rule. Check procedure: static-checks.md
+  section 13.
 - **2.3.1(a) keeps the review-notes and misleading-marketing rules.** It still
   requires all new features and product changes to be "described with specificity in
   the Notes for Review section" and "accessible for review", and still makes
   misleading marketing grounds for removal and termination. The hidden-feature
   sentence is the only thing that left.
 - **2.3.14 (new): creative assets.** The App Store now accepts promotional assets
-  beyond app-in-use screenshots and previews (product page header, search results;
-  announced October 5, 2026, with an Asset Library in App Store Connect). Live text:
+  beyond app-in-use screenshots and previews (product page header, search results,
+  In-App Events, and featuring, shown on iOS 27 and iPadOS 27 and later; announced
+  October 5, 2026, with an Asset Library in App Store Connect). Live text:
   creative assets "must pertain to your app's content and functionality or
   overarching brand, follow standard metadata guidelines, and be appropriate for all
   audiences" and "should not include inappropriate content, references to other apps
@@ -92,8 +95,8 @@ Context Apple gave with the revision: in the previous year it "prevented over 15
 apps with safety issues from reaching customers and terminated over 193K developer
 accounts for engaging in fraud and abuse", tracing violations to actors "working to
 conceal harmful content that only becomes active once an app is approved." That is
-the enforcement posture behind 2.5.19: an app whose behavior changes after approval
-is treated as fraud, not as a metadata nit.
+the enforcement posture behind 2.5.19: an app that conceals functionality during
+review and reveals it after approval is treated as fraud, not as a metadata nit.
 
 Separate but adjacent, from the October 5, 2026 iPhone Duo announcement: "Starting
 April 2027, any apps or games submitted will need to include screenshots for iPhone
@@ -113,8 +116,9 @@ Two earlier 2026 revisions, both verified from Apple's news posts:
   above); 4.3(a) and 4.3(b) gained examples; and 4.5.3 now says Live Activities may
   not be used "to spam, phish, or send unsolicited messages". The same post revised
   the Developer Program License Agreement (Foundation Models framework terms, a new
-  AI and machine learning subsection 3.3.11, identity-verification duties in 3.1 and
-  14.8); the agreement is behind sign-in and not audited by this skill.
+  AI and machine learning subsection 3.3.11, and in 3.1 and 14.8 "requirements for
+  providing information and responding to questions about developer identity"); the
+  agreement is behind sign-in and not audited by this skill.
 
 ## Privacy manifests and required-reason APIs (May 2024)
 

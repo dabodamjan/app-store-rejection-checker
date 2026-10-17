@@ -27,8 +27,8 @@ Contents:
 - **Screenshots (2.3.3)**: must show the app in use, not splash screens, login walls,
   or pure marketing art. Apple's 2.3.3 help page (linked from the guideline since
   October 2026) says App Review approves only submissions "where more than half of
-  screenshots show the app in use" per device set, and that screenshots must match
-  the current interface. Starting April 2027, submissions must also include iPhone
+  screenshots show the app in use" per device set; its best practices also ask that
+  screenshots be updated with each version to match the current interface. Starting April 2027, submissions must also include iPhone
   Duo screenshots (Apple news, October 5, 2026).
 - **Creative assets (2.3.14, since October 16, 2026)**: promotional assets for the
   product page header and search results (Asset Library in App Store Connect) are a
@@ -43,8 +43,10 @@ Contents:
   every asset regardless of the app's rating. Flag assets that show prices or
   discounts, award or ranking claims the developer cannot verify, competitor or
   other-platform names, or content above 4+. Rules:
-  developer.apple.com/app-store/asset-best-practices/. If the developer supplies no
-  creative assets, there is nothing to audit; say so in one line.
+  developer.apple.com/app-store/asset-best-practices/. If the developer confirms no
+  creative assets are configured, say so in one line; if they were simply not
+  supplied, mark 2.3.14 "not audited", since assets can exist in App Store Connect
+  without being in the repo.
 - **Age rating (2.3.6)**: answers must match the app's actual content and features.
   The questionnaire was overhauled in 2025 (see recent-changes.md): tiers are now 4+,
   9+, 13+, 16+, 18+ (displayed on OS 26 and later; older OS versions show the old
@@ -79,8 +81,9 @@ cannot infer from the binary:
 - Required hardware or peripherals, and what happens without them
 - Server-driven or remote-config behavior, explained rather than discovered: name
   the flags and experiments the reviewer may hit, what each variant shows, and
-  confirm every variant is reachable in the submitted build (under 2.5.19 a feature
-  the reviewer cannot see is a hidden one)
+  confirm every variant is reachable in the submitted build (2.5.19 wants
+  functionality "clear to end users and App Review"; a variant the reviewer cannot
+  reach reads as undocumented)
 - For medical apps with regulatory clearance: the link to that documentation (1.4.1)
 - For VPN or licensed categories: license information where a territory requires it
 

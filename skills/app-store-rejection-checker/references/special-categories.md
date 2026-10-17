@@ -75,13 +75,14 @@ patterns) can be removed outright regardless of moderation tooling. Creator-cont
 apps additionally need an age-restriction mechanism when content can exceed the app's
 rating (1.2.1, 4.7.5 for embedded software).
 
-Enforcement, new in October 2026: "Developers who fail to implement appropriate
-safeguards or fail to remediate identified violations after notice may be considered
-in violation of the Developer Code of Conduct." Apple asks for removal plus a
-compliance plan; the app can be pulled until improvements are shown, and "egregious
-or repeated behavior" is grounds for removal from the Developer Program. A missing
-moderation set in a generator app is therefore an account-level risk, not only a
-rejection.
+Enforcement: the sentence added on October 16, 2026 reads "Developers who fail to
+implement appropriate safeguards or fail to remediate identified violations after
+notice may be considered in violation of the Developer Code of Conduct." The
+surrounding text, in place since June 2026, says Apple will ask for removal plus a
+plan to improve compliance, may pull the app until improvements are shown, and that
+"Egregious or repeated behavior is grounds for immediate removal of your app from
+the App Store, and from the Apple Developer Program." A missing moderation set in a
+generator app is therefore an account-level risk, not only a rejection.
 
 Static signals: chat, comments, profiles, upload, or generation features in code with
 no report, block, or moderation surface anywhere; an AI generation endpoint (OpenAI,

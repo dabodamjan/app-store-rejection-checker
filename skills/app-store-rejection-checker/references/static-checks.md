@@ -382,8 +382,9 @@ when a finding depends on it.
 
 Static signals, each from source, lockfiles, or build settings:
 
-- **Reviewer detection** (review-risk, account-level exposure): code that changes
-  behavior when it believes App Review is looking. Grep for identifiers like
+- **Reviewer detection** (review-risk): code that changes behavior when it believes
+  App Review is looking. Account-level exposure: it falls under 2.5.19's "other
+  methods" and the Introduction's "trick the review process". Grep for identifiers like
   `isReview`, `reviewMode`, `appReview`, `isAppleReviewer`, `underReview`; Apple IP
   ranges or ASN strings (`17.0.0.0/8`); geo checks against Cupertino; date gates that
   unlock a feature after a planned review window; and StoreKit environment checks
@@ -397,40 +398,55 @@ Static signals, each from source, lockfiles, or build settings:
   entry in the review notes explaining how to reach it. Read the flag defaults
   (`setDefaults`, bundled defaults plist, `@AppStorage` defaults) and trace which
   flags feed navigation or feature registration. A flag that only reorders
-  onboarding or swaps paywall copy is not this finding.
+  onboarding or swaps paywall copy is not this finding. If review notes were not
+  supplied, report the flag inventory as a review-notes to-do (judgment-call), not
+  as a hidden-feature finding.
 - **Hidden entry points** (review-risk): debug or developer menus reachable in
   Release builds (shake handlers in `motionEnded`, secret tap-count gestures,
-  long-press easter eggs), URL-scheme or deep-link handlers that flip feature flags,
-  and admin screens gated on `isAdmin` or role checks that the reviewer's demo
-  account cannot reach. `#if DEBUG` around the surface is the fix; its absence is
-  the signal. An Apple DTS engineer's forum guidance (December 2025) is the closest
-  Apple statement: submitted apps "should not contain hidden features or debugging
-  options that alter the intended user experience for the general public".
-- **Obfuscated feature code** (review-risk, the sentence names it): selectors and
+  long-press easter eggs) and URL-scheme or deep-link handlers that flip feature
+  flags. `#if DEBUG` around the surface is the fix; its absence is the signal. The
+  closest Apple statement is an Apple DTS engineer's forum reply (December 2025,
+  developer.apple.com/forums/thread/810549, a secondary source): submitted apps
+  "should not contain hidden features or debugging options that alter the intended
+  user experience for the general public". Role-gated admin screens (`isAdmin`, role
+  checks) are a different case: a production admin area is legitimate, but the
+  reviewer needs credentials for it or a review-notes line saying what it is
+  (2.3.1(a); per-role demo accounts in metadata-and-review-notes.md). Flag the
+  missing disclosure (judgment-call), not the screen.
+- **Obfuscated feature code** (review-risk; the one method the text names): selectors and
   class names assembled from decoded strings (`NSClassFromString`,
   `NSSelectorFromString`, `performSelector` with runtime-built names), base64 or XOR
   blobs decoded into symbol names, `dlopen`/`dlsym` on bundled or downloaded paths,
   and obfuscator build phases. Ordinary string encryption of API keys is not feature
   hiding; the finding needs a feature behind the obfuscation. Overlaps section 12
   (2.5.1, 2.5.2); cite both where both apply.
-- **Post-review payment swaps** (review-risk, also 3.1.1): a remote toggle that
-  replaces IAP with a web checkout or external SDK after approval, or a hard paywall
-  that can be switched on remotely after a freemium submission. Signals: network-
-  sourced checkout URLs opened from paywall code; a payment SDK present with no
-  external-purchase-link entitlement and a storefront check around its call site.
+- **Post-review payment swaps** (review-risk; cite 3.1.1 as well): a remote toggle
+  that replaces IAP with a web checkout or external SDK after approval, or a hard
+  paywall that can be switched on remotely after a freemium submission. Signals:
+  network-sourced checkout URLs opened from paywall code, or a payment SDK reached
+  from paywall code behind a remote toggle. Calibrate by storefront: 3.1.1(a) says
+  the entitlements "are not required" for links in United States storefront apps,
+  so a US-only checkout link shown next to IAP is not this finding; outside the US
+  the external-purchase CTA needs the entitlement (section 6), and the 2.5.19 side
+  is the toggle that changes the purchase path after approval.
 - **Undisclosed experiments** (judgment-call): paywall or onboarding variants
   configured in a paywall SDK (RevenueCat, Superwall, Adapty) or an experimentation
-  SDK that the default flow never shows. Not a 2.5.19 violation by text, but each
-  variant the reviewer may land on must itself pass 3.1.2 and 2.1(b), and 2.3.1(a)
-  wants it described. The fix is a review-notes line naming the variants and what
+  SDK that the default flow never shows. The text does not name experiments, and a
+  variant the reviewer never sees could still be read as undocumented; each variant
+  the reviewer may land on must itself pass 3.1.2 and 2.1(b), and 2.3.1(a) wants it
+  described. The fix is a review-notes line naming the variants and what
   each shows, plus confirming every variant is reachable in the submitted build.
-- **Regional or account gating** (judgment-call unless undisclosed): feature branches
-  on `Storefront.current`, `SKStorefront.countryCode`, `Locale.current.region`, or
-  the signed-in user's plan, with no review-notes explanation. Apple's complete-
-  review help page asks for regional differences to be described or ruled out.
+- **Regional or account gating** (judgment-call; review-risk when the gated branch
+  is a whole screen or capability the reviewer cannot reach): feature branches on
+  `Storefront.current`, `SKStorefront.countryCode`, `Locale.current.region`, or the
+  signed-in user's plan, with no review-notes explanation. Apple's help page on
+  completing a review
+  (developer.apple.com/help/app-review/before-submitting-for-review/complete-review)
+  asks for regional differences to be described or ruled out.
 
 Calibration: remote-config SDK presence alone is not a finding; list it in the
 report's "Not checked" section (anything driven by remote configuration is outside
 what a repository audit can see). Reviewer detection and obfuscated feature code are
-the two patterns to report at the top of the findings regardless of frequency, since
-the live text ties both to account termination.
+the two patterns to report at the top of the findings regardless of frequency: the
+live text names obfuscation as grounds for termination, and reviewer detection falls
+under its "or other methods".
