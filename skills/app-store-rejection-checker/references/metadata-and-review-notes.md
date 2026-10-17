@@ -28,8 +28,9 @@ Contents:
   or pure marketing art. Apple's 2.3.3 help page (linked from the guideline since
   October 2026) says App Review approves only submissions "where more than half of
   screenshots show the app in use" per device set; its best practices also ask that
-  screenshots be updated with each version to match the current interface. Starting April 2027, submissions must also include iPhone
-  Duo screenshots (Apple news, October 5, 2026).
+  screenshots be updated with each version to match the current interface. Starting
+  April 2027, submissions must also include iPhone Duo screenshots (Apple news,
+  October 5, 2026).
 - **Creative assets (2.3.14, since October 16, 2026)**: promotional assets for the
   product page header and search results (Asset Library in App Store Connect) are a
   separate surface from screenshots. Live text: they "must pertain to your app's

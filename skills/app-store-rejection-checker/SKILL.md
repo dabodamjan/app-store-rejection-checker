@@ -103,10 +103,10 @@ the iOS/iPadOS surface is audited and the other platforms are out of scope.
 If App Store Connect metadata is not in the repo, ask the user to paste the app name,
 subtitle, description, keywords, age rating, screenshots description, creative assets
 (product page header and search result images or videos, if any are configured), and
-the App Review Information fields (notes and demo account). The metadata checks are real rejection
-surfaces; skipping them silently would understate risk. If the user declines, or there
-is no user to ask (a non-interactive or CI run), mark those checks "not audited" in the
-report and continue. Never invent metadata to audit.
+the App Review Information fields (notes and demo account). The metadata checks are
+real rejection surfaces; skipping them silently would understate risk. If the user
+declines, or there is no user to ask (a non-interactive or CI run), mark those checks
+"not audited" in the report and continue. Never invent metadata to audit.
 
 ## Step 3: static checks
 

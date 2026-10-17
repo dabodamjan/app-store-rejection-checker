@@ -374,17 +374,18 @@ functionality is "clear to end users and App Review" and whether anything is hid
 "in your app binary". So the audit question is not "does this app use remote config"
 but "is there functionality in the binary the reviewer cannot see or was not told
 about, and is any of it concealed on purpose". Remote changes to data (paywall copy,
-prices, layout order) for code that shipped in the reviewed binary fall outside the
-sentence; a screen, tab, or capability that exists only after a server-side switch
-falls inside it. That reading is an inference from the text plus Apple's "features
+price display, layout order) for code that shipped in the reviewed binary read as
+outside the sentence; a screen, tab, or capability that exists only after a
+server-side switch reads as inside it. That reading is an inference from the text plus Apple's "features
 that weren't included in the version submitted" framing, not a quoted rule; say so
 when a finding depends on it.
 
 Static signals, each from source, lockfiles, or build settings:
 
 - **Reviewer detection** (review-risk): code that changes behavior when it believes
-  App Review is looking. Account-level exposure: it falls under 2.5.19's "other
-  methods" and the Introduction's "trick the review process". Grep for identifiers like
+  App Review is looking. Account-level exposure: it reads as one of 2.5.19's "other
+  methods", and the Introduction names trying "to trick the review process" as
+  grounds for expulsion. Grep for identifiers like
   `isReview`, `reviewMode`, `appReview`, `isAppleReviewer`, `underReview`; Apple IP
   ranges or ASN strings (`17.0.0.0/8`); geo checks against Cupertino; date gates that
   unlock a feature after a planned review window; and StoreKit environment checks
@@ -410,9 +411,11 @@ Static signals, each from source, lockfiles, or build settings:
   "should not contain hidden features or debugging options that alter the intended
   user experience for the general public". Role-gated admin screens (`isAdmin`, role
   checks) are a different case: a production admin area is legitimate, but the
-  reviewer needs credentials for it or a review-notes line saying what it is
-  (2.3.1(a); per-role demo accounts in metadata-and-review-notes.md). Flag the
-  missing disclosure (judgment-call), not the screen.
+  reviewer needs demo credentials for that role, since Apple's help page on
+  completing a review asks for credentials for each account type, administrative
+  accounts included; a review-notes description alone does not substitute. Flag
+  missing per-role credentials (review-risk, 2.1(a); demo account checklist in
+  metadata-and-review-notes.md), not the screen.
 - **Obfuscated feature code** (review-risk; the one method the text names): selectors and
   class names assembled from decoded strings (`NSClassFromString`,
   `NSSelectorFromString`, `performSelector` with runtime-built names), base64 or XOR
