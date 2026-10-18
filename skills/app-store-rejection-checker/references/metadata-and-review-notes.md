@@ -2,7 +2,7 @@
 
 The store-listing and submission-form surface: what reviewers cross-check against the
 binary, and how the review process behaves when something is rejected. Guideline
-numbers verified against the live guidelines on 2026-08-20.
+numbers verified against the live guidelines on 2026-10-17.
 
 Contents:
 
@@ -18,11 +18,36 @@ Contents:
   the binary does. Cross-check every feature claim in the description against the code
   inventory from Step 2; flag claims with no implementation ("AI-powered" with no model
   or API call in the code, "community" with no UGC surface). Hidden, dormant, or
-  undocumented features in the build are an explicit 2.3.1 violation.
+  undocumented features in the build are a 2.5.19 violation since October 2026
+  (previously 2.3.1), with account termination named in the text; see
+  static-checks.md section 13. 2.3.1(a) itself still makes misleading marketing,
+  "whether within or outside of the App Store", grounds for removal.
 - **IAP disclosure (2.3.2)**: if items, levels, or subscriptions require additional
   purchases, the description, screenshots, and previews must say so.
 - **Screenshots (2.3.3)**: must show the app in use, not splash screens, login walls,
-  or pure marketing art.
+  or pure marketing art. Apple's 2.3.3 help page (linked from the guideline since
+  October 2026) says App Review approves only submissions "where more than half of
+  screenshots show the app in use" per device set; its best practices also ask that
+  screenshots be updated with each version to match the current interface. Starting
+  April 2027, submissions must also include iPhone Duo screenshots (Apple news,
+  October 5, 2026).
+- **Creative assets (2.3.14, since October 16, 2026)**: promotional assets for the
+  product page header and search results (Asset Library in App Store Connect) are a
+  separate surface from screenshots. Live text: they "must pertain to your app's
+  content and functionality or overarching brand, follow standard metadata
+  guidelines, and be appropriate for all audiences" and "should not include
+  inappropriate content, references to other apps with an intent to mislead,
+  unverifiable product claims, or specific or discounted pricing information."
+  Apple's asset best practices page adds: no website URLs or copyright symbols, no
+  Apple-designated recognitions (Editor's Choice, App of the Day, Apple Design Award),
+  no logos or references to other platforms or marketplaces, and a 4+ rating for
+  every asset regardless of the app's rating. Flag assets that show prices or
+  discounts, award or ranking claims the developer cannot verify, competitor or
+  other-platform names, or content above 4+. Rules:
+  developer.apple.com/app-store/asset-best-practices/. If the developer confirms no
+  creative assets are configured, say so in one line; if they were simply not
+  supplied, mark 2.3.14 "not audited", since assets can exist in App Store Connect
+  without being in the repo.
 - **Age rating (2.3.6)**: answers must match the app's actual content and features.
   The questionnaire was overhauled in 2025 (see recent-changes.md): tiers are now 4+,
   9+, 13+, 16+, 18+ (displayed on OS 26 and later; older OS versions show the old
@@ -55,7 +80,11 @@ cannot infer from the binary:
 - Setup steps to reach core functionality quickly
 - Region-locked or geo-dependent content, and how to see it from the review location
 - Required hardware or peripherals, and what happens without them
-- Server-driven or remote-config behavior, explained rather than discovered
+- Server-driven or remote-config behavior, explained rather than discovered: name
+  the flags and experiments the reviewer may hit, what each variant shows, and
+  confirm every variant is reachable in the submitted build (2.5.19 wants
+  functionality "clear to end users and App Review"; a variant the reviewer cannot
+  reach reads as undocumented)
 - For medical apps with regulatory clearance: the link to that documentation (1.4.1)
 - For VPN or licensed categories: license information where a territory requires it
 

@@ -24,7 +24,7 @@ Non-negotiable output rules:
 3. Never promise approval, estimate approval odds as a percentage, or invent statistics.
    Passing this audit reduces known risks; it does not guarantee anything.
 4. The live guidelines text fetched in Step 1 is the authority. The bundled reference
-   files are a map of the rejection landscape (verified 2026-08-20); on any conflict,
+   files are a map of the rejection landscape (verified 2026-10-17); on any conflict,
    the live text wins, and the report should note the discrepancy. When the live fetch
    truncates before a section, a finding may quote wording recovered via the Step 1
    web-search fallback instead, labeled as a secondary source.
@@ -48,9 +48,10 @@ prompts to pull each area out of the snapshot:
    that the tail of the live text could not be confirmed this run.
 
 Then check https://developer.apple.com/news/ for review-related announcements newer than
-the reference files (they were last verified against the live text on 2026-08-20). Pay
-attention to anything touching payments, privacy, age ratings, or AI, since those moved
-repeatedly in 2024-2026; [references/recent-changes.md](references/recent-changes.md)
+the reference files (they were last verified against the live text on 2026-10-17, the
+day after the October 16, 2026 revision). Pay attention to anything touching payments,
+privacy, age ratings, AI, or hidden features, since those moved repeatedly in
+2024-2026; [references/recent-changes.md](references/recent-changes.md)
 lists the changes already covered. When a headline plausibly applies to the app under
 audit, fetch the announcement and assess its applicability like any other check;
 headlines that do not apply get one line in the verification note, nothing more. This
@@ -91,18 +92,21 @@ Build a picture of what the app actually is before judging it:
 
 Classify the app: does it have accounts, payments, subscriptions, UGC, chat or AI
 features, web content, kids targeting, health/medical/finance/gambling/VPN exposure?
-The classification decides which checks below are load-bearing.
+The classification decides which checks below are load-bearing. Since October 2026,
+AI content generators (image, video, or text) count as 1.2 user-generated content
+apps, and random or anonymous chat has since February 2026; classify them as UGC.
 
 If the project also builds for other platforms (macOS, watchOS, visionOS, tvOS
 targets, or shared entitlements carrying their keys), state in the report that only
 the iOS/iPadOS surface is audited and the other platforms are out of scope.
 
 If App Store Connect metadata is not in the repo, ask the user to paste the app name,
-subtitle, description, keywords, age rating, screenshots description, and the App Review
-Information fields (notes and demo account). The metadata checks are real rejection
-surfaces; skipping them silently would understate risk. If the user declines, or there
-is no user to ask (a non-interactive or CI run), mark those checks "not audited" in the
-report and continue. Never invent metadata to audit.
+subtitle, description, keywords, age rating, screenshots description, creative assets
+(product page header and search result images or videos, if any are configured), and
+the App Review Information fields (notes and demo account). The metadata checks are
+real rejection surfaces; skipping them silently would understate risk. If the user
+declines, or there is no user to ask (a non-interactive or CI run), mark those checks
+"not audited" in the report and continue. Never invent metadata to audit.
 
 ## Step 3: static checks
 
@@ -126,6 +130,8 @@ mechanically verifiable surface:
   without disclosure and consent wiring.
 - Web-wrapper fingerprints (guideline 4.2).
 - Dynamic code loading, deprecated API red flags.
+- Hidden, dormant, or undocumented features (2.5.19, since October 2026): reviewer
+  detection, features shipped dark behind a switch, obfuscated entry points.
 
 These checks read build settings, plists, lockfiles, and source. Prefer evidence from
 files over inference; quote file paths and keys in findings.
@@ -136,9 +142,22 @@ This is the part a linter cannot do. Read the code and the copy, then judge:
 
 - **2.3 metadata accuracy**: does the store description claim anything the code does not
   implement? Do screenshots (as described) show the app in use, or splash/marketing art?
-  Are there hidden, dormant, or undocumented features in the code (2.3.1), including
-  debug switches, remote feature flags that change behavior after review, or endpoints
-  that serve different content by region or date?
+  If the listing uses creative assets (2.3.14, since October 2026), do they stay on
+  the app's actual content or brand, with no pricing, no unverifiable claims, and
+  nothing a 4+ audience should not see?
+- **2.5.19 hidden, dormant, or undocumented features** (moved out of 2.3.1 in
+  October 2026, now with explicit account-termination language): is every feature in
+  the binary reachable and documented for the reviewer? Look for debug switches live
+  in Release, features shipped dark behind a remote flag with no mention in the
+  review notes, reviewer or sandbox detection that changes what the app shows, and
+  endpoints that serve different content by region or date. The text names neither
+  remote configuration nor A/B testing. Remote changes to data (paywall copy, price
+  display, layout order) for code that shipped in the reviewed binary read as outside
+  the sentence, and a feature that only exists after a server-side switch reads as
+  inside it; that is an inference from the text and Apple's announcement, not a
+  quoted rule, so label findings that rest on it. A remotely changed price also
+  touches 2.3.1(a) ("promoting a false price"). Static signals: static-checks.md
+  section 13.
 - **4.2 minimum functionality / 4.3 differentiation**: for thin apps, wrappers, and apps
   in categories Apple names as saturated (dating, flashlight, sound effects, wallpaper,
   simple timers, fortune telling), form a view on what this app does that existing apps
@@ -168,8 +187,9 @@ plus recurring developer reports) with per-cluster confidence labels.
 Work through [references/metadata-and-review-notes.md](references/metadata-and-review-notes.md)
 for the App Store Connect surface: name and keyword rules (2.3.7), screenshot rules
 (2.3.3), IAP disclosure in metadata (2.3.2), age rating (2.3.6 and the 2025-2026
-questionnaire overhaul), review notes (2.3.1), and demo credentials. It also explains
-what "Metadata Rejected" means mechanically and what to expect from review timing.
+questionnaire overhaul), creative assets (2.3.14), review notes (2.3.1), and demo
+credentials. It also explains what "Metadata Rejected" means mechanically and what to
+expect from review timing.
 
 ## Step 6: report
 

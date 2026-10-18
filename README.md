@@ -12,7 +12,9 @@ honest confidence level.
 - **Static checks** for the mechanical surface: purpose strings vs the APIs you
   actually link, privacy manifest and required-reason declarations, entitlements,
   export compliance, IAP and restore wiring, account deletion, App Tracking
-  Transparency, web-wrapper fingerprints.
+  Transparency, web-wrapper fingerprints, and the hidden-feature patterns behind
+  Apple's October 2026 rule 2.5.19 (reviewer detection, features shipped dark
+  behind a switch, obfuscated entry points).
 - **Semantic review** for what mechanical tools cannot judge: does your description
   match what the app does, is it differentiated enough for a saturated category,
   will your review notes and demo account get a reviewer to your core flow, does
@@ -69,20 +71,22 @@ associated backend records, then re-run this audit.
 | Area | Examples |
 |---|---|
 | Completeness signals (2.1) | demo account and review notes quality, placeholder content |
-| Metadata accuracy (2.3.x) | description vs actual code, screenshots, name and keyword rules, age rating answers |
+| Metadata accuracy (2.3.x) | description vs actual code, screenshots, creative assets, name and keyword rules, age rating answers |
+| Hidden features (2.5.19) | reviewer detection, features shipped dark behind a switch, obfuscated entry points, review-notes coverage of flags and experiments |
 | Payments (3.1.x) | digital goods outside IAP, restore purchases, subscription disclosure, loot box odds |
 | Minimum functionality (4.2) | web-wrapper fingerprints, thin AI-wrapper patterns |
 | Differentiation (4.3) | saturated-category exposure, template output signals |
 | Login services (4.8) | social login without a privacy-protecting alternative |
 | Privacy (5.1.x) | purpose strings, privacy manifest, account deletion, ATT, third-party AI data sharing |
-| Special categories | kids, medical, gambling, VPN, crypto, finance, UGC obligations |
-| Recent rule changes | 2024-2026 surfaces: privacy manifests, AI disclosure, age rating overhaul, EU DMA |
+| Special categories | kids, medical, gambling, VPN, crypto, finance, UGC obligations (since October 2026 also AI content generators) |
+| Recent rule changes | 2024-2026 surfaces: privacy manifests, AI disclosure, age rating overhaul, EU DMA, the October 2026 hidden-feature and creative-asset rules |
 
 Guideline numbers in the bundled references were verified against the live text on
-2026-08-20. Each run re-fetches the main guidelines (the authority on any
-conflict) and quotes finding-relevant wording from them, scans Apple's news feed
-headlines, and fetches auxiliary policy pages (account deletion, EU DMA terms, age
-ratings, required-reason APIs) when a finding depends on them.
+2026-10-17, the day after Apple's October 16, 2026 revision. Each run re-fetches
+the main guidelines (the authority on any conflict) and quotes finding-relevant
+wording from them, scans Apple's news feed headlines, and fetches auxiliary policy
+pages (account deletion, EU DMA terms, age ratings, required-reason APIs) when a
+finding depends on them.
 
 ## Honest limits
 
