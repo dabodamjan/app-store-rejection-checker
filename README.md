@@ -12,8 +12,10 @@ honest confidence level.
 - **Static checks** for the mechanical surface: purpose strings vs the APIs you
   actually link, privacy manifest and required-reason declarations, entitlements,
   export compliance, IAP and restore wiring, the paywall disclosures Apple's
-  subscription rules require (trial length and the price after it, billed amount
-  most prominent, no trial toggle, no false or tricky price), account deletion, App
+  subscription rules require (the offer and the price after it, billed amount most
+  prominent, terms and privacy links in the app), the free-trial toggle that
+  subscription vendors report rejected since January 2026, price comparisons the
+  developer cannot back, account deletion, App
   Tracking Transparency, ratings-prompt rules, web-wrapper fingerprints, and the
   hidden-feature patterns behind Apple's October 2026 rule 2.5.19 (reviewer
   detection, features shipped dark behind a switch, dormant code, obfuscated entry
@@ -24,9 +26,10 @@ honest confidence level.
   reviewer's fresh sandbox account see the same paywall your users see, does your AI
   feature get consent before sharing personal data with a third-party AI service.
 - **Account-level exposure called out.** Findings whose guideline or license clause
-  names developer-account termination (hidden features, false prices, subscription
-  bait-and-switch, review manipulation) are ranked above everything else and labeled
-  as such, because an appeal rarely restores a terminated account.
+  names developer-account termination (concealed features, false prices,
+  subscription bait-and-switch, review manipulation) are ranked above everything
+  else and labeled as such when the evidence matches the clause's condition, because
+  an appeal rarely restores a terminated account.
 - **Portable.** Written in the open Agent Skills format; Cursor, Codex CLI, and
   Gemini CLI run it too. See [Use with other agents](#use-with-other-agents).
 
@@ -93,8 +96,9 @@ Guideline numbers in the bundled references were verified against the live text 
 2026-11-05 (Apple's text dated October 16, 2026). Each run re-fetches
 the main guidelines (the authority on any conflict) and quotes finding-relevant
 wording from them, scans Apple's news feed headlines, and fetches auxiliary policy
-pages (account deletion, EU DMA terms, age ratings, required-reason APIs) when a
-finding depends on them.
+pages (account deletion, EU DMA terms, age ratings, required-reason APIs, the
+subscriptions page, the license agreement, and the App Store Connect and App Review
+help pages the references quote) when a finding depends on them.
 
 ## Honest limits
 

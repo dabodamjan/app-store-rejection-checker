@@ -69,6 +69,15 @@ When a finding depends on one of these surfaces, fetch the relevant page too:
 - Developer Program License Agreement (Schedule 2 subscription disclosures; the
   conduct and termination clauses): developer.apple.com/support/terms/apple-developer-program-license-agreement/
   (long; fetch in chunks and quote the clause, not a summary)
+- App categories: developer.apple.com/app-store/categories/
+- Privacy label definitions ("collect"): developer.apple.com/app-store/app-privacy-details/
+- Regulated medical device declaration:
+  developer.apple.com/help/app-store-connect/manage-app-information/declare-regulated-medical-device-status/
+- Review status and information requests:
+  developer.apple.com/help/app-review/after-submitting-for-review/review-status/
+- Appeals: developer.apple.com/help/app-review/after-submitting-for-review/appeal-to-the-app-review-board
+- Submitting in-app purchases with a version:
+  developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase
 
 Pages under developer.apple.com/documentation/ are rendered client-side; a plain fetch
 often returns an empty shell. When that happens, fall back to a web search for the
@@ -100,9 +109,9 @@ features, web content, kids targeting, health/medical/finance/gambling/VPN expos
 The classification decides which checks below are load-bearing. Since October 2026,
 AI content generators (image, video, or text) count as 1.2 user-generated content
 apps, and random or anonymous chat has since February 2026; classify them as UGC.
-Diet, nutrition, allergen, symptom, and sleep apps count as health for 1.4.1 whenever
-they tell the user what is safe, healthy, or recommended, whatever their store
-category.
+Diet, nutrition, allergen, symptom, sleep, and supplement apps count as health for
+1.4.1 whenever they tell the user what is safe, healthy, or recommended, whatever
+their store category.
 
 Ask whether this app, or an earlier version, has been rejected before, and for the
 rejection text if so. Repeated rejections for the same guideline change the advice
@@ -135,11 +144,11 @@ mechanically verifiable surface:
   alternative.
 - Export compliance (`ITSAppUsesNonExemptEncryption`).
 - Payments wiring: IAP vs external payment SDKs for digital goods, restore purchases,
-  loot box odds, and the paywall disclosure checklist: trial length with the price
-  billed after it and a renewal statement, the billed amount as the most prominent
-  price, terms and privacy links in the app, no trial toggle, and no false or tricky
-  price (strikethrough reference prices never charged, permanent discounts, fake
-  urgency).
+  loot box odds, and the paywall disclosure checklist: the offer and the price
+  billed after it, the billed amount as the most prominent price, terms and privacy
+  links in the app, the free-trial toggle (no published rule; subscription vendors
+  report rejections since January 2026), and price comparisons the developer cannot
+  back with a configured price or offer.
 - Account deletion path when account creation exists.
 - App Tracking Transparency wiring vs tracking SDKs.
 - Analytics consent: analytics SDKs initialized collection-on with no consent flow.
@@ -149,10 +158,11 @@ mechanically verifiable surface:
 - Dynamic code loading, deprecated API red flags.
 - Hidden, dormant, or undocumented features (2.5.19, since October 2026): reviewer
   detection (a paywall that hides options on a sandbox receipt is the common shape),
-  features shipped dark behind a switch, dormant code compiled in with no path to it,
-  obfuscated entry points.
-- Ratings prompts (5.6.1): custom rate-us UI instead of the system request, review
-  gating that filters who sees the prompt, access or rewards conditioned on rating.
+  features shipped dark behind a switch, test switches readable in Release,
+  unreachable screens still compiled in, obfuscated entry points.
+- Ratings prompts: custom rate-us UI instead of the system request (5.6.1), review
+  gating that filters who sees the prompt (Section 3 introduction, 5.6.3), access or
+  rewards conditioned on rating (3.2.2(x)).
 
 These checks read build settings, plists, lockfiles, and source. Prefer evidence from
 files over inference; quote file paths and keys in findings.
@@ -181,9 +191,10 @@ This is the part a linter cannot do. Read the code and the copy, then judge:
   section 13.
 - **3.1.2 paywall as the reviewer will see it**: the static checklist says what the
   screen must contain; the judgment is what a reviewer on a fresh sandbox account
-  actually sees. Trial copy gated on an eligibility result, prices assembled from
-  constants rather than product data, and offers that depend on remote configuration
-  can all show the reviewer a screen that does not match Apple's purchase sheet. Say
+  actually sees. Trial copy whose error or unknown path shows no offer, prices
+  assembled from constants rather than product data, and offers that depend on
+  remote configuration can all show the reviewer a screen that does not match
+  Apple's purchase sheet. Say
   which of these the code can do, label the mismatch as an inference, and give the
   test (run the paywall on a fresh sandbox tester). Details: static-checks.md
   section 6.
@@ -234,7 +245,11 @@ Produce the report as markdown. Structure:
    frequency; a rare special-category miss outranks a frequent metadata nit, and a
    finding whose guideline or license clause names account termination (the list in
    rejection-taxonomy.md, account-level exposure) outranks everything else at the same
-   confidence. Say "account-level" in the title of such a finding. Each finding:
+   confidence, provided the evidence matches the clause's condition (concealment, a
+   false price actually shown, data shared with no consent, repetition the developer
+   confirmed) and not only its subject. Say "account-level" in the title of such a
+   finding; an honest metadata mistake or unreachable code with no concealment
+   signal does not get the label. Each finding:
 
    ```
    ### [guideline number] short title
@@ -270,12 +285,16 @@ Produce the report as markdown. Structure:
    carry the taxonomy file's per-cluster labels (high, medium-high, medium
    confidence) into a finding.
 
-3. **Not checked**: list what this audit cannot see. At minimum: runtime crashes,
-   broken links, restore-purchase behavior, what the reviewer's sandbox account
-   returns for product loading and trial eligibility, live server content, OAuth
-   flows, the developer's App Store Connect state (product status, agreements, account
-   type, submission history), and anything driven by remote configuration. Never imply
-   these were verified.
+3. **Not checked**: list what this audit cannot see, in three groups so the reader
+   knows what each line rests on: what the run verified itself (a URL it fetched, a
+   file it read), what the developer supplied and the run took on their word (account
+   type, submission history, product status, which creative assets exist), and what
+   nobody checked. The third group at minimum: runtime crashes, restore-purchase
+   behavior, what the reviewer's sandbox account returns for product loading and
+   trial eligibility, live server content, OAuth flows, agreements in App Store
+   Connect, and anything driven by remote configuration. A fact the developer
+   supplied moves to the second group, not the first; a URL the run fetched moves to
+   the first. Never imply the third group was verified.
 4. **Verification note**: state that guideline citations were checked against the live
    guidelines during this run, and list any section the live fetch could not confirm.
    For each such section, say whether any finding quotes search-derived wording
