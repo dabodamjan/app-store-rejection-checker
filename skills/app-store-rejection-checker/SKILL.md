@@ -24,7 +24,7 @@ Non-negotiable output rules:
 3. Never promise approval, estimate approval odds as a percentage, or invent statistics.
    Passing this audit reduces known risks; it does not guarantee anything.
 4. The live guidelines text fetched in Step 1 is the authority. The bundled reference
-   files are a map of the rejection landscape (verified 2026-10-17); on any conflict,
+   files are a map of the rejection landscape (verified 2026-11-05); on any conflict,
    the live text wins, and the report should note the discrepancy. When the live fetch
    truncates before a section, a finding may quote wording recovered via the Step 1
    web-search fallback instead, labeled as a secondary source.
@@ -48,8 +48,8 @@ prompts to pull each area out of the snapshot:
    that the tail of the live text could not be confirmed this run.
 
 Then check https://developer.apple.com/news/ for review-related announcements newer than
-the reference files (they were last verified against the live text on 2026-10-17, the
-day after the October 16, 2026 revision). Pay attention to anything touching payments,
+the reference files (they were last verified against the live text on 2026-11-05; the
+text was dated October 16, 2026). Pay attention to anything touching payments,
 privacy, age ratings, AI, or hidden features, since those moved repeatedly in
 2024-2026; [references/recent-changes.md](references/recent-changes.md)
 lists the changes already covered. When a headline plausibly applies to the app under
@@ -64,6 +64,11 @@ When a finding depends on one of these surfaces, fetch the relevant page too:
 - Age ratings: developer.apple.com/help/app-store-connect/reference/age-ratings/
 - Required-reason APIs:
   developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api
+- Subscription paywall rules (trial disclosure, price prominence):
+  developer.apple.com/app-store/subscriptions/
+- Developer Program License Agreement (Schedule 2 subscription disclosures; the
+  conduct and termination clauses): developer.apple.com/support/terms/apple-developer-program-license-agreement/
+  (long; fetch in chunks and quote the clause, not a summary)
 
 Pages under developer.apple.com/documentation/ are rendered client-side; a plain fetch
 often returns an empty shell. When that happens, fall back to a web search for the
@@ -95,6 +100,14 @@ features, web content, kids targeting, health/medical/finance/gambling/VPN expos
 The classification decides which checks below are load-bearing. Since October 2026,
 AI content generators (image, video, or text) count as 1.2 user-generated content
 apps, and random or anonymous chat has since February 2026; classify them as UGC.
+Diet, nutrition, allergen, symptom, and sleep apps count as health for 1.4.1 whenever
+they tell the user what is safe, healthy, or recommended, whatever their store
+category.
+
+Ask whether this app, or an earlier version, has been rejected before, and for the
+rejection text if so. Repeated rejections for the same guideline change the advice
+(metadata-and-review-notes.md, repeated rejections section) and raise the severity of
+anything the earlier rejection already named.
 
 If the project also builds for other platforms (macOS, watchOS, visionOS, tvOS
 targets, or shared entitlements carrying their keys), state in the report that only
@@ -122,7 +135,11 @@ mechanically verifiable surface:
   alternative.
 - Export compliance (`ITSAppUsesNonExemptEncryption`).
 - Payments wiring: IAP vs external payment SDKs for digital goods, restore purchases,
-  subscription disclosure, loot box odds.
+  loot box odds, and the paywall disclosure checklist: trial length with the price
+  billed after it and a renewal statement, the billed amount as the most prominent
+  price, terms and privacy links in the app, no trial toggle, and no false or tricky
+  price (strikethrough reference prices never charged, permanent discounts, fake
+  urgency).
 - Account deletion path when account creation exists.
 - App Tracking Transparency wiring vs tracking SDKs.
 - Analytics consent: analytics SDKs initialized collection-on with no consent flow.
@@ -131,7 +148,11 @@ mechanically verifiable surface:
 - Web-wrapper fingerprints (guideline 4.2).
 - Dynamic code loading, deprecated API red flags.
 - Hidden, dormant, or undocumented features (2.5.19, since October 2026): reviewer
-  detection, features shipped dark behind a switch, obfuscated entry points.
+  detection (a paywall that hides options on a sandbox receipt is the common shape),
+  features shipped dark behind a switch, dormant code compiled in with no path to it,
+  obfuscated entry points.
+- Ratings prompts (5.6.1): custom rate-us UI instead of the system request, review
+  gating that filters who sees the prompt, access or rewards conditioned on rating.
 
 These checks read build settings, plists, lockfiles, and source. Prefer evidence from
 files over inference; quote file paths and keys in findings.
@@ -158,6 +179,14 @@ This is the part a linter cannot do. Read the code and the copy, then judge:
   quoted rule, so label findings that rest on it. A remotely changed price also
   touches 2.3.1(a) ("promoting a false price"). Static signals: static-checks.md
   section 13.
+- **3.1.2 paywall as the reviewer will see it**: the static checklist says what the
+  screen must contain; the judgment is what a reviewer on a fresh sandbox account
+  actually sees. Trial copy gated on an eligibility result, prices assembled from
+  constants rather than product data, and offers that depend on remote configuration
+  can all show the reviewer a screen that does not match Apple's purchase sheet. Say
+  which of these the code can do, label the mismatch as an inference, and give the
+  test (run the paywall on a fresh sandbox tester). Details: static-checks.md
+  section 6.
 - **4.2 minimum functionality / 4.3 differentiation**: for thin apps, wrappers, and apps
   in categories Apple names as saturated (dating, flashlight, sound effects, wallpaper,
   simple timers, fortune telling), form a view on what this app does that existing apps
@@ -186,10 +215,12 @@ plus recurring developer reports) with per-cluster confidence labels.
 
 Work through [references/metadata-and-review-notes.md](references/metadata-and-review-notes.md)
 for the App Store Connect surface: name and keyword rules (2.3.7), screenshot rules
-(2.3.3), IAP disclosure in metadata (2.3.2), age rating (2.3.6 and the 2025-2026
-questionnaire overhaul), creative assets (2.3.14), review notes (2.3.1), and demo
-credentials. It also explains what "Metadata Rejected" means mechanically and what to
-expect from review timing.
+(2.3.3), IAP disclosure in metadata (2.3.2), prices shown in metadata (2.3.1(a)),
+category fit (2.3.5), age rating (2.3.6 and the 2025-2026 questionnaire overhaul),
+creative assets (2.3.14), developer identity and support contact (1.5, 5.6.2), review
+notes (2.3.1), demo credentials, and in-app purchase readiness for the reviewer's
+sandbox (2.1(b)). It also explains what "Metadata Rejected" means mechanically, what
+to expect from review timing, and why repeated rejections are an account-level matter.
 
 ## Step 6: report
 
@@ -200,8 +231,10 @@ Produce the report as markdown. Structure:
 2. **Findings**, ordered by severity then confidence. Severity means likely rejection
    impact: how likely the finding, shipped as-is, is to block approval or force a
    resubmission. It is not the taxonomy file's cluster ranking, which reflects
-   frequency; a rare special-category miss outranks a frequent metadata nit. Each
-   finding:
+   frequency; a rare special-category miss outranks a frequent metadata nit, and a
+   finding whose guideline or license clause names account termination (the list in
+   rejection-taxonomy.md, account-level exposure) outranks everything else at the same
+   confidence. Say "account-level" in the title of such a finding. Each finding:
 
    ```
    ### [guideline number] short title
@@ -238,8 +271,11 @@ Produce the report as markdown. Structure:
    confidence) into a finding.
 
 3. **Not checked**: list what this audit cannot see. At minimum: runtime crashes,
-   broken links, restore-purchase behavior, live server content, OAuth flows, and
-   anything driven by remote configuration. Never imply these were verified.
+   broken links, restore-purchase behavior, what the reviewer's sandbox account
+   returns for product loading and trial eligibility, live server content, OAuth
+   flows, the developer's App Store Connect state (product status, agreements, account
+   type, submission history), and anything driven by remote configuration. Never imply
+   these were verified.
 4. **Verification note**: state that guideline citations were checked against the live
    guidelines during this run, and list any section the live fetch could not confirm.
    For each such section, say whether any finding quotes search-derived wording

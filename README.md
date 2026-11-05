@@ -11,15 +11,22 @@ honest confidence level.
   current App Store Review Guidelines from Apple's site.
 - **Static checks** for the mechanical surface: purpose strings vs the APIs you
   actually link, privacy manifest and required-reason declarations, entitlements,
-  export compliance, IAP and restore wiring, account deletion, App Tracking
-  Transparency, web-wrapper fingerprints, and the hidden-feature patterns behind
-  Apple's October 2026 rule 2.5.19 (reviewer detection, features shipped dark
-  behind a switch, obfuscated entry points).
+  export compliance, IAP and restore wiring, the paywall disclosures Apple's
+  subscription rules require (trial length and the price after it, billed amount
+  most prominent, no trial toggle, no false or tricky price), account deletion, App
+  Tracking Transparency, ratings-prompt rules, web-wrapper fingerprints, and the
+  hidden-feature patterns behind Apple's October 2026 rule 2.5.19 (reviewer
+  detection, features shipped dark behind a switch, dormant code, obfuscated entry
+  points).
 - **Semantic review** for what mechanical tools cannot judge: does your description
   match what the app does, is it differentiated enough for a saturated category,
-  will your review notes and demo account get a reviewer to your core flow, does
-  your AI feature get consent before sharing personal data with a third-party
-  AI service.
+  will your review notes and demo account get a reviewer to your core flow, will the
+  reviewer's fresh sandbox account see the same paywall your users see, does your AI
+  feature get consent before sharing personal data with a third-party AI service.
+- **Account-level exposure called out.** Findings whose guideline or license clause
+  names developer-account termination (hidden features, false prices, subscription
+  bait-and-switch, review manipulation) are ranked above everything else and labeled
+  as such, because an appeal rarely restores a terminated account.
 - **Portable.** Written in the open Agent Skills format; Cursor, Codex CLI, and
   Gemini CLI run it too. See [Use with other agents](#use-with-other-agents).
 
@@ -70,19 +77,20 @@ associated backend records, then re-run this audit.
 
 | Area | Examples |
 |---|---|
-| Completeness signals (2.1) | demo account and review notes quality, placeholder content |
-| Metadata accuracy (2.3.x) | description vs actual code, screenshots, creative assets, name and keyword rules, age rating answers |
-| Hidden features (2.5.19) | reviewer detection, features shipped dark behind a switch, obfuscated entry points, review-notes coverage of flags and experiments |
-| Payments (3.1.x) | digital goods outside IAP, restore purchases, subscription disclosure, loot box odds |
+| Completeness signals (2.1) | demo account and review notes quality, placeholder content, in-app purchases the reviewer's sandbox can actually load |
+| Metadata accuracy (2.3.x) | description vs actual code, screenshots, creative assets, prices shown in metadata, category fit, name and keyword rules, age rating answers |
+| Hidden features (2.5.19) | reviewer detection, features shipped dark behind a switch, dormant code, obfuscated entry points, review-notes coverage of flags and experiments |
+| Payments (3.1.x) | digital goods outside IAP, restore purchases, trial and renewal disclosure, price prominence, trial toggles, false or tricky prices, loot box odds |
 | Minimum functionality (4.2) | web-wrapper fingerprints, thin AI-wrapper patterns |
 | Differentiation (4.3) | saturated-category exposure, template output signals |
 | Login services (4.8) | social login without a privacy-protecting alternative |
-| Privacy (5.1.x) | purpose strings, privacy manifest, account deletion, ATT, third-party AI data sharing |
-| Special categories | kids, medical, gambling, VPN, crypto, finance, UGC obligations (since October 2026 also AI content generators) |
-| Recent rule changes | 2024-2026 surfaces: privacy manifests, AI disclosure, age rating overhaul, EU DMA, the October 2026 hidden-feature and creative-asset rules |
+| Privacy (5.1.x) | purpose strings, privacy manifest, account deletion, ATT, third-party AI data sharing and what it means for privacy labels |
+| Developer conduct (5.6) | custom or gated ratings prompts, developer identity and support contact, what the termination clauses actually say |
+| Special categories | kids, medical and health (sources shown in-app, verdict wording, doctor reminder, medical-device declaration, health data in iCloud), gambling, VPN, crypto, finance, UGC obligations (since October 2026 also AI content generators) |
+| Recent rule changes | 2024-2026 surfaces: privacy manifests, AI disclosure, age rating overhaul, EU DMA, the October 2026 hidden-feature and creative-asset rules, the October 2026 license agreement, 2026 enforcement shifts (trial toggles, limited-history requests) |
 
 Guideline numbers in the bundled references were verified against the live text on
-2026-10-17, the day after Apple's October 16, 2026 revision. Each run re-fetches
+2026-11-05 (Apple's text dated October 16, 2026). Each run re-fetches
 the main guidelines (the authority on any conflict) and quotes finding-relevant
 wording from them, scans Apple's news feed headlines, and fetches auxiliary policy
 pages (account deletion, EU DMA terms, age ratings, required-reason APIs) when a
