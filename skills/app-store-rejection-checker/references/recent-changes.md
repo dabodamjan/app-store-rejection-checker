@@ -122,18 +122,21 @@ earlier copy, so cite the current text and not a change):
   including through post-review modifications that would cause harm to others,
   including end users or Apple". That is the agreement-side counterpart of 2.5.19 and
   of Apple's "bait-and-switch" framing.
-- **Section 3.2, item 6** (the clause developers know as 3.2(f), the number
-  termination notices and the transparency report still use): no act "intended to
+- **Section 3.2, item 6** (the clause the transparency report and developers'
+  accounts of termination notices call 3.2(f); the current page numbers it 6, and
+  whether it was renumbered could not be confirmed against an earlier copy): no act "intended to
   interfere with ... Apple's business practices", with examples including fraudulent
   reviews and confusingly similar app names, and no "unlawful, unfair, misleading,
   fraudulent, improper, or dishonest acts or business practices", with "bait-and-switch
   pricing, consumer misrepresentation, deceptive business practices" as examples.
-- **Section 11.2, item 7**: termination "effective immediately upon notice" for "any
-  misleading, fraudulent, improper, unlawful or dishonest act relating to this
-  Agreement, including, but not limited to, misrepresenting the nature of Your
-  Application (e.g., hiding or trying to hide functionality from Apple's review,
-  falsifying consumer reviews for Your Application, engaging in payment fraud, etc.)."
-  Ordinary breaches get a 30-day cure period under item 1; this one does not.
+- **Section 11.2, item 7**: the section's lead-in says the agreement "will
+  terminate, effective immediately upon notice from Apple" on any listed condition;
+  item 7 is "any misleading, fraudulent, improper, unlawful or dishonest act relating
+  to this Agreement, including, but not limited to, misrepresenting the nature of
+  Your Application (e.g., hiding or trying to hide functionality from Apple's review,
+  falsifying consumer reviews for Your Application, engaging in payment fraud,
+  etc.)." Item 1, for ordinary breaches, builds in a 30-day cure period; item 7
+  does not.
 
 Schedule 2, section 3.8(b) (subscription disclosures: title, length, price, and
 privacy policy and terms links inside the app) is unchanged in substance and is quoted
@@ -158,19 +161,17 @@ developer and vendor reports, labelled as such; Apple published nothing.
 - **"Limited App Review history" information requests (since about September
   2026)**: new accounts report a Guideline 2.1 "Information Needed" message stating
   the app "has been submitted by a developer account that has a limited App Review
-  history" and asking for a physical-device screen recording plus purpose, setup,
-  external services, regional differences, and regulatory documents
-  (developer.apple.com/forums/thread/849346, message dated September 30, 2026;
-  github.com/sharneng/spliit2go/issues/184, October 5, 2026). Apple's review status
-  help page lists "Limited review history" as a reason for longer review but
-  describes no request. It is a delay and a to-do, not a rejection. Audit angle:
-  metadata-and-review-notes.md, review notes checklist.
+  history" (developer.apple.com/forums/thread/849346, message dated September 30,
+  2026); a GitHub issue shows the itemized request that came with it, a
+  physical-device screen recording plus purpose, setup, external services, regional
+  differences, and regulatory documents (github.com/sharneng/spliit2go/issues/184,
+  opened October 5, 2026). Apple's review status help page lists "Limited review
+  history" as a reason for longer review and does not tie it to any request. It is a
+  delay and a to-do, not a rejection. Audit angle: metadata-and-review-notes.md,
+  review notes checklist.
 
-Related context, from Apple: the "After You Submit" section says repeated rejection
-"for the same guideline violation" or attempts to "manipulate the review process" make
-review "take longer to complete"; 2026 forum threads tie repeated rejections to
-pending-termination notices (metadata-and-review-notes.md, repeated rejections
-section).
+Repeated rejections and the 2026 termination reports around them:
+metadata-and-review-notes.md, repeated rejections section.
 
 ## Regulated medical device declaration (March 2026)
 
@@ -198,8 +199,9 @@ Two earlier 2026 revisions, both verified from Apple's news posts:
   not be used "to spam, phish, or send unsolicited messages". The same post revised
   the Developer Program License Agreement (Foundation Models framework terms, a new
   AI and machine learning subsection 3.3.11, and in 3.1 and 14.8 "requirements for
-  providing information and responding to questions about developer identity"); the
-  agreement is behind sign-in and not audited by this skill.
+  providing information and responding to questions about developer identity"). The
+  agreement is public; the clauses this skill checks are in the October 2026 entry
+  above.
 
 ## Privacy manifests and required-reason APIs (May 2024)
 

@@ -43,11 +43,12 @@ The same report's account-level figures (fetched 2026-11-05): 193,035 developer
 accounts terminated, 192,702 of them under the license agreement's fraud clause
 (3.2(f) in the report's numbering); 10,127 termination appeals; 499 restorations,
 with a footnote that most appealed terminations were for fraud. Apple's May 20, 2026
-newsroom post adds that App Review uses AI to "analyze app similarity, and flag
-potentially problematic changes in app updates" and that it removed nearly 59,000 apps
-approved as simple games or utilities that then changed for fraud ("bait-and-switch").
-Those are the only published numbers on terminations; nothing says how many
-rejections or submissions precede one.
+newsroom post adds that "Apple's systems" use AI to "analyze app similarity, and flag
+potentially problematic changes in app updates", and that the review team removed
+nearly 59,000 apps in 2025 for "bait-and-switch maneuvers", including apps "initially
+approved as standard games or utilities" that changed after approval. Those are the
+only published numbers on terminations; nothing says how many rejections or
+submissions precede one.
 
 ## Ranked clusters
 
@@ -131,9 +132,11 @@ Hidden, dormant, or undocumented features used to sit in this cluster under 2.3.
 Since October 16, 2026 they are 2.5.19, whose text names code obfuscation and
 account termination, and Apple's companion announcement ties the rule to
 "bait-and-switch" apps and cites 193K developer accounts terminated for fraud and
-abuse in the previous year. Treat a 2.5.19 finding as account-level exposure, not a
-metadata nit: rank it by severity in the report even though its frequency is
-unknown. Static signals: static-checks.md section 13.
+abuse in the previous year. Treat a 2.5.19 finding that carries a concealment signal
+(reviewer detection, obfuscation, a switch that unhides a feature after approval) as
+account-level exposure, not a metadata nit: rank it by severity in the report even
+though its frequency is unknown. Dormant code with no such signal is an ordinary
+finding. Static signals: static-checks.md section 13.
 
 ### 9. UGC moderation and age rating (1.2, 2.3.6): medium confidence
 
@@ -166,14 +169,24 @@ October 16, 2026, plus the license agreement as fetched 2026-11-05:
 - Introduction: trying "to trick the review process", stealing data, copying, or
   manipulating ratings or discovery gets the developer "expelled from the Apple
   Developer Program".
-- 2.5.19: hiding undocumented features "through code obfuscation or other methods".
-- 2.3.1(a): misleading marketing and "promoting a false price, whether within or
-  outside of the App Store"; 2.3.1(b): "Egregious or repeated behavior".
-- 3.1.2(a): tricking users "into purchasing a subscription under false pretenses" or
-  "bait-and-switch and scam practices".
-- 4.3(b): "Repeated submissions of this kind".
 - 1.2: egregious or repeated failure to moderate; failing to remediate after notice
   is a Developer Code of Conduct matter.
+- 2.3.1(a): misleading marketing and "promoting a false price, whether within or
+  outside of the App Store"; 2.3.1(b): "Egregious or repeated behavior".
+- 2.5.3: apps that transmit harmful code; "Egregious violations and repeat behavior".
+- 2.5.19: hiding undocumented features "through code obfuscation or other methods".
+- 3.1.1(a): "misleading marketing practices, scams, or fraud in relation to" an
+  external purchase link entitlement.
+- 3.1.2(a): tricking users "into purchasing a subscription under false pretenses" or
+  "bait-and-switch and scam practices".
+- 4.1(b): "apps which impersonate other apps or services".
+- 4.3(b): "Repeated submissions of this kind".
+- 4.4.2: Safari extensions with "malicious or misleading content or code".
+- 4.5.3: exploiting "Player IDs, aliases, or other information obtained through Game
+  Center".
+- 5.1.1(vi): apps used "to surreptitiously discover passwords or other private data".
+- 5.1.2(i): "Apps that share user data without user consent or otherwise complying
+  with data privacy laws".
 - 5.4: VPN apps that do not comply.
 - 5.6: "Repeated manipulative or misleading behavior or other fraudulent conduct";
   5.6.4 counts "excessive customer reports ... and excessive refund requests" against
@@ -182,20 +195,33 @@ October 16, 2026, plus the license agreement as fetched 2026-11-05:
   the App Store, "bait-and-switch pricing, consumer misrepresentation, deceptive
   business practices"); section 3.2 item 5(3) (code that would "deceive regarding the
   identity, purpose, or behavior of the product, code, or program, including through
-  post-review modifications that would cause harm to others"); section 11.2 item 7,
-  termination "effective immediately upon notice" for "hiding or trying to hide
-  functionality from Apple's review, falsifying consumer reviews for Your Application,
-  engaging in payment fraud".
+  post-review modifications that would cause harm to others"); section 11.2, whose
+  lead-in makes termination "effective immediately upon notice from Apple" for every
+  condition it lists, with item 7 naming "hiding or trying to hide functionality from
+  Apple's review, falsifying consumer reviews for Your Application, engaging in
+  payment fraud" and, unlike item 1, no 30-day cure period.
 
-Which audit findings map onto that list: reviewer detection and dormant or obfuscated
-code (static-checks.md section 13), false or tricky prices and subscription
-bait-and-switch (section 6), review manipulation (section 14), missing UGC moderation
-in a generator app (special-categories.md), and anything in the review notes or
-metadata that is not true of the submitted build (metadata-and-review-notes.md). The
-pattern-of-submissions side (repeated rejections, replacement apps, template
-portfolios) is not visible from a repository; the report can only name it when the
-developer says the app has been rejected before. Reported 2026 cases and the advice
-that follows: metadata-and-review-notes.md, repeated rejections section.
+1.1 (objectionable content) is not on the list: its text carries no removal or
+termination language.
+
+The label is conditional. A finding earns "account-level" only when the evidence
+matches the clause's condition, not when it touches the clause's subject: a
+concealment signal (reviewer detection, obfuscation, a switch that unhides a feature
+after approval), a false price actually shown that the developer cannot back with a
+configured price or offer, personal data shared with no consent step, or repetition
+the developer has confirmed. Dormant code with no concealment signal, an honest
+metadata mistake, or a paywall missing a disclosure are ordinary 2.5.19, 2.3, or
+3.1.2 findings. Which audit findings can reach the label: reviewer detection and
+obfuscated code (static-checks.md section 13), false prices and subscription
+bait-and-switch the developer could not back (section 6), review manipulation
+(section 14), personal data shared with third parties with no consent step (sections
+8 and 10), missing UGC moderation in a generator app (special-categories.md), and
+review notes that describe a build the developer knows differs from the submitted
+one (metadata-and-review-notes.md). The pattern-of-submissions side (repeated
+rejections, replacement apps, template portfolios) is not visible from a repository;
+the report can only name it when the developer says the app has been rejected
+before. Reported 2026 cases and the advice that follows: metadata-and-review-notes.md,
+repeated rejections section.
 
 ## Frequency claims to distrust
 
