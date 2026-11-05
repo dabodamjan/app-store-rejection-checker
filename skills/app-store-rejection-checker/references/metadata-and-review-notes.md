@@ -2,15 +2,19 @@
 
 The store-listing and submission-form surface: what reviewers cross-check against the
 binary, and how the review process behaves when something is rejected. Guideline
-numbers verified against the live guidelines on 2026-10-17.
+numbers verified against the live guidelines on 2026-11-05 (text dated October 16,
+2026).
 
 Contents:
 
 1. [Metadata checks (2.3.x)](#metadata-checks-23x)
-2. [Review notes checklist (2.3.1)](#review-notes-checklist-231)
-3. [Demo account checklist (2.1)](#demo-account-checklist-21)
-4. [Metadata Rejected vs binary rejection](#metadata-rejected-vs-binary-rejection)
-5. [Review timing, expedited review, appeals](#review-timing-expedited-review-appeals)
+2. [Developer identity and contact (1.5, 5.6.2)](#developer-identity-and-contact-15-562)
+3. [Review notes checklist (2.3.1)](#review-notes-checklist-231)
+4. [Demo account checklist (2.1)](#demo-account-checklist-21)
+5. [In-app purchase readiness (2.1(b))](#in-app-purchase-readiness-21b)
+6. [Metadata Rejected vs binary rejection](#metadata-rejected-vs-binary-rejection)
+7. [Review timing, expedited review, appeals](#review-timing-expedited-review-appeals)
+8. [Repeated rejections and account exposure](#repeated-rejections-and-account-exposure)
 
 ## Metadata checks (2.3.x)
 
@@ -24,6 +28,24 @@ Contents:
   "whether within or outside of the App Store", grounds for removal.
 - **IAP disclosure (2.3.2)**: if items, levels, or subscriptions require additional
   purchases, the description, screenshots, and previews must say so.
+- **Prices in metadata (2.3.1(a), 2.3.7, 2.3.14)**: 2.3.1(a) makes "promoting a false
+  price, whether within or outside of the App Store" grounds for removal and account
+  termination, so the store surface counts: a strikethrough or "50% off" badge in a
+  screenshot, a price in the subtitle or keywords (2.3.7 bars pricing there), or a
+  discount in a creative asset (2.3.14 bars "specific or discounted pricing
+  information") each needs a configured price that matches. A price that appears
+  nowhere in the product configuration is a review-risk finding; prices that are
+  merely stale because storefront pricing changed are a judgment-call. The in-app side
+  of the same rule is in static-checks.md section 6.
+- **Category (2.3.5)**: "Select the most appropriate category for your app ... If
+  you're way off base, we may change the category for you." Apple's category
+  definitions page (developer.apple.com/app-store/categories/) adds that "Choosing
+  categories that are not appropriate for your app is against the App Review
+  Guidelines." Judgment-call, with one hard edge: a Health & Fitness or Medical
+  primary or secondary category triggers the regulated-medical-device declaration
+  (special-categories.md), so an app whose code is a diet or symptom tool but whose
+  category avoids both needs an honest fit elsewhere (Apple lists "dietary & food
+  allergy" under Food & Drink, for example), not a category chosen to dodge the form.
 - **Screenshots (2.3.3)**: must show the app in use, not splash screens, login walls,
   or pure marketing art. Apple's 2.3.3 help page (linked from the guideline since
   October 2026) says App Review approves only submissions "where more than half of
@@ -70,6 +92,36 @@ Contents:
 - **Rights to metadata materials (2.3.9, 5.2.1)**: no borrowed screenshots, brands, or
   celebrity imagery without permission.
 
+## Developer identity and contact (1.5, 5.6.2)
+
+Live text, 1.5: "Make sure your app and its Support URL include an easy way to contact
+you ... Failure to include accurate and up-to-date contact information not only
+frustrates customers, but may violate the law in some countries or regions." 5.6.2:
+"Your representation of yourself, your business, and your offerings on the App Store
+or alternative distribution must be accurate. The information you provide must be
+truthful, relevant, and up-to-date". 5.6 as a whole carries account termination.
+
+Checks, each on the metadata the developer supplied:
+
+- The support URL and privacy policy URL resolve, belong to the developer, and are not
+  placeholder or template pages (an unfilled site template, an empty policy, a
+  "coming soon" page). 2.1(a) separately rejects "empty websites, and other temporary
+  content". Review-risk when a URL is dead or empty; the audit can fetch the URLs if
+  network is available, and says so when it did.
+- The support page gives a working contact route (email, form, or similar), not only
+  marketing copy.
+- The seller name, legal entity, and support contact match the app's actual
+  publisher, and the privacy policy names the real data recipients (static-checks.md
+  sections 9 and 10 for the AI and analytics cases). Judgment-call; the audit cannot
+  verify legal identity, only consistency between what the policy says and what the
+  code does.
+- 5.1.1(ix): apps in "highly regulated fields (such as banking and financial services,
+  healthcare, gambling, legal cannabis use, air travel and crypto exchanges) or that
+  require sensitive user information should be submitted by a legal entity that
+  provides the services, and not by an individual developer." The account type is not
+  in the repo; when Step 2 puts the app in one of these fields, ask, and flag an
+  individual enrollment as a structural review-risk no code change fixes.
+
 ## Review notes checklist (2.3.1)
 
 Live text: "All new features, functionality, and product changes must be described with
@@ -87,6 +139,25 @@ cannot infer from the binary:
   reach reads as undocumented)
 - For medical apps with regulatory clearance: the link to that documentation (1.4.1)
 - For VPN or licensed categories: license information where a territory requires it
+- Every product, plan, price, flag, and experiment the notes name must exist in the
+  submitted build and configuration. Notes promising a plan that is not configured,
+  or a demo video recorded on an older version, read as "inaccurate metadata" and
+  "misleading responses in App Store Connect", two of the behaviors developers report
+  seeing listed in Apple's account termination notices (see the account exposure
+  section below). Cross-check the notes against the product list and the paywall code.
+- Expect a "limited App Review history" information request on a new account. Apple's
+  review status help page (developer.apple.com/help/app-review/after-submitting-for-review/review-status/)
+  lists "Limited review history: Apps with little or no prior App Review history" as
+  a reason reviews take longer. Developers report (September to October 2026,
+  developer.apple.com/forums/thread/849346; github.com/sharneng/spliit2go/issues/184)
+  a Guideline 2.1 "Information Needed" message quoting that phrase and asking for a
+  screen recording on a physical device running the latest OS from launch through the
+  main flow (registration, account deletion, content reporting and blocking, paid
+  features included), the app's purpose and audience, setup steps and credentials,
+  the external services it relies on, regional differences, and regulatory documents
+  where relevant. Those are reported requests, not guideline text; preparing the
+  recording and answers before the first submission costs little and shortens the
+  loop if the request comes.
 
 ## Demo account checklist (2.1)
 
@@ -100,6 +171,48 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
 - The backing server and staging environment stay up for the whole review window
 - If credentials legally cannot be provided, a demo mode needs prior arrangement with
   Apple; do not assume it silently substitutes
+
+## In-app purchase readiness (2.1(b))
+
+Live text: "If you offer in-app purchases in your app, make sure they are complete,
+up-to-date, visible to the reviewer and functional. If any configured in-app purchase
+items cannot be found or reviewed in your app, explain the reason in your review
+notes." The reviewer buys in Apple's sandbox, and the recurring failure shape is a
+paywall that cannot load its products or a purchase that errors, reported back as a
+2.1(b) rejection ("unable to complete purchase") even though the same build works for
+the developer. RevenueCat's rejection guide puts it plainly: "Often times, purchases
+will work fine in Sandbox and Testflight, but App Store Review will not be able to
+fetch products" (revenuecat.com/docs/test-and-launch/app-store-rejections, undated,
+a vendor source).
+
+What the audit can check from the repo and the supplied metadata:
+
+- **Products attached to the submission.** App Store Connect help
+  (developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase):
+  "The first consumable, non-consumable, auto-renewable subscription, and
+  non-renewing subscription In-App Purchase of each type must be submitted with a new
+  app version." A first-time product type that is not added to the version
+  submission is invisible to the reviewer. Ask whether every product the paywall code
+  references is attached and in a submittable state; if the developer cannot say,
+  list it under "Not checked".
+- **Product identifiers match.** The identifiers in code or in a `.storekit`
+  configuration must match the ones configured in App Store Connect, and the bundle
+  identifier must match the app record; a mismatch loads nothing. Compare the code's
+  identifier list with what the developer supplies.
+- **Error handling the reviewer can read.** A generic "Something went wrong" on
+  purchase failure gives the reviewer nothing to put in the rejection and the
+  developer nothing to diagnose. Not a guideline finding; recommend surfacing the
+  StoreKit error description in the alert and logging the product fetch result.
+- **Trial eligibility and sandbox state.** See the eligibility item in
+  static-checks.md section 6: what the reviewer's fresh sandbox account shows on the
+  paywall can differ from what the developer's account shows.
+
+Apple's technote TN3188 ("Troubleshooting In-App Purchases availability in the App
+Store", under developer.apple.com/documentation/technotes/) is the authoritative
+checklist for the App Store Connect side (agreement status, product status, regional
+availability). It renders client-side and a plain fetch returns an empty shell, so
+point the developer at it rather than quoting it. Runtime purchase behavior stays in
+the report's "Not checked" list regardless.
 
 ## Metadata Rejected vs binary rejection
 
@@ -127,7 +240,56 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
   genuinely time-sensitive event. Routine releases do not qualify, and repeated
   misuse gets future requests denied.
 - **On rejection**: reply in the Resolution Center first; a phone call can be
-  requested. An App Review Board appeal must argue specific compliance and is limited
-  to one appeal per rejected submission. If unrelated new issues surface during a
-  bug-fix review, Apple may offer to let the current submission through and defer the
-  new issues to the next one; that offer arrives in the message thread.
+  requested. Apple's appeal page
+  (developer.apple.com/help/app-review/after-submitting-for-review/appeal-to-the-app-review-board)
+  says to reply to the message in App Store Connect before appealing, to "Cite the
+  specific guideline or terms your app was rejected or removed under, and explain
+  point by point how your app meets it", to submit "one appeal per rejected or removed
+  app" covering every cited violation at once, and not to appeal "if you've addressed
+  the issues App Review identified and resubmitted the app for review." Its model
+  appeal attaches "screenshots showing the feature working as described"; a screen
+  recording of the flow is the practical equivalent. If unrelated new issues surface
+  during a bug-fix review, Apple may offer to let the current submission through and
+  defer the new issues to the next one; that offer arrives in the message thread.
+
+## Repeated rejections and account exposure
+
+The guidelines treat the pattern of submissions, not only each one. Live text in
+"After You Submit": "if your app is repeatedly rejected for the same guideline
+violation or you've attempted to manipulate the review process, review of your app
+will take longer to complete." 2.3.1(b): "Egregious or repeated behavior is grounds
+for removal from the Apple Developer Program." 4.3(b): "Repeated submissions of this
+kind may lead to removal from the Apple Developer Program." 5.6: "Repeated
+manipulative or misleading behavior or other fraudulent conduct will lead to your
+removal from the Apple Developer Program." Apple's 2025 transparency report
+(apple.com/legal/app-store/transparency/2025/) counts 193,035 developer accounts
+terminated, 10,127 termination appeals, and 499 restorations; its footnote says most
+appealed terminations were for fraud. Apple publishes no number of rejections that
+triggers account action; the text is qualitative ("repeated", "egregious").
+
+Developers report 2026 termination or pending-termination notices after: a new app
+rejected four or five times on an account fifteen years old
+(developer.apple.com/forums/thread/841277, August 2026); repeated rejections followed
+by submitting a rebuilt replacement app (developer.apple.com/forums/thread/831303,
+notice dated May 29, 2026); a second 4.3(a) rejection arriving with an account removal
+warning (developer.apple.com/forums/thread/847013, September 2026); 66 apps removed
+at once under 4.3 for sharing a similar "binary, metadata, and/or concept"
+(developer.apple.com/forums/thread/845150, September 2026). Each is the developer's
+own account of events; the notices they quote cite the license agreement's conduct
+clause and name no specific submission. Treat them as the shape of the risk, not as
+thresholds.
+
+What this means for the audit's advice, when the developer says the app has already
+been rejected:
+
+- Fix every cited item before resubmitting, and reply in the thread first to ask for
+  all outstanding reasons. Serial rejections for different reasons are the common
+  loop; a second rejection for the same reason is the one Apple's text names.
+- Do not resubmit an unchanged binary with only the build number bumped; if the
+  rejection was a reviewer-environment failure (sandbox purchase, server down), say so
+  in the notes with evidence instead.
+- Do not delete the app record and recreate it under a new bundle identifier, and do
+  not submit a rebuilt variant to escape a rejection history; the replacement-app case
+  above is exactly that.
+- A first 4.3 (spam) or 1.1 (objectionable content) rejection deserves a stop and a
+  reply, not a quick fix-and-resubmit: both carry Program removal language.
