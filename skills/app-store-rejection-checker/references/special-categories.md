@@ -62,13 +62,15 @@ before making medical decisions."
   research, so the reviewer could not find what existed) and for lacking
   "appropriate citations for health and medical recommendations"
   (developer.apple.com/forums/thread/767340, October 2024, the poster's paraphrase;
-  the app listed USDA, NIH, and WHO among its sources). The lesson in both is
-  placement: sources that exist but are not where the reviewer looks did not clear
-  review. Static signal: a bundled or fetched reference dataset (ingredients, foods,
-  dosages, thresholds) with a source field that no view ever renders, or guidance
-  copy with no sources screen reachable from the result or from Settings. Fix: a
-  sources-and-method screen linked from where the verdict or recommendation is
-  shown, naming the institutions or publications behind the data.
+  the app listed USDA, NIH, and WHO among its sources and the poster did not know
+  why review failed). Neither thread shows what the reviewer looked at; in both,
+  sources the developer says existed were not found, so discoverability is the
+  likely explanation and the thing to check, not a proven cause. Static signal: a
+  bundled or fetched reference dataset (ingredients, foods, dosages, thresholds)
+  with a source field that no view ever renders, or guidance copy with no sources
+  screen reachable from the result or from Settings. Fix: a sources-and-method
+  screen linked from where the verdict or recommendation is shown, naming the
+  institutions or publications behind the data.
 - **Verdict wording as an accuracy claim** (review-risk): binary labels such as
   "Safe" and "Dangerous", "Healthy" and "Unhealthy", applied to foods, products, or
   readings are accuracy claims the app usually cannot validate. Prefer wording that

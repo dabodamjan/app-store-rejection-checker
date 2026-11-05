@@ -159,13 +159,15 @@ developer and vendor reports, labelled as such; Apple published nothing.
   is the standing subscriptions-page text on trial disclosure. Check procedure:
   static-checks.md section 6.
 - **"Limited App Review history" information requests (since about September
-  2026)**: new accounts report a Guideline 2.1 "Information Needed" message stating
-  the app "has been submitted by a developer account that has a limited App Review
+  2026)**: new accounts report a request for additional information stating the
+  app "has been submitted by a developer account that has a limited App Review
   history" (developer.apple.com/forums/thread/849346, message dated September 30,
-  2026); a GitHub issue shows the itemized request that came with it, a
-  physical-device screen recording plus purpose, setup, external services, regional
-  differences, and regulatory documents (github.com/sharneng/spliit2go/issues/184,
-  opened October 5, 2026). Apple's review status help page lists "Limited review
+  2026, which cites no guideline); a GitHub issue shows the same request labeled
+  "Guideline 2.1 - Information Needed - New App Submission" with its itemized list,
+  a physical-device screen recording plus purpose, setup, external services,
+  regional differences, and regulatory documents
+  (github.com/sharneng/spliit2go/issues/184, opened October 5, 2026). Apple's review
+  status help page lists "Limited review
   history" as a reason for longer review and does not tie it to any request. It is a
   delay and a to-do, not a rejection. Audit angle: metadata-and-review-notes.md,
   review notes checklist.

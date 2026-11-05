@@ -14,8 +14,8 @@ honest confidence level.
   export compliance, IAP and restore wiring, the paywall disclosures Apple's
   subscription rules require (the offer and the price after it, billed amount most
   prominent, terms and privacy links in the app), the free-trial toggle that
-  subscription vendors report rejected since January 2026, price comparisons the
-  developer cannot back, account deletion, App
+  subscription vendors report rejected since January 2026, price comparisons with
+  no configured price or offer behind them, account deletion, App
   Tracking Transparency, ratings-prompt rules, web-wrapper fingerprints, and the
   hidden-feature patterns behind Apple's October 2026 rule 2.5.19 (reviewer
   detection, features shipped dark behind a switch, dormant code, obfuscated entry

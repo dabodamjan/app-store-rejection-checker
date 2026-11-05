@@ -294,25 +294,30 @@ period."
   quarter's real price, a first-launch countdown may back a genuine introductory
   offer, and "save 40%" usually compares the annual plan with twelve months of the
   monthly one, which the subscriptions page allows in a subordinate position. So the
-  signals below are questions for the developer, reported as **judgment-call** until
-  answered: a strikethrough or "was" price that matches no configured product price
-  (ask for the price history); a permanent discount badge (ask what the higher price
-  is and when it is in force); "today only" or countdown copy driven by a constant,
-  a first-launch timestamp, or a remote flag (ask which configured offer it
-  reflects); price text that does not come from the product's own price data. A
-  comparison the developer cannot back with a configured price or offer becomes
-  **review-risk** and account-level, with 3.1.2(a) cited as below. "Outside of the
+  signals below are questions for the developer, reported as **judgment-call**: a
+  strikethrough or "was" price that matches no configured product price (ask for
+  the price history); a permanent discount badge (ask what the higher price is and
+  when it is in force); "today only" or countdown copy driven by a constant, a
+  first-launch timestamp, or a remote flag (ask which configured offer it
+  reflects); price text that does not come from the product's own price data. An
+  unanswered question stays a judgment-call, reported as open; missing paperwork is
+  not evidence of a false price. The finding becomes **review-risk** and
+  account-level only on affirmative evidence that the presentation misleads: a
+  reference price the developer confirms was never charged, a countdown or "ends
+  today" with no configured offer behind it, a "save" figure that matches no
+  arithmetic on the configured prices. Then cite 3.1.2(a) as below. "Outside of the
   App Store" means screenshots, ads, and creative assets count too
   (metadata-and-review-notes.md). One developer report ties an account termination
   for "misleading auto-renewable subscription practices" to a paywall whose owner
   later found a reference-price strikethrough and a hard-to-dismiss win-back screen
   (developer.apple.com/forums/thread/839800, July 2026; the developer's own
   attribution, Apple named no screen).
-- **Scam and bait-and-switch language in 3.1.2(a)**: "Apps that attempt to trick users
-  into purchasing a subscription under false pretenses or engage in bait-and-switch and
-  scam practices ... will be removed from the App Store and you may be removed from the
-  Apple Developer Program." Cite it with 5.6 on a false-price finding the developer
-  could not back; it is what makes that finding account-level rather than a paywall
+- **Scam and bait-and-switch language in 3.1.2(a)**: the live sentence reads "This
+  includes apps that attempt to trick users into purchasing a subscription under
+  false pretenses or engage in bait-and-switch and scam practices; these will be
+  removed from the App Store and you may be removed from the Apple Developer
+  Program." Cite it with 5.6 on a false-price finding that has the affirmative
+  evidence above; it is what makes that finding account-level rather than a paywall
   nit.
 
 Calibration: a hard paywall with no free tier is not a finding; nothing in the live
@@ -544,14 +549,20 @@ Static signals, each from source, lockfiles, or build settings:
   - *Unreachable screens and flows* (judgment-call): a view, tab, or flow whose
     presentation or navigation call is commented out or never made while the
     implementation stays in the target; in-development features with the UI
-    disconnected. From source alone the audit cannot tell whether the code survives
-    the build, so name the check that settles it: archive the shipping target and
-    look for the feature's type names or user-facing strings in the built
-    executable (`strings` or `nm` on the archived binary). If they ship, delete the
-    code or finish and document the feature; `#if DEBUG` is the halfway house.
+    disconnected. Evidence to correlate, since no single check settles it from
+    source: the file's membership in the shipping target (Compile Sources, or the
+    package product the target links); any runtime registration (a route or
+    deep-link table, a tab or scene registration, a storyboard or SwiftUI
+    navigation destination) that could reach the view; and, when an archive is
+    available, the feature's type names or user-facing strings in the built
+    executable (`strings` or `nm`). The archive search is supporting evidence
+    only: symbol stripping removes names without removing code, and a surviving
+    name does not show an executable, reachable feature. When the evidence is
+    inconclusive, keep the judgment-call label and say which check is missing.
+    Fix: delete the code, or finish and document the feature.
 
-  Users not being able to reach it is not a defense; the rule is about what is in
-  the binary. Neither shape earns the account-level label on its own: 2.5.19's
+  That users cannot reach it is not a defense: the rule is about what the binary
+  contains. Neither shape earns the account-level label on its own: 2.5.19's
   termination sentence is about attempting to hide, so the label needs a
   concealment signal (obfuscation, reviewer detection, a switch that unhides the
   feature after approval). One developer report: a pending termination notice was
@@ -560,8 +571,9 @@ Static signals, each from source, lockfiles, or build settings:
   unreleased app's binary; that app was then rejected under 2.3.1 (Hidden Features,
   the rule's home before October 2026), and its resubmission with the code removed
   was still awaiting review when the thread was posted
-  (developer.apple.com/forums/thread/818150, February 2026; the developer's own
-  attribution, not confirmed by Apple in the thread).
+  (developer.apple.com/forums/thread/818150, thread dated March 8, 2026, about
+  notices received in February 2026; the developer's own attribution, not
+  confirmed by Apple in the thread).
 - **Dark-shipped features** (review-risk): a remote flag (Firebase Remote Config,
   LaunchDarkly, Statsig, GrowthBook, ConfigCat, Optimizely, custom JSON) or a local
   default gating a whole screen, tab, or capability with the default off, and no

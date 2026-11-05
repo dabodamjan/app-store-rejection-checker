@@ -207,13 +207,15 @@ termination language.
 The label is conditional. A finding earns "account-level" only when the evidence
 matches the clause's condition, not when it touches the clause's subject: a
 concealment signal (reviewer detection, obfuscation, a switch that unhides a feature
-after approval), a false price actually shown that the developer cannot back with a
-configured price or offer, personal data shared with no consent step, or repetition
-the developer has confirmed. Dormant code with no concealment signal, an honest
-metadata mistake, or a paywall missing a disclosure are ordinary 2.5.19, 2.3, or
-3.1.2 findings. Which audit findings can reach the label: reviewer detection and
-obfuscated code (static-checks.md section 13), false prices and subscription
-bait-and-switch the developer could not back (section 6), review manipulation
+after approval), a false price shown on affirmative evidence (a reference price the
+developer confirms was never charged, a countdown with no configured offer behind
+it), personal data shared with no consent step, or repetition the developer has
+confirmed. A price comparison the developer has not yet backed is an open question,
+not evidence. Dormant code with no concealment signal, an honest metadata mistake,
+or a paywall missing a disclosure are ordinary 2.5.19, 2.3, or 3.1.2 findings. Which
+audit findings can reach the label: reviewer detection and obfuscated code
+(static-checks.md section 13), false prices and subscription bait-and-switch shown
+on affirmative evidence (section 6), review manipulation
 (section 14), personal data shared with third parties with no consent step (sections
 8 and 10), missing UGC moderation in a generator app (special-categories.md), and
 review notes that describe a build the developer knows differs from the submitted
