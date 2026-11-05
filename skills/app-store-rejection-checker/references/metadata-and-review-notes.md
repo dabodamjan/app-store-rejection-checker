@@ -226,18 +226,35 @@ What the audit can check from the repo and the supplied metadata:
   "The first consumable, non-consumable, auto-renewable subscription, and
   non-renewing subscription In-App Purchase of each type must be submitted with a new
   app version." A first-time product type that is not added to the version
-  submission is invisible to the reviewer. Ask whether every product the paywall code
-  references is attached and in the Ready for Review state with a price and
-  localizations set (TN3186 names a missing price or localization as a reason a
-  product does not load); if the developer cannot say, list it under "Not checked".
+  submission is invisible to the reviewer. The check applies only to products that
+  still need submitting: the first product of each type, and any new product the
+  paywall code references. For those, ask whether the product is attached to the
+  version submission and shows Ready for Review, with a price and localizations set
+  (TN3186 names a missing price or localization as a reason a product does not
+  load). Products in another state are not a finding when the state fits their
+  lifecycle. App Store Connect's status reference
+  (developer.apple.com/help/app-store-connect/reference/in-app-purchases-and-subscriptions/in-app-purchase-statuses,
+  fetched 2026-11-05) defines Approved as "Apple has approved your In-App Purchase",
+  and Waiting for Review, In Review, and Accepted as states of a submission already
+  sent; a product in any of these is fine. Prepare for Submission ("you haven't yet
+  submitted it for review") on a product the paywall needs is the finding. If the
+  developer cannot say, list it under "Not checked".
 - **Product identifiers match.** The identifiers in code or in a `.storekit`
   configuration must match the ones configured in App Store Connect, and the bundle
-  identifier must match the app record; a mismatch loads nothing. TN3186's other
-  causes are also identifier-side: a bundle ID "disabled for the In-App Purchase
-  capability in Certificates, Identifiers & Profiles", a wildcard App ID, or a
-  provisioning profile without the capability. Compare the code's identifier list
-  and the target's bundle identifier with what the developer supplies, and check the
-  entitlements and provisioning setup for the capability.
+  identifier must match the app record; a mismatch loads nothing. TN3186's remaining
+  causes are identifier and signing causes: a bundle ID "disabled for the In-App
+  Purchase capability in Certificates, Identifiers & Profiles", a wildcard App ID,
+  an app "signed with an invalid certificate or provisioning profile", and an
+  inactive Apple Developer Program account (the membership item under the agreement
+  bullet above). In-app purchase is a capability on the explicit App ID, not a key in
+  the app's entitlements file; Apple DTS (developer.apple.com/forums/thread/801832,
+  September 2025) says the capability "appears enabled by default for an explicit
+  App ID and disabled for a wildcard App ID" and that the
+  `com.apple.developer.in-app-purchase` entitlement "doesn't exist", so a build whose
+  entitlements carry that key should drop it. What to compare: the code's identifier
+  list and the target's bundle identifier against what the developer supplies, an
+  explicit (non-wildcard) App ID registered with the capability, and a signing
+  certificate and provisioning profile that are valid for it.
 - **Error handling the reviewer can read.** A generic "Something went wrong" on
   purchase failure gives the reviewer nothing to put in the rejection and the
   developer nothing to diagnose. Not a guideline finding; recommend surfacing the
@@ -252,10 +269,14 @@ is its pointer, not a review check: it asks the developer to confirm each produc
 status is Approved once Apple has reviewed it, to update the product information on
 "Developer Action Needed" and to reselect countries or regions on "Developer Removed
 from Sale", to confirm storefront availability, and to allow time after approval
-before the products appear everywhere. Both technotes render client-side, so a plain
-fetch returns an empty shell; point the developer at them and name the checks rather
-than quoting them. Runtime purchase behavior stays in the report's "Not checked"
-list regardless.
+before the products appear everywhere. The HTML pages of both technotes render
+client-side and return an empty shell to a plain fetch; the full text is at the
+`.json` endpoints under developer.apple.com/tutorials/data/documentation/technotes/
+(tn3186-troubleshooting-in-app-purchases-availability-in-the-sandbox.json and
+tn3188-troubleshooting-in-app-purchases-availability-in-the-app-store.json), which
+is where the TN3186 quotes above come from. Point the developer at the technotes by
+name and number. Runtime purchase behavior stays in the report's "Not checked" list
+regardless.
 
 ## Metadata Rejected vs binary rejection
 

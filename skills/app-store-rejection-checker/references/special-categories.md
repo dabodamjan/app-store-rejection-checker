@@ -62,10 +62,10 @@ before making medical decisions."
   research, so the reviewer could not find what existed) and for lacking
   "appropriate citations for health and medical recommendations"
   (developer.apple.com/forums/thread/767340, October 2024, the poster's paraphrase;
-  the app listed USDA, NIH, and WHO among its sources and the poster did not know
-  why review failed). Neither thread shows what the reviewer looked at; in both,
-  sources the developer says existed were not found, so discoverability is the
-  likely explanation and the thing to check, not a proven cause. Static signal: a
+  the app listed USDA, NIH, and WHO among its sources and the poster was unsure what
+  more to add). Neither thread shows what the reviewer looked at, and neither
+  settles whether the citations were adequate; discoverability is one possible
+  explanation and the thing an audit can check, not a proven cause. Static signal: a
   bundled or fetched reference dataset (ingredients, foods, dosages, thresholds)
   with a source field that no view ever renders, or guidance copy with no sources
   screen reachable from the result or from Settings. Fix: a sources-and-method
