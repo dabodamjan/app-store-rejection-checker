@@ -222,23 +222,28 @@ What the audit can check from the repo and the supplied metadata:
   reasons products do not load, and adds that banking and tax information must also
   show Active. An expired membership needs the agreement accepted again.
 - **Products attached to the submission.** App Store Connect help
-  (developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase):
-  "The first consumable, non-consumable, auto-renewable subscription, and
-  non-renewing subscription In-App Purchase of each type must be submitted with a new
-  app version." A first-time product type that is not added to the version
-  submission is invisible to the reviewer. The check applies only to products that
-  still need submitting: the first product of each type, and any new product the
-  paywall code references. For those, ask whether the product is attached to the
-  version submission and shows Ready for Review, with a price and localizations set
-  (TN3186 names a missing price or localization as a reason a product does not
-  load). Products in another state are not a finding when the state fits their
-  lifecycle. App Store Connect's status reference
+  (developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase,
+  fetched 2026-11-05): "The first consumable, non-consumable, auto-renewable
+  subscription, and non-renewing subscription In-App Purchase of each type must be
+  submitted with a new app version." The same page: "After the first item of a given
+  type is approved, you can submit additional items of that type without a new app
+  version, as long as your app has at least one approved app version at the time of
+  submission." So the attach-to-version check applies to the first product of each
+  type, and to every product while the app has no approved version yet; a first-time
+  product type that is not added to the version submission is invisible to the
+  reviewer. A later product of a type that already has an approved product can be
+  submitted on its own, without a version, and is fine as long as it is in a
+  submitted or approved state before review. For the products the check covers, ask
+  whether the product is attached to the version submission and shows Ready for
+  Review, with a price and localizations set (TN3186 names a missing price or
+  localization as a reason a product does not load). App Store Connect's status
+  reference
   (developer.apple.com/help/app-store-connect/reference/in-app-purchases-and-subscriptions/in-app-purchase-statuses,
   fetched 2026-11-05) defines Approved as "Apple has approved your In-App Purchase",
   and Waiting for Review, In Review, and Accepted as states of a submission already
-  sent; a product in any of these is fine. Prepare for Submission ("you haven't yet
-  submitted it for review") on a product the paywall needs is the finding. If the
-  developer cannot say, list it under "Not checked".
+  sent; a product in any of these is fine, however it was submitted. Prepare for
+  Submission ("you haven't yet submitted it for review") on a product the paywall
+  needs is the finding. If the developer cannot say, list it under "Not checked".
 - **Product identifiers match.** The identifiers in code or in a `.storekit`
   configuration must match the ones configured in App Store Connect, and the bundle
   identifier must match the app record; a mismatch loads nothing. TN3186's remaining
