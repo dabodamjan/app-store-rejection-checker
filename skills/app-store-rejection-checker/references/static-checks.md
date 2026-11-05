@@ -238,28 +238,39 @@ standard text: the app "offers a free trial or introductory period but does not 
 it clear that a payment will be automatically initiated for the next subscription
 period."
 
-- **Post-trial price and renewal statement** (review-risk): when a product carries an
-  introductory offer, the screen must state the trial length, the price billed after
-  it, and that the subscription renews. A trial badge in one element and a bare price
-  in another does not join them; look for one sentence that does ("Free for 7 days,
-  then 29.99 a year, renews until cancelled", or equivalent) rendered from the
-  product's offer data, not hard-coded.
+- **Offer and post-offer price disclosure** (review-risk): when a product carries an
+  introductory offer, the screen must state what the offer is and what follows it.
+  For a free trial the subscriptions page wants the trial length and "the price
+  billed once the free trial is over"; for paid introductory pricing (the page's
+  "pay as you go" and "pay up front" types) the discounted price and its period, and
+  the standard renewal price after it. Judge the whole presentation, not one
+  element: a trial line and the renewal price that sit together and read as one
+  statement pass; a trial badge in one corner and a bare price elsewhere, with
+  nothing joining them, is the shape the 2019 rejection text above describes. Prefer
+  copy rendered from the product's offer data; a hard-coded sentence is not a
+  finding on its own, but it goes stale the moment the offer changes in App Store
+  Connect, so note it.
 - **Billed amount most prominent** (review-risk): a per-month or per-day breakdown of
   an annual price rendered larger than the annual amount, a price with no period
   attached, or a primary button that sells the trial ("Try for free", "Continue with
   free trial") while the billed amount sits small or elsewhere. The amount Apple will
   charge, with its period, is the largest price on the screen.
-- **Trial copy gated on eligibility** (judgment-call; an inference, so give the test):
-  paywalls commonly show trial copy only when the eligibility check (StoreKit's
-  `isEligibleForIntroOffer`, or a subscription SDK's eligibility API) returns
-  eligible, and show plain purchase copy for every other result. Fresh sandbox
-  accounts can return an unknown result, in which case the reviewer sees no trial on
-  the screen while Apple's purchase sheet offers one: the mismatch the rejection text
-  above describes. Whether a reviewer hits it cannot be read from the repository.
-  Report the pattern with the test: run the paywall on a fresh sandbox tester and
-  compare what the screen says with what the purchase sheet shows. Fix: render the
-  disclosure from the product's offer data whatever the eligibility result, with an
-  honest fallback when eligibility is unknown ("29.99 a year, renews automatically;
+- **Trial copy that depends on an eligibility check** (judgment-call; an inference,
+  so give the test): showing trial copy only to customers who are eligible is
+  correct, and StoreKit's `isEligibleForIntroOffer` returns a plain Bool, so the
+  StoreKit path has no unknown state to mishandle. The risk sits in the code around
+  it: a subscription SDK's eligibility call that can return unknown or fail, a
+  cached result from another account, or a product fetch that errors, when every
+  path other than "eligible" falls through to copy that shows no offer and no
+  disclosure. Then the reviewer's fresh sandbox account can see a screen with no
+  trial while Apple's purchase sheet offers one: the mismatch the rejection text
+  above describes. Flag it only when the code shows that path (an error or unknown
+  branch that silently renders the no-offer paywall), never for the eligibility
+  check itself. Whether a reviewer hits it cannot be read from the repository, so
+  report it with the test: run the paywall on a fresh sandbox tester and compare
+  what the screen says with what the purchase sheet shows. Fix: keep the
+  eligibility-based presentation and give the unknown and error paths an honest
+  fallback that still carries the disclosure ("29.99 a year, renews automatically;
   includes a 7-day free trial if you have not had one").
 - **Trial toggle** (review-risk, reported developer experience): a switch on the
   purchase screen that adds or removes a free trial. Apple published no rule, but
@@ -270,28 +281,39 @@ period."
   adapty.io/blog/your-toggle-paywall-is-about-to-get-rejected/, February 11, 2026).
   Flag the control itself; the fix is separate plans with the trial attached to one of
   them.
-- **Terms and privacy links** (review-risk): both must be reachable from the paywall
-  inside the app (Schedule 2 above), not only on the website or in the store listing.
-- **False or tricky prices** (review-risk; cite 2.3.1(a) and 5.6): 2.3.1(a) makes
-  "promoting a false price, whether within or outside of the App Store" grounds for
-  removal "and termination of your developer account"; 5.6 says apps should never
-  "trick them into making unwanted purchases ... raise prices in a tricky manner".
-  Static signals: a strikethrough or "was" price that is not the product's configured
-  regular price (a reference price that was never charged); a permanent "X% off"
-  badge with no higher price in force at other times; "today only" or countdown copy
-  driven by a constant, a first-launch timestamp, or a remote flag rather than a real
-  time-boxed offer; price text that does not come from the product's own price data.
-  "Outside of the App Store" means screenshots, ads, and creative assets count too
+- **Terms and privacy links** (review-risk): Schedule 2 requires both to be
+  "accessible within Your Licensed Application"; links only on the website or in the
+  store listing do not satisfy it. The agreement does not say where in the app. A
+  link from the paywall itself is the recommended placement, since that is the
+  screen the reviewer judges, not a requirement.
+- **False or tricky prices** (cite 2.3.1(a) and 5.6): 2.3.1(a) makes "promoting a
+  false price, whether within or outside of the App Store" grounds for removal "and
+  termination of your developer account"; 5.6 says apps should never "trick them
+  into making unwanted purchases ... raise prices in a tricky manner". The
+  repository cannot show that a price was never charged: a strikethrough may be last
+  quarter's real price, a first-launch countdown may back a genuine introductory
+  offer, and "save 40%" usually compares the annual plan with twelve months of the
+  monthly one, which the subscriptions page allows in a subordinate position. So the
+  signals below are questions for the developer, reported as **judgment-call** until
+  answered: a strikethrough or "was" price that matches no configured product price
+  (ask for the price history); a permanent discount badge (ask what the higher price
+  is and when it is in force); "today only" or countdown copy driven by a constant,
+  a first-launch timestamp, or a remote flag (ask which configured offer it
+  reflects); price text that does not come from the product's own price data. A
+  comparison the developer cannot back with a configured price or offer becomes
+  **review-risk** and account-level, with 3.1.2(a) cited as below. "Outside of the
+  App Store" means screenshots, ads, and creative assets count too
   (metadata-and-review-notes.md). One developer report ties an account termination
-  for "misleading auto-renewable subscription practices" to a paywall whose owner later
-  found a reference-price strikethrough and a hard-to-dismiss win-back screen
+  for "misleading auto-renewable subscription practices" to a paywall whose owner
+  later found a reference-price strikethrough and a hard-to-dismiss win-back screen
   (developer.apple.com/forums/thread/839800, July 2026; the developer's own
   attribution, Apple named no screen).
 - **Scam and bait-and-switch language in 3.1.2(a)**: "Apps that attempt to trick users
   into purchasing a subscription under false pretenses or engage in bait-and-switch and
   scam practices ... will be removed from the App Store and you may be removed from the
-  Apple Developer Program." Cite it with 5.6 on false-price findings; it is what makes
-  them account-level rather than a paywall nit.
+  Apple Developer Program." Cite it with 5.6 on a false-price finding the developer
+  could not back; it is what makes that finding account-level rather than a paywall
+  nit.
 
 Calibration: a hard paywall with no free tier is not a finding; nothing in the live
 3.1.x text requires a free tier. A close control that is hard to find is a 5.6
@@ -502,26 +524,42 @@ Static signals, each from source, lockfiles, or build settings:
   hides a plan, price, or purchase option when the receipt is a sandbox receipt, so
   the reviewer sees a different paywall from users; 2.1(b) separately requires IAPs
   to be "visible to the reviewer". Beyond the guidelines, the Developer Program
-  License Agreement's termination clause (section 11.2, item 7, as fetched
-  2026-11-05) names "hiding or trying to hide functionality from Apple's review" as
-  grounds for termination "effective immediately upon notice", and section 3.2 item 6
-  bars "bait-and-switch pricing, consumer misrepresentation, deceptive business
-  practices". Cite the agreement clause in the finding; it is what turns reviewer
-  detection from a rejection into account exposure.
-- **Dormant code** (review-risk; the text's own word): functionality compiled into the
-  shipping target with no path to reach it. Signals: view or feature types never
-  referenced from any navigation, presentation, or routing call; entry points
-  commented out while the implementation behind them stays compiled; test switches
-  (mock purchases, screenshot mode, entitlement overrides, slow-network toggles)
-  readable from `UserDefaults`, launch arguments, or environment in Release without
-  `#if DEBUG`; marketing or testimonial blocks with hard-coded figures carried over
-  from another project. Users not being able to reach it is not a defense; the rule
-  is about what is in the binary. Fix: delete it, or wrap it in `#if DEBUG`, or
-  document it in the review notes if it is a real feature. One developer report: a
-  pending termination notice was withdrawn after a second appeal named leftover
-  unreleased code (experimental features with the UI commented out but still
-  compiled) in another app's binary; that app was then rejected under the
-  hidden-features rule until the code was removed
+  License Agreement's termination section (11.2, as fetched 2026-11-05) lists
+  "hiding or trying to hide functionality from Apple's review" in item 7; the
+  section's lead-in makes termination "effective immediately upon notice from
+  Apple" for every condition it lists, and item 7, unlike ordinary breaches under
+  item 1, builds in no 30-day cure period. Cite the agreement clause in the
+  finding; it is what turns reviewer detection from a rejection into account
+  exposure.
+- **Dormant code** (the text's own word): user-facing functionality compiled into
+  the shipping target with no path to reach it. The rule is about screens and
+  behaviors, not symbols: a dead helper function or an unreferenced type is not a
+  feature, and the linker may strip it anyway. Two shapes, rated differently:
+  - *Test and override switches readable in Release* (review-risk): mock purchases,
+    screenshot mode, entitlement overrides, slow-network or region toggles read from
+    `UserDefaults`, launch arguments, or the environment without `#if DEBUG`. A user
+    or reviewer can trigger them, they change what the app does, and they are what
+    the Apple engineer's reply under hidden entry points says a submitted app should
+    not contain.
+  - *Unreachable screens and flows* (judgment-call): a view, tab, or flow whose
+    presentation or navigation call is commented out or never made while the
+    implementation stays in the target; in-development features with the UI
+    disconnected. From source alone the audit cannot tell whether the code survives
+    the build, so name the check that settles it: archive the shipping target and
+    look for the feature's type names or user-facing strings in the built
+    executable (`strings` or `nm` on the archived binary). If they ship, delete the
+    code or finish and document the feature; `#if DEBUG` is the halfway house.
+
+  Users not being able to reach it is not a defense; the rule is about what is in
+  the binary. Neither shape earns the account-level label on its own: 2.5.19's
+  termination sentence is about attempting to hide, so the label needs a
+  concealment signal (obfuscation, reviewer detection, a switch that unhides the
+  feature after approval). One developer report: a pending termination notice was
+  withdrawn after a second appeal self-reported leftover unreleased code
+  (experimental features with the UI commented out but still compiled) in an
+  unreleased app's binary; that app was then rejected under 2.3.1 (Hidden Features,
+  the rule's home before October 2026), and its resubmission with the code removed
+  was still awaiting review when the thread was posted
   (developer.apple.com/forums/thread/818150, February 2026; the developer's own
   attribution, not confirmed by Apple in the thread).
 - **Dark-shipped features** (review-risk): a remote flag (Firebase Remote Config,
@@ -584,8 +622,8 @@ what a repository audit can see). Reviewer detection and obfuscated feature code
 the two patterns to report at the top of the findings regardless of frequency: the
 live text names obfuscation as grounds for termination, reviewer detection falls
 under its "or other methods", and the license agreement names hiding functionality
-from review outright. Dormant code ranks just below them: same rule, weaker intent
-signal.
+from review outright. Dormant code with no concealment signal is an ordinary 2.5.19
+finding, not account-level.
 
 ## 14. Ratings prompts (5.6.1, 3.2.2(x))
 
