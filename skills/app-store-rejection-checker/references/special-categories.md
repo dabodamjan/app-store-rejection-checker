@@ -2,9 +2,9 @@
 
 Apply the matching section when Step 2 classifies the app into one of these. Each
 carries requirements that are near-certain rejections when missed. Guideline numbers
-verified against the live guidelines on 2026-10-17; quotes for 5.4 taken verbatim from
-the live text. Always re-read the matching live section during the audit; these are
-summaries.
+verified against the live guidelines on 2026-11-05 (text dated October 16, 2026);
+quotes for 1.4.1, 5.1.1(ix), 5.1.3, and 5.4 taken verbatim from the live text. Always
+re-read the matching live section during the audit; these are summaries.
 
 Contents:
 
@@ -37,14 +37,84 @@ Category app; `SKAdNetwork` identifiers; outbound links without a parental gate.
 
 ## Medical and health (1.4.1, 5.1.3)
 
-- Apps that could provide inaccurate data or be used for diagnosing or treating
-  patients get extra scrutiny; accuracy claims need disclosed data and methodology,
-  and unvalidated claims get the app rejected.
+Scope is wider than apps that call themselves medical: diet, nutrition, allergen,
+symptom, sleep, and supplement apps are read against 1.4.1 when they tell a user what
+is safe, healthy, or recommended. Live text: "Medical apps that could provide
+inaccurate data or information, or that could be used for diagnosing or treating
+patients may be reviewed with greater scrutiny." Then: "Apps must clearly disclose
+data and methodology to support accuracy claims relating to health measurements, and
+if the level of accuracy or methodology cannot be validated, we will reject your app",
+and "Apps should remind users to check with a doctor in addition to using the app and
+before making medical decisions."
+
 - Explicitly not permitted: apps claiming to take x-rays or measure blood pressure,
   body temperature, blood glucose, or blood oxygen using only device sensors.
-- Apps should remind users to check with a doctor before medical decisions.
+- **Sources and method visible in the app** (review-risk where the app makes a
+  health or accuracy claim; judgment-call for general wellness advice): the quoted
+  sentence is about "accuracy claims relating to health measurements", so apply it
+  where the app asserts something checkable about health: a reading, a verdict on a
+  food or product, a recommendation presented as medically grounded. Whether it
+  reaches ordinary lifestyle advice is not settled by the text; there the finding is
+  a judgment-call resting on reported experience. Developers report 1.4.1 rejections
+  of diet and nutrition apps with the text "We are still unable to locate links to
+  medical sources in the app" (developer.apple.com/forums/thread/760773, July 2024;
+  the poster says every page of the in-app guide already linked to books and
+  research, so the reviewer could not find what existed) and for lacking
+  "appropriate citations for health and medical recommendations"
+  (developer.apple.com/forums/thread/767340, October 2024, the poster's paraphrase;
+  the app listed USDA, NIH, and WHO among its sources and the poster was unsure what
+  more to add). Neither thread shows what the reviewer looked at, and neither
+  settles whether the citations were adequate; discoverability is one possible
+  explanation and the thing an audit can check, not a proven cause. Static signal: a
+  bundled or fetched reference dataset (ingredients, foods, dosages, thresholds)
+  with a source field that no view ever renders, or guidance copy with no sources
+  screen reachable from the result or from Settings. Fix: a sources-and-method
+  screen linked from where the verdict or recommendation is shown, naming the
+  institutions or publications behind the data.
+- **Verdict wording as an accuracy claim** (review-risk): binary labels such as
+  "Safe" and "Dangerous", "Healthy" and "Unhealthy", applied to foods, products, or
+  readings are accuracy claims the app usually cannot validate. Prefer wording that
+  states what the data says ("high in X", "flagged", "not in our data"). The same
+  claim in metadata (name, subtitle, screenshots, description) is a 2.3 accuracy
+  finding; flag unsupported safety or health claims wherever they appear. Related:
+  an engine that defaults unknown or unparseable input to the favorable verdict is
+  both the 1.4.1 "inaccurate information" risk and a product bug; the honest output
+  for unknown input is "could not check".
+- **Doctor reminder** (review-risk when absent): the text says "check with a doctor",
+  so a disclaimer that names only a dietitian, coach, or pharmacist is incomplete.
+  The check is whether the reminder reaches the user before the medical decision the
+  app informs, not where it sits; a reminder only in Settings or a legal page usually
+  fails that test. Putting it on the result screen, in onboarding, or in the store
+  description is advice, not a rule.
 - If the app has regulatory clearance (for example FDA), submit a link to that
-  documentation with the app.
+  documentation with the app; "Before You Submit" also asks for "required
+  documentation for apps and features that require regulatory approval".
+- **Regulated medical device declaration** (App Store Connect, since March 26, 2026;
+  developer.apple.com/news/?id=nyqbfz1y): for apps distributed in the EEA, UK, or US
+  whose "primary or secondary category is Health & Fitness or Medical", or that are
+  "marked as containing frequent references to Medical or Treatment Information in
+  the Age Rating questionnaire", a regulated-medical-device status is required before
+  a new app can be distributed there, and existing apps must declare by early 2027.
+  The help page (developer.apple.com/help/app-store-connect/manage-app-information/declare-regulated-medical-device-status/)
+  says "If your app doesn't provide any health or medical features, or access health
+  data to support non-health features, you should select No"; a Yes needs regulatory
+  details. The answer shows on the product page. Audit angle: if Step 2 found health
+  features and the category or age rating answer trips the trigger, ask whether the
+  declaration is answered; a missing one blocks distribution in those regions rather
+  than failing review.
+- **Age rating answers for health content** (2.3.6): the questionnaire's "Health or
+  Wellness Topics" covers "self-care or lifestyle recommendations" including "calorie
+  tracking, dieting advice, or exercise recommendations" and rates 9+; "Medical or
+  Treatment Information" covers "diagnoses or guidance around the management of
+  medical conditions or health and wellness", Infrequent rating 13+ and Frequent 16+ (Apple's age ratings
+  definitions page, fetched 2026-11-05). An app that names a medical condition and
+  helps manage it with "None" on the medical answer is a mismatch; "Frequent" is also
+  what trips the device declaration above. Judgment-call on the honest level, flag
+  only clear mismatches.
+- **Account type (5.1.1(ix))**: healthcare is on the live list of "highly regulated
+  fields" whose apps "should be submitted by a legal entity that provides the
+  services, and not by an individual developer." Not readable from the repo; ask
+  (metadata-and-review-notes.md, developer identity).
 - Health and fitness data has its own privacy rules (5.1.3(i)): data gathered in the
   health, fitness, and medical-research context (HealthKit, Clinical Health Records,
   Motion and Fitness, MovementDisorder APIs, health research) may not be used or
@@ -56,6 +126,15 @@ Category app; `SKAdNetwork` identifiers; outbound links without a parental gate.
   shared with a third party. The specific health data collected from the device must
   be disclosed. Also: no writing false data into HealthKit, and no storing personal
   health information in iCloud (5.1.3(ii)).
+- **Health data in iCloud (5.1.3(ii))**, the static form: CloudKit (`CKContainer`,
+  `NSPersistentCloudKitContainer`, iCloud key-value store, or an iCloud-synced
+  document directory) carrying fields that describe the user's body or condition:
+  symptoms, diagnoses, medications, readings, allergies framed as medical. That is
+  review-risk; the text says apps "may not store personal health information in
+  iCloud" with no carve-out for the private database. Food preferences, shopping
+  lists, and product notes are not health information; the line is whether a record
+  says something about the person's health. If the app syncs such fields, the fix is
+  a non-iCloud store or dropping the fields, not a privacy-policy sentence.
 
 ## User-generated content (1.2)
 
