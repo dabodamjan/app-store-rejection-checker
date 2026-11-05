@@ -49,30 +49,41 @@ before making medical decisions."
 
 - Explicitly not permitted: apps claiming to take x-rays or measure blood pressure,
   body temperature, blood glucose, or blood oxygen using only device sensors.
-- **Sources and method visible in the app** (review-risk for any app giving dietary or
-  health guidance): the methodology sentence is enforced as "show your sources".
-  Developers report 1.4.1 rejections of diet and nutrition apps with the text "We are
-  still unable to locate links to medical sources in the app"
-  (developer.apple.com/forums/thread/760773, July 2024) and for missing "appropriate
-  citations for health and medical recommendations"
-  (developer.apple.com/forums/thread/767340, October 2024); in both threads a
-  disclaimer alone did not clear it. Static signal: a bundled or fetched reference
-  dataset (ingredients, foods, dosages, thresholds) with a source field that no view
-  ever renders, or guidance copy with no sources screen reachable from the result or
-  from Settings. Fix: a sources-and-method screen linked from where the verdict is
+- **Sources and method visible in the app** (review-risk where the app makes a
+  health or accuracy claim; judgment-call for general wellness advice): the quoted
+  sentence is about "accuracy claims relating to health measurements", so apply it
+  where the app asserts something checkable about health: a reading, a verdict on a
+  food or product, a recommendation presented as medically grounded. Whether it
+  reaches ordinary lifestyle advice is not settled by the text; there the finding is
+  a judgment-call resting on reported experience. Developers report 1.4.1 rejections
+  of diet and nutrition apps with the text "We are still unable to locate links to
+  medical sources in the app" (developer.apple.com/forums/thread/760773, July 2024;
+  the poster says every page of the in-app guide already linked to books and
+  research, so the reviewer could not find what existed) and for lacking
+  "appropriate citations for health and medical recommendations"
+  (developer.apple.com/forums/thread/767340, October 2024, the poster's paraphrase;
+  the app listed USDA, NIH, and WHO among its sources). The lesson in both is
+  placement: sources that exist but are not where the reviewer looks did not clear
+  review. Static signal: a bundled or fetched reference dataset (ingredients, foods,
+  dosages, thresholds) with a source field that no view ever renders, or guidance
+  copy with no sources screen reachable from the result or from Settings. Fix: a
+  sources-and-method screen linked from where the verdict or recommendation is
   shown, naming the institutions or publications behind the data.
 - **Verdict wording as an accuracy claim** (review-risk): binary labels such as
   "Safe" and "Dangerous", "Healthy" and "Unhealthy", applied to foods, products, or
   readings are accuracy claims the app usually cannot validate. Prefer wording that
-  states what the data says ("high in X", "flagged", "not in our data") and keep the
-  word "safe" out of the app name's neighbors (subtitle, screenshots) when it is in
-  the name. Related: an engine that defaults unknown or unparseable input to the
-  favorable verdict is both the 1.4.1 "inaccurate information" risk and a product
-  bug; the honest output for unknown input is "could not check".
+  states what the data says ("high in X", "flagged", "not in our data"). The same
+  claim in metadata (name, subtitle, screenshots, description) is a 2.3 accuracy
+  finding; flag unsupported safety or health claims wherever they appear. Related:
+  an engine that defaults unknown or unparseable input to the favorable verdict is
+  both the 1.4.1 "inaccurate information" risk and a product bug; the honest output
+  for unknown input is "could not check".
 - **Doctor reminder** (review-risk when absent): the text says "check with a doctor",
   so a disclaimer that names only a dietitian, coach, or pharmacist is incomplete.
-  The reminder belongs where decisions are made (the result screen) and in onboarding
-  and the store description, not only in Settings.
+  The check is whether the reminder reaches the user before the medical decision the
+  app informs, not where it sits; a reminder only in Settings or a legal page usually
+  fails that test. Putting it on the result screen, in onboarding, or in the store
+  description is advice, not a rule.
 - If the app has regulatory clearance (for example FDA), submit a link to that
   documentation with the app; "Before You Submit" also asks for "required
   documentation for apps and features that require regulatory approval".
@@ -93,7 +104,7 @@ before making medical decisions."
   Wellness Topics" covers "self-care or lifestyle recommendations" including "calorie
   tracking, dieting advice, or exercise recommendations" and rates 9+; "Medical or
   Treatment Information" covers "diagnoses or guidance around the management of
-  medical conditions", Infrequent rating 13+ and Frequent 16+ (Apple's age ratings
+  medical conditions or health and wellness", Infrequent rating 13+ and Frequent 16+ (Apple's age ratings
   definitions page, fetched 2026-11-05). An app that names a medical condition and
   helps manage it with "None" on the medical answer is a mismatch; "Frequent" is also
   what trips the device declaration above. Judgment-call on the honest level, flag

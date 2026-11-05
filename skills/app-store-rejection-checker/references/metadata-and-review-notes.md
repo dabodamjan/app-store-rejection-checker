@@ -28,15 +28,21 @@ Contents:
   "whether within or outside of the App Store", grounds for removal.
 - **IAP disclosure (2.3.2)**: if items, levels, or subscriptions require additional
   purchases, the description, screenshots, and previews must say so.
-- **Prices in metadata (2.3.1(a), 2.3.7, 2.3.14)**: 2.3.1(a) makes "promoting a false
-  price, whether within or outside of the App Store" grounds for removal and account
-  termination, so the store surface counts: a strikethrough or "50% off" badge in a
-  screenshot, a price in the subtitle or keywords (2.3.7 bars pricing there), or a
-  discount in a creative asset (2.3.14 bars "specific or discounted pricing
-  information") each needs a configured price that matches. A price that appears
-  nowhere in the product configuration is a review-risk finding; prices that are
-  merely stale because storefront pricing changed are a judgment-call. The in-app side
-  of the same rule is in static-checks.md section 6.
+- **Prices in metadata (2.3.1(a), 2.3.7, 2.3.14)**: two different rules, and a
+  matching configured price cures only the first. Accuracy: 2.3.1(a) makes
+  "promoting a false price, whether within or outside of the App Store" grounds for
+  removal and account termination, so a price or discount shown in a screenshot or
+  preview must match a price or offer actually configured. One that appears nowhere
+  in the product configuration and that the developer cannot back is a review-risk
+  finding; prices merely stale because storefront pricing changed are a
+  judgment-call. Placement: 2.3.7 says not to "pack any of your metadata with
+  trademarked terms, popular app names, pricing information, or other irrelevant
+  phrases just to game the system" and that "app names, subtitles, screenshots, and
+  previews should not include prices, terms, or descriptions that are not specific
+  to the metadata type"; 2.3.14 bars "specific or discounted pricing information" in
+  creative assets outright. A price in the name, subtitle, or keywords, or a
+  discount in a creative asset, is a review-risk finding whether or not the number
+  is right. The in-app side is in static-checks.md section 6.
 - **Category (2.3.5)**: "Select the most appropriate category for your app ... If
   you're way off base, we may change the category for you." Apple's category
   definitions page (developer.apple.com/app-store/categories/) adds that "Choosing
@@ -141,23 +147,28 @@ cannot infer from the binary:
 - For VPN or licensed categories: license information where a territory requires it
 - Every product, plan, price, flag, and experiment the notes name must exist in the
   submitted build and configuration. Notes promising a plan that is not configured,
-  or a demo video recorded on an older version, read as "inaccurate metadata" and
-  "misleading responses in App Store Connect", two of the behaviors developers report
-  seeing listed in Apple's account termination notices (see the account exposure
-  section below). Cross-check the notes against the product list and the paywall code.
+  or a demo video recorded on an older version, are a 2.3.1(a) accuracy finding
+  (features must be "described with specificity"); report them as that. Only a
+  pattern of such mismatches reads as the conduct Apple's termination notices
+  describe; the notice wording is quoted in the account exposure section below.
+  Cross-check the notes against the product list and the paywall code.
 - Expect a "limited App Review history" information request on a new account. Apple's
   review status help page (developer.apple.com/help/app-review/after-submitting-for-review/review-status/)
-  lists "Limited review history: Apps with little or no prior App Review history" as
-  a reason reviews take longer. Developers report (September to October 2026,
-  developer.apple.com/forums/thread/849346; github.com/sharneng/spliit2go/issues/184)
-  a Guideline 2.1 "Information Needed" message quoting that phrase and asking for a
-  screen recording on a physical device running the latest OS from launch through the
-  main flow (registration, account deletion, content reporting and blocking, paid
-  features included), the app's purpose and audience, setup steps and credentials,
-  the external services it relies on, regional differences, and regulatory documents
-  where relevant. Those are reported requests, not guideline text; preparing the
-  recording and answers before the first submission costs little and shortens the
-  loop if the request comes.
+  lists "Limited review history: Apps with little or no prior App Review history"
+  among the reasons reviews take longer, and separately says that when "App Review
+  requested more information and there are no other issues to resolve" the developer
+  can reply in App Store Connect instead of resubmitting; it does not tie the two
+  together. Developers do: a forum post quotes a Guideline 2.1 message saying the
+  app "has been submitted by a developer account that has a limited App Review
+  history" (developer.apple.com/forums/thread/849346, September 30, 2026), and a
+  GitHub issue (github.com/sharneng/spliit2go/issues/184, opened October 5, 2026)
+  shows the itemized request: a screen recording on a physical device running the
+  latest OS from launch through the main flow (registration, account deletion,
+  content reporting and blocking), the app's purpose and audience, setup steps and
+  credentials, the external services it relies on, regional differences, and
+  regulatory documents where relevant. Those are reported requests, not guideline
+  text; preparing the recording and answers before the first submission costs
+  little and shortens the loop if the request comes.
 
 ## Demo account checklist (2.1)
 
@@ -208,11 +219,16 @@ What the audit can check from the repo and the supplied metadata:
   paywall can differ from what the developer's account shows.
 
 Apple's technote TN3188 ("Troubleshooting In-App Purchases availability in the App
-Store", under developer.apple.com/documentation/technotes/) is the authoritative
-checklist for the App Store Connect side (agreement status, product status, regional
-availability). It renders client-side and a plain fetch returns an empty shell, so
-point the developer at it rather than quoting it. Runtime purchase behavior stays in
-the report's "Not checked" list regardless.
+Store", under developer.apple.com/documentation/technotes/) walks the App Store
+Connect side in three checks: every product identifier in code matches a product
+created for the app with the same bundle identifier; each product's status is
+Approved (a product in "Developer Action Needed" or "Developer Removed from Sale" is
+not returned); and each product is available in the customer's storefront, with a
+note that availability can take time to propagate after approval. It covers nothing
+account-level, such as agreements. The page renders client-side and a plain fetch
+returns an empty shell, so point the developer at it and name the three checks
+rather than quoting it. Runtime purchase behavior stays in the report's "Not
+checked" list regardless.
 
 ## Metadata Rejected vs binary rejection
 
@@ -247,8 +263,9 @@ the report's "Not checked" list regardless.
   point by point how your app meets it", to submit "one appeal per rejected or removed
   app" covering every cited violation at once, and not to appeal "if you've addressed
   the issues App Review identified and resubmitted the app for review." Its model
-  appeal attaches "screenshots showing the feature working as described"; a screen
-  recording of the flow is the practical equivalent. If unrelated new issues surface
+  appeal says the demo account and setup steps "are included in the App Review
+  Information section of this submission, along with screenshots showing the feature
+  working as described"; a screen recording of the flow is the practical equivalent. If unrelated new issues surface
   during a bug-fix review, Apple may offer to let the current submission through and
   defer the new issues to the next one; that offer arrives in the message thread.
 
@@ -275,9 +292,15 @@ notice dated May 29, 2026); a second 4.3(a) rejection arriving with an account r
 warning (developer.apple.com/forums/thread/847013, September 2026); 66 apps removed
 at once under 4.3 for sharing a similar "binary, metadata, and/or concept"
 (developer.apple.com/forums/thread/845150, September 2026). Each is the developer's
-own account of events; the notices they quote cite the license agreement's conduct
-clause and name no specific submission. Treat them as the shape of the risk, not as
-thresholds.
+own account of events. The first two say the notice cited section 3.2(f) of the
+license agreement (the conduct clause; recent-changes.md); the other two were 4.3
+actions. None quotes its notice in full, and one names the app. Two earlier threads
+do paste the notice text, which says the conduct "can include, but are not limited
+to, inaccurate metadata describing your app or service" and "providing misleading
+responses in App Store Connect" (developer.apple.com/forums/thread/804267, October
+2025; developer.apple.com/forums/thread/767063, October 2024, where the notice
+referred to one dated binary submission). Treat all of them as the shape of the
+risk, not as thresholds.
 
 What this means for the audit's advice, when the developer says the app has already
 been rejected:
@@ -291,5 +314,9 @@ been rejected:
 - Do not delete the app record and recreate it under a new bundle identifier, and do
   not submit a rebuilt variant to escape a rejection history; the replacement-app case
   above is exactly that.
-- A first 4.3 (spam) or 1.1 (objectionable content) rejection deserves a stop and a
-  reply, not a quick fix-and-resubmit: both carry Program removal language.
+- A rejection whose own text names Program removal deserves a stop and a reply, not
+  a quick fix-and-resubmit: 4.3(b) ("Repeated submissions of this kind"), 2.3.1(b),
+  3.1.2(a), 5.6. An ordinary first rejection under 4.3(a) or 1.1 carries no such
+  language; fix what was cited, use the reply thread to confirm nothing else is
+  outstanding, and resubmit once. The full list of clauses with that language is in
+  rejection-taxonomy.md, account-level exposure.
