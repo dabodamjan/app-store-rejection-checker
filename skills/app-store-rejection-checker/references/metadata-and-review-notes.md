@@ -33,9 +33,11 @@ Contents:
   "promoting a false price, whether within or outside of the App Store" grounds for
   removal and account termination, so a price or discount shown in a screenshot or
   preview must match a price or offer actually configured. One that appears nowhere
-  in the product configuration and that the developer cannot back is a review-risk
-  finding; prices merely stale because storefront pricing changed are a
-  judgment-call. Placement: 2.3.7 says not to "pack any of your metadata with
+  in the product configuration is a question for the developer (judgment-call until
+  answered); it becomes a review-risk finding, with the account-level label, only
+  when the developer confirms it was never in force or no offer exists behind it.
+  Prices merely stale because storefront pricing changed are a judgment-call.
+  Placement: 2.3.7 says not to "pack any of your metadata with
   trademarked terms, popular app names, pricing information, or other irrelevant
   phrases just to game the system" and that "app names, subtitles, screenshots, and
   previews should not include prices, terms, or descriptions that are not specific
@@ -158,11 +160,13 @@ cannot infer from the binary:
   among the reasons reviews take longer, and separately says that when "App Review
   requested more information and there are no other issues to resolve" the developer
   can reply in App Store Connect instead of resubmitting; it does not tie the two
-  together. Developers do: a forum post quotes a Guideline 2.1 message saying the
-  app "has been submitted by a developer account that has a limited App Review
-  history" (developer.apple.com/forums/thread/849346, September 30, 2026), and a
-  GitHub issue (github.com/sharneng/spliit2go/issues/184, opened October 5, 2026)
-  shows the itemized request: a screen recording on a physical device running the
+  together. Developers do: a forum post quotes a message asking for additional
+  information, citing no guideline, which says the app "has been submitted by a
+  developer account that has a limited App Review history"
+  (developer.apple.com/forums/thread/849346, message dated September 30, 2026), and
+  a GitHub issue (github.com/sharneng/spliit2go/issues/184, opened October 5, 2026)
+  shows the same request under the label "Guideline 2.1 - Information Needed - New
+  App Submission" with its itemized list: a screen recording on a physical device running the
   latest OS from launch through the main flow (registration, account deletion,
   content reporting and blocking), the app's purpose and audience, setup steps and
   credentials, the external services it relies on, regional differences, and
@@ -188,28 +192,52 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
 Live text: "If you offer in-app purchases in your app, make sure they are complete,
 up-to-date, visible to the reviewer and functional. If any configured in-app purchase
 items cannot be found or reviewed in your app, explain the reason in your review
-notes." The reviewer buys in Apple's sandbox, and the recurring failure shape is a
-paywall that cannot load its products or a purchase that errors, reported back as a
-2.1(b) rejection ("unable to complete purchase") even though the same build works for
-the developer. RevenueCat's rejection guide puts it plainly: "Often times, purchases
-will work fine in Sandbox and Testflight, but App Store Review will not be able to
-fetch products" (revenuecat.com/docs/test-and-launch/app-store-rejections, undated,
-a vendor source).
+notes." Apple's help page on configuring in-app purchases for review
+(developer.apple.com/help/app-review/before-submitting-for-review/configure-in-app-purchases,
+fetched 2026-11-05) sets the environment: "App Review evaluates your In-App
+Purchases in the same sandbox environment you use for testing", and "In-App
+Purchases do not need prior approval from App Review to function in review." The
+same page makes one account-side item a hard condition: "The Account Holder must
+accept the Paid Apps Agreement in the Business section of App Store Connect, then
+confirm the agreement is in effect", because "Paid In-App Purchases won't function
+in review until this agreement is active." It also asks that storefront or device
+restrictions on products be stated "in the Notes field in the App Review
+Information section", and that the products be submitted "once they're in the Ready
+for Review state". The recurring failure shape is a paywall that cannot load its
+products or a purchase that errors, reported back as a 2.1(b) rejection ("unable to
+complete purchase") even though the same build works for the developer. RevenueCat's
+rejection guide: "Often times, purchases will work fine in Sandbox
+and Testflight, but App Store Review will not be able to fetch products"
+(revenuecat.com/docs/test-and-launch/app-store-rejections, undated, a vendor
+source).
 
 What the audit can check from the repo and the supplied metadata:
 
+- **Paid Apps Agreement active.** Not in the repo; ask, and report the answer as
+  developer-supplied. Apple's sandbox technote TN3186 ("Troubleshooting In-App
+  Purchases availability in the sandbox", under
+  developer.apple.com/documentation/technotes/, fetched 2026-11-05) says the
+  agreement "is in effect if App Store Connect shows an Active status in its
+  Agreements section", lists an unsigned, superseded, or expired agreement among the
+  reasons products do not load, and adds that banking and tax information must also
+  show Active. An expired membership needs the agreement accepted again.
 - **Products attached to the submission.** App Store Connect help
   (developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase):
   "The first consumable, non-consumable, auto-renewable subscription, and
   non-renewing subscription In-App Purchase of each type must be submitted with a new
   app version." A first-time product type that is not added to the version
   submission is invisible to the reviewer. Ask whether every product the paywall code
-  references is attached and in a submittable state; if the developer cannot say,
-  list it under "Not checked".
+  references is attached and in the Ready for Review state with a price and
+  localizations set (TN3186 names a missing price or localization as a reason a
+  product does not load); if the developer cannot say, list it under "Not checked".
 - **Product identifiers match.** The identifiers in code or in a `.storekit`
   configuration must match the ones configured in App Store Connect, and the bundle
-  identifier must match the app record; a mismatch loads nothing. Compare the code's
-  identifier list with what the developer supplies.
+  identifier must match the app record; a mismatch loads nothing. TN3186's other
+  causes are also identifier-side: a bundle ID "disabled for the In-App Purchase
+  capability in Certificates, Identifiers & Profiles", a wildcard App ID, or a
+  provisioning profile without the capability. Compare the code's identifier list
+  and the target's bundle identifier with what the developer supplies, and check the
+  entitlements and provisioning setup for the capability.
 - **Error handling the reviewer can read.** A generic "Something went wrong" on
   purchase failure gives the reviewer nothing to put in the rejection and the
   developer nothing to diagnose. Not a guideline finding; recommend surfacing the
@@ -218,17 +246,16 @@ What the audit can check from the repo and the supplied metadata:
   static-checks.md section 6: what the reviewer's fresh sandbox account shows on the
   paywall can differ from what the developer's account shows.
 
-Apple's technote TN3188 ("Troubleshooting In-App Purchases availability in the App
-Store", under developer.apple.com/documentation/technotes/) walks the App Store
-Connect side in three checks: every product identifier in code matches a product
-created for the app with the same bundle identifier; each product's status is
-Approved (a product in "Developer Action Needed" or "Developer Removed from Sale" is
-not returned); and each product is available in the customer's storefront, with a
-note that availability can take time to propagate after approval. It covers nothing
-account-level, such as agreements. The page renders client-side and a plain fetch
-returns an empty shell, so point the developer at it and name the three checks
-rather than quoting it. Runtime purchase behavior stays in the report's "Not
-checked" list regardless.
+Production availability after approval is a different question, and TN3188
+("Troubleshooting In-App Purchases availability in the App Store", same location)
+is its pointer, not a review check: it asks the developer to confirm each product's
+status is Approved once Apple has reviewed it, to update the product information on
+"Developer Action Needed" and to reselect countries or regions on "Developer Removed
+from Sale", to confirm storefront availability, and to allow time after approval
+before the products appear everywhere. Both technotes render client-side, so a plain
+fetch returns an empty shell; point the developer at them and name the checks rather
+than quoting them. Runtime purchase behavior stays in the report's "Not checked"
+list regardless.
 
 ## Metadata Rejected vs binary rejection
 

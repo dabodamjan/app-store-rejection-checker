@@ -78,6 +78,8 @@ When a finding depends on one of these surfaces, fetch the relevant page too:
 - Appeals: developer.apple.com/help/app-review/after-submitting-for-review/appeal-to-the-app-review-board
 - Submitting in-app purchases with a version:
   developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-in-app-purchase
+- In-app purchases in review (sandbox, Paid Apps Agreement):
+  developer.apple.com/help/app-review/before-submitting-for-review/configure-in-app-purchases
 
 Pages under developer.apple.com/documentation/ are rendered client-side; a plain fetch
 often returns an empty shell. When that happens, fall back to a web search for the
@@ -147,8 +149,9 @@ mechanically verifiable surface:
   loot box odds, and the paywall disclosure checklist: the offer and the price
   billed after it, the billed amount as the most prominent price, terms and privacy
   links in the app, the free-trial toggle (no published rule; subscription vendors
-  report rejections since January 2026), and price comparisons the developer cannot
-  back with a configured price or offer.
+  report rejections since January 2026), and price comparisons with no configured
+  price or offer behind them (questions for the developer; account-level only on
+  affirmative evidence).
 - Account deletion path when account creation exists.
 - App Tracking Transparency wiring vs tracking SDKs.
 - Analytics consent: analytics SDKs initialized collection-on with no consent flow.
