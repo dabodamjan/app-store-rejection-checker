@@ -27,7 +27,23 @@ Contents:
   static-checks.md section 13. 2.3.1(a) itself still makes misleading marketing,
   "whether within or outside of the App Store", grounds for removal.
 - **IAP disclosure (2.3.2)**: if items, levels, or subscriptions require additional
-  purchases, the description, screenshots, and previews must say so.
+  purchases, the description, screenshots, and previews must say so. The products'
+  own display names and descriptions are listing copy too: the subscriptions page
+  says they display "in the Apple In-App Purchases section of your app's product
+  page". A name that carries a discount or "sale" is a price claim; check it like a
+  price in a screenshot (next bullet, and static-checks.md section 6).
+- **Terms of Use and privacy policy links (5.1.1(i); subscriptions page)**: 5.1.1(i)
+  requires "a link to their privacy policy in the App Store Connect metadata field
+  and within the app". For auto-renewable subscriptions the subscriptions page
+  (developer.apple.com/app-store/subscriptions/) adds: "your app and App Store
+  metadata must include links to your Terms of Use and Privacy Policy." Apple's help
+  page on license agreements
+  (developer.apple.com/help/app-store-connect/manage-app-information/provide-a-custom-license-agreement)
+  says that with no custom EULA "the license agreement link isn't shown on your App
+  Store product page", so an app on the standard EULA shows no terms link unless
+  the description carries one. A subscription app with neither a custom EULA nor a
+  Terms of Use link in the description is a review-risk finding; ask which applies
+  when the metadata was not supplied. The in-app side is static-checks.md section 6.
 - **Prices in metadata (2.3.1(a), 2.3.7, 2.3.14)**: two different rules, and a
   matching configured price cures only the first. Accuracy: 2.3.1(a) makes
   "promoting a false price, whether within or outside of the App Store" grounds for
@@ -354,6 +370,21 @@ responses in App Store Connect" (developer.apple.com/forums/thread/804267, Octob
 2025; developer.apple.com/forums/thread/767063, October 2024, where the notice
 referred to one dated binary submission). Treat all of them as the shape of the
 risk, not as thresholds.
+
+Approval does not settle any of this. Section 6.9 of the license agreement
+(fetched 2026-11-24): "The fact that Apple may have reviewed, tested, approved or
+selected an Application will not relieve You of any of these responsibilities";
+section 4 lets Apple remove apps already on the store that do not comply with new
+or modified Program Requirements "at any time". The removal and termination
+sentences in 2.3.1(a), 2.5.19, 3.1.2(a), and 5.6 name no review stage, and Apple's
+May 2026 count of apps removed for changing after approval is in
+rejection-taxonomy.md. So a paywall or listing that passed review is not proof it
+complies; audit a live app's current state the same way. The other direction holds
+too: the text makes termination possible, not automatic. 2.3.1(a) and 2.5.19 say
+"grounds for", 3.1.2(a) says "may be removed", 5.6 ties removal to "Repeated"
+behavior, and the license agreement's section 11.2 makes termination effective
+"upon notice from Apple", so it runs through a notice Apple decides to send. Report the clause as written, never as a certain
+outcome of a first offence.
 
 What this means for the audit's advice, when the developer says the app has already
 been rejected:
