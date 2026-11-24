@@ -31,6 +31,7 @@ Contents:
 12. [Dynamic code and deprecated APIs](#12-dynamic-code-and-deprecated-apis)
 13. [Hidden, dormant, and undocumented features (2.5.19)](#13-hidden-dormant-and-undocumented-features-2519)
 14. [Ratings prompts (5.6.1, 3.2.2(x))](#14-ratings-prompts-561-322x)
+15. [Near-duplicate app targets (4.3(a))](#15-near-duplicate-app-targets-43a)
 
 ## 1. Permission purpose strings
 
@@ -250,11 +251,21 @@ period."
   copy rendered from the product's offer data; a hard-coded sentence is not a
   finding on its own, but it goes stale the moment the offer changes in App Store
   Connect, so note it.
-- **Billed amount most prominent** (review-risk): a per-month or per-day breakdown of
-  an annual price rendered larger than the annual amount, a price with no period
-  attached, or a primary button that sells the trial ("Try for free", "Continue with
-  free trial") while the billed amount sits small or elsewhere. The amount Apple will
-  charge, with its period, is the largest price on the screen.
+- **Billed amount most prominent** (review-risk): a per-month, per-week, or per-day
+  breakdown of an annual price rendered larger than the annual amount, a price with
+  no period attached, or a primary button that sells the trial ("Try for free",
+  "Continue with free trial") while the billed amount sits small or elsewhere. The
+  amount Apple will charge, with its period, is the largest price on the screen. The
+  subscriptions page allows a breakdown "equivalent to or a savings when compared to
+  weekly or monthly subscriptions" only "in a subordinate position and size to the
+  annual price", and gives the reason: "This ensures that people are not misled."
+  The same test covers wording: "cancel anytime" or "/month" copy next to an annual
+  product that bills the full year upfront, with the annual amount absent or
+  smaller, makes a yearly charge read as a monthly one. Read the copy against the
+  product's period (`subscriptionPeriod`, or the `.storekit` file), not only the
+  font sizes. "Cancel anytime" is not itself a finding; the subscriptions page asks
+  apps to make it "easy for people to access the system-provided management UI
+  where they can cancel".
 - **Trial copy that depends on an eligibility check** (judgment-call; an inference,
   so give the test): showing trial copy only to customers who are eligible is
   correct, and StoreKit's `isEligibleForIntroOffer` returns a plain Bool, so the
@@ -285,7 +296,9 @@ period."
   "accessible within Your Licensed Application"; links only on the website or in the
   store listing do not satisfy it. The agreement does not say where in the app. A
   link from the paywall itself is the recommended placement, since that is the
-  screen the reviewer judges, not a requirement.
+  screen the reviewer judges, not a requirement. The listing needs them too: "your
+  app and App Store metadata must include links to your Terms of Use and Privacy
+  Policy" (subscriptions page); metadata-and-review-notes.md has that check.
 - **False or tricky prices** (cite 2.3.1(a) and 5.6): 2.3.1(a) makes "promoting a
   false price, whether within or outside of the App Store" grounds for removal "and
   termination of your developer account"; 5.6 says apps should never "trick them
@@ -299,7 +312,16 @@ period."
   the price history); a permanent discount badge (ask what the higher price is and
   when it is in force); "today only" or countdown copy driven by a constant, a
   first-launch timestamp, or a remote flag (ask which configured offer it
-  reflects); price text that does not come from the product's own price data. An
+  reflects); price text that does not come from the product's own price data;
+  product display names or descriptions that carry a discount ("70% OFF Yearly",
+  "Sale", "Limited offer") in the `.storekit` file, in fastlane IAP metadata, or as
+  supplied by the developer (ask which standing price the discount is against).
+  Those names are not internal labels: the subscriptions page says a subscription's
+  name and description display "in the Apple In-App Purchases section of your app's
+  product page", asks for "a user-friendly, self-explanatory name", and says Apple
+  reuses them for win-back offers, "so be sure this information is accurate"; 2.3.2
+  requires a promoted purchase's "Display Name, Screenshot and Description" to be
+  "appropriate for a public audience". An
   unanswered question stays a judgment-call, reported as open; missing paperwork is
   not evidence of a false price. The finding becomes **review-risk** and
   account-level only on affirmative evidence that the presentation misleads: a
@@ -307,7 +329,29 @@ period."
   today" with no configured offer behind it, a "save" figure that matches no
   arithmetic on the configured prices. Then cite 3.1.2(a) as below. "Outside of the
   App Store" means screenshots, ads, and creative assets count too
-  (metadata-and-review-notes.md). One developer report ties an account termination
+  (metadata-and-review-notes.md).
+- **Countdown that restarts** (review-risk; cite 5.6): unlike the countdown question
+  above, this one the code can settle. A deadline computed from the current launch
+  or the current view appearance (`Date()` plus a fixed interval in `onAppear`,
+  `viewDidLoad`, or app start) with no persisted start time, or a persisted start
+  that the code resets on launch, shows every user a deadline that never arrives.
+  5.6 bars apps that "trick them into making unwanted purchases" and "any other
+  manipulative practices within or outside of the app"; a deadline that is not real
+  is that, whatever the price behind it. It earns the account-level label only
+  together with a false price on the evidence above; a real standing price under a
+  fake deadline is a 5.6 finding, not a false-price one. A countdown anchored to a
+  configured offer's end date, or to a first-launch time stored once and never
+  reset, is the question above, not this finding.
+- **Free features sold as paid** (judgment-call; review-risk when the code settles
+  it): a paywall feature list or a lock icon on something the code never gates.
+  Compare each paywall bullet and locked-looking control with the entitlement checks
+  in code: a feature listed as premium that every user already gets, or a "Pro"
+  badge on a screen with no entitlement check behind it, tells the customer they
+  must pay for what is free. 3.1.2(c) asks the app to "clearly describe what the
+  user will get for the price", and 5.6 bars tricking customers "into making
+  unwanted purchases". Gating that lives on a server cannot be read from the repo;
+  ask before calling a bullet free. The fix is to remove the bullet or gate the
+  feature, and to say plainly what stays free. One developer report ties an account termination
   for "misleading auto-renewable subscription practices" to a paywall whose owner
   later found a reference-price strikethrough and a hard-to-dismiss win-back screen
   (developer.apple.com/forums/thread/839800, July 2026; the developer's own
@@ -667,7 +711,40 @@ Static signals, each from source:
 - **Access or rewards gated on rating** (review-risk; 3.2.2(x)): an unlock, currency,
   or feature conditioned on tapping a rate action, or a flow that cannot be dismissed
   without one.
+- **Prompt before use** (a recommendation, not a guideline finding): a system review
+  request called at first launch, in onboarding, or on a launch counter of one. No
+  guideline sets the timing; Apple's Human Interface Guidelines
+  (developer.apple.com/design/human-interface-guidelines/ratings-and-reviews) do:
+  "Avoid asking for a rating on first launch or during onboarding, because people
+  haven't had enough time to gain a clear understanding of your app's value or form
+  an opinion", and "Ask for a rating only after people have demonstrated engagement
+  with your app or game." Put it in the report as a one-line recommendation with
+  that citation, never as a rejection risk; it becomes a finding only when it is
+  also one of the three patterns above.
 
 The circulating citation "5.6.3" for the prompt rule is wrong; the prompt sentence is
 in 5.6.1, and 5.6.3 is Discovery Fraud. Cite 5.6.1 for custom prompts, the Section 3
 introduction plus 5.6.3 for filtering, and 3.2.2(x) for forced actions.
+
+## 15. Near-duplicate app targets (4.3(a))
+
+Live text, 4.3(a): "Don't create multiple Bundle IDs of the same app (for example,
+submitting a separate map app for every city in the world instead of a single
+worldwide map that allows users to search any city)." It goes on: "If your app has
+different versions for specific locations, sports teams, universities, etc.,
+consider submitting a single app and providing the variations using in-app
+purchase."
+
+Static signal (review-risk): several app targets or schemes in one project that
+compile the same sources and differ only in bundle identifier, display name, icon,
+or a configuration constant (a city, a niche, a keyword theme), each meant for its
+own App Store record. Read each target's Compile Sources and build settings
+(`PRODUCT_BUNDLE_IDENTIFIER`, `INFOPLIST_KEY_CFBundleDisplayName`, per-target
+`.xcconfig` files). An app with its extensions, or targets for other platforms, is
+not this finding. One app per client built from a template falls under 4.2.6
+instead, which rejects template apps "unless they are submitted directly by the
+provider of the app's content" and names a single "picker" app as the alternative.
+A repository holds one project, so ask whether the developer runs other
+near-identical apps under separate records; the 66 apps removed at once under 4.3
+(metadata-and-review-notes.md, repeated rejections section) are what a portfolio of
+them can lead to. The fix is one app with the variations inside it.

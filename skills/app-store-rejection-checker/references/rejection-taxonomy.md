@@ -209,7 +209,8 @@ matches the clause's condition, not when it touches the clause's subject: a
 concealment signal (reviewer detection, obfuscation, a switch that unhides a feature
 after approval), a false price shown on affirmative evidence (a reference price the
 developer confirms was never charged, a countdown with no configured offer behind
-it), personal data shared with no consent step, or repetition the developer has
+it; a countdown that restarts on every launch is a 5.6 finding, and account-level
+only together with such a price), personal data shared with no consent step, or repetition the developer has
 confirmed. A price comparison the developer has not yet backed is an open question,
 not evidence. Dormant code with no concealment signal, an honest metadata mistake,
 or a paywall missing a disclosure are ordinary 2.5.19, 2.3, or 3.1.2 findings. Which
