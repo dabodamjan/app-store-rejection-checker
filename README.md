@@ -83,9 +83,9 @@ associated backend records, then re-run this audit.
 | Completeness signals (2.1) | demo account and review notes quality, placeholder content, in-app purchases the reviewer's sandbox can actually load |
 | Metadata accuracy (2.3.x) | description vs actual code, screenshots, creative assets, prices shown in metadata, category fit, name and keyword rules, age rating answers |
 | Hidden features (2.5.19) | reviewer detection, features shipped dark behind a switch, dormant code, obfuscated entry points, review-notes coverage of flags and experiments |
-| Payments (3.1.x) | digital goods outside IAP, restore purchases, trial and renewal disclosure, price prominence, trial toggles, false or tricky prices, loot box odds |
+| Payments (3.1.x) | digital goods outside IAP, restore purchases, trial and renewal disclosure, price prominence, trial toggles, false or tricky prices, countdowns that restart, free features sold as paid, Terms of Use links in app and listing, loot box odds |
 | Minimum functionality (4.2) | web-wrapper fingerprints, thin AI-wrapper patterns |
-| Differentiation (4.3) | saturated-category exposure, template output signals |
+| Differentiation (4.3) | saturated-category exposure, template output signals, one codebase shipped as several near-identical apps |
 | Login services (4.8) | social login without a privacy-protecting alternative |
 | Privacy (5.1.x) | purpose strings, privacy manifest, account deletion, ATT, third-party AI data sharing and what it means for privacy labels |
 | Developer conduct (5.6) | custom or gated ratings prompts, developer identity and support contact, what the termination clauses actually say |

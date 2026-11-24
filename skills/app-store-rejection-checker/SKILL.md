@@ -69,6 +69,11 @@ When a finding depends on one of these surfaces, fetch the relevant page too:
 - Developer Program License Agreement (Schedule 2 subscription disclosures; the
   conduct and termination clauses): developer.apple.com/support/terms/apple-developer-program-license-agreement/
   (long; fetch in chunks and quote the clause, not a summary)
+- Custom license agreement (standard EULA and the product page link):
+  developer.apple.com/help/app-store-connect/manage-app-information/provide-a-custom-license-agreement
+- Ratings prompt timing (Human Interface Guidelines; renders client-side, the text is
+  at developer.apple.com/tutorials/data/design/human-interface-guidelines/ratings-and-reviews.json):
+  developer.apple.com/design/human-interface-guidelines/ratings-and-reviews
 - App categories: developer.apple.com/app-store/categories/
 - Privacy label definitions ("collect"): developer.apple.com/app-store/app-privacy-details/
 - Regulated medical device declaration:
@@ -150,8 +155,10 @@ mechanically verifiable surface:
   billed after it, the billed amount as the most prominent price, terms and privacy
   links in the app, the free-trial toggle (no published rule; subscription vendors
   report rejections since January 2026), and price comparisons with no configured
-  price or offer behind them (questions for the developer; account-level only on
-  affirmative evidence).
+  price or offer behind them, discounts in product display names included
+  (questions for the developer; account-level only on affirmative evidence);
+  countdowns that restart on every launch; paywall bullets for features the code
+  never gates.
 - Account deletion path when account creation exists.
 - App Tracking Transparency wiring vs tracking SDKs.
 - Analytics consent: analytics SDKs initialized collection-on with no consent flow.
@@ -165,7 +172,10 @@ mechanically verifiable surface:
   unreachable screens still compiled in, obfuscated entry points.
 - Ratings prompts: custom rate-us UI instead of the system request (5.6.1), review
   gating that filters who sees the prompt (Section 3 introduction, 5.6.3), access or
-  rewards conditioned on rating (3.2.2(x)).
+  rewards conditioned on rating (3.2.2(x)); a prompt at first launch is a Human
+  Interface Guidelines recommendation, not a finding.
+- Near-duplicate app targets (4.3(a)): one codebase shipped as several apps that
+  differ only in name, bundle identifier, or a theme constant.
 
 These checks read build settings, plists, lockfiles, and source. Prefer evidence from
 files over inference; quote file paths and keys in findings.
@@ -229,12 +239,15 @@ plus recurring developer reports) with per-cluster confidence labels.
 
 Work through [references/metadata-and-review-notes.md](references/metadata-and-review-notes.md)
 for the App Store Connect surface: name and keyword rules (2.3.7), screenshot rules
-(2.3.3), IAP disclosure in metadata (2.3.2), prices shown in metadata (2.3.1(a)),
+(2.3.3), IAP disclosure in metadata (2.3.2), Terms of Use and privacy policy links
+in the listing (5.1.1(i) and the subscriptions page), prices shown in metadata
+(2.3.1(a)),
 category fit (2.3.5), age rating (2.3.6 and the 2025-2026 questionnaire overhaul),
 creative assets (2.3.14), developer identity and support contact (1.5, 5.6.2), review
 notes (2.3.1), demo credentials, and in-app purchase readiness for the reviewer's
 sandbox (2.1(b)). It also explains what "Metadata Rejected" means mechanically, what
-to expect from review timing, and why repeated rejections are an account-level matter.
+to expect from review timing, why repeated rejections are an account-level matter,
+and why an approved app is not thereby compliant.
 
 ## Step 6: report
 
