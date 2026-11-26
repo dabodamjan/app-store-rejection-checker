@@ -148,6 +148,23 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
 - Either way the submission lands in an "Unresolved Issues" state: remove the rejected
   item to let the rest proceed, or fix and resubmit, and reply in the same App Store
   Connect message thread.
+- **A hidden-functionality warning is not an ordinary rejection.** Developers in
+  2026 quote a Guideline 5.6 message saying "the app contains features that appear
+  to have been intentionally hidden during the review process", framed as "a pattern
+  of unusual behavior with the app that is commonly associated with fraudulent
+  activity" (developer.apple.com/forums/thread/848576, September 2026, the
+  developer's quotation). 5.6's live text says the account "will be terminated" for
+  conduct outside the Code of Conduct, and the guidelines' "After You Submit"
+  section says to "use App Store Connect to communicate directly with the App
+  Review team" about a rejection. Advice drawn from a single reported case, not
+  Apple policy: reply in the message thread and ask which feature, screen, or
+  configuration Apple means before submitting anything. Then fix what is named,
+  check every locale's metadata as well as the binary, and say in the reply what
+  was removed and why. In the case a developer reported in November 2026, a quick
+  fix-and-resubmit (remote config removed, new build sent) was followed two to
+  three days later by a termination notice; the developer's own view was that
+  pushing the update was probably the mistake. Details: recent-changes.md,
+  October 16, 2026 revision.
 
 ## Review timing, expedited review, appeals
 
