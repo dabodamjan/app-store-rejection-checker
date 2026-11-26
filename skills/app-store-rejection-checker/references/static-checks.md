@@ -439,8 +439,9 @@ Static signals, each from source, lockfiles, or build settings:
   the reviewer may land on must itself pass 3.1.2 and 2.1(b), and 2.3.1(a) wants it
   described. The fix is a review-notes line naming the variants and what
   each shows, plus confirming every variant is reachable in the submitted build.
-- **Leftover config from ended experiments** (judgment-call; review-risk when the
-  key still gates a screen or flow): a remote-config key, experiment name, or
+- **Leftover config from ended experiments** (judgment-call, as cleanup; review-risk
+  only when the screen or flow the key gates is not reachable by the reviewer or
+  not disclosed in review notes, per the variant checks above): a remote-config key, experiment name, or
   config fetch still in the binary, or still served by the backend, after the test
   it belonged to ended. Signals: keys in the defaults (`setDefaults`, bundled
   defaults plist) or `configValue(forKey:)` / `getValue` calls whose names mark a
