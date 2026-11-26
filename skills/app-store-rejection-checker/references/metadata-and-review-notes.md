@@ -64,6 +64,47 @@ Contents:
   app names used without permission or with no relevant content in the app), not
   every trademark reference (naming a service the app legitimately integrates with
   is not itself a violation).
+- **Localized names, subtitles, and keywords (2.3.7, 4.1(c), 5.2.1)**: run this for
+  every locale, not only the primary one. Sources: one `fastlane/metadata/<locale>/`
+  folder per locale (`name.txt`, `subtitle.txt`, `keywords.txt`; values in
+  `default/` apply where a locale has none), or the pasted per-locale fields from
+  Step 2. A localized name is normal: App Store Connect's field description is "The
+  localized name of your app", and nothing in the guidelines requires the same name
+  in every storefront. A translation or a generic descriptor ("Budget Tracker" in
+  the locale's language) is fine. The risk is what a locale adds that the primary
+  name does not have. For each locale, compare name and subtitle against the
+  primary locale and flag any word or phrase that is neither a translation nor a
+  generic description of what the app does, above all a company, product, or brand
+  name the app does not own. The finding tells the developer to look the phrase up
+  (is it a company, a product, a registered trademark?) and to trace where it came
+  from; ASO tool keyword suggestions are one source of such phrases. Citations,
+  from the live text: 2.3.7 bars packing metadata with "trademarked terms, popular
+  app names" and says subtitles should not "reference other apps"; 4.1(c): "You
+  cannot use another developer's icon, brand, or product name in your app's icon
+  or name, without approval from the developer"; 5.2.1: don't include "misleading,
+  false, or copycat representations, names, or metadata". A real integration is
+  not a blanket exemption. Ask three separate questions for each third-party name:
+  is it relevant to what the app does; does the developer have permission to use
+  it; and what does that field's own rule say. Name: 4.1(c) requires the other
+  developer's approval for their brand in an app name, integration or not.
+  Subtitle: 2.3.7 says subtitles should not reference other apps, integration or
+  not. Keywords: see below. A localized name that describes a different
+  kind of app (a trading or investing name on a budgeting app) is a 2.3 accuracy
+  finding even with no brand in it. Keywords: App Store Connect's keyword field
+  help says "Names of other apps or companies aren't allowed", and localized
+  keywords are searchable in every country or region where the App Store supports
+  that language (localize-app-information help page), so check each locale's list
+  for them too. Confidence, scored per field: app name, review-risk without stated
+  permission from the brand owner (4.1(c)), judgment-call with it, so ask the
+  developer about permission before scoring; subtitle, review-risk for any
+  reference to another app, permission or not (2.3.7); keywords, review-risk for
+  any other app's or company's name (keyword field help); judgment-call for a
+  descriptor that may overstate the app. One developer
+  reported in November 2026 that a single localized name carrying an unrelated
+  trading company's name was the reason Apple gave for upholding an account
+  termination (recent-changes.md, October 16, 2026 revision); that is one report,
+  not a stated rule, but it is why a third-party name in any locale belongs near
+  the top of the findings.
 - **All-audiences metadata (2.3.8)**: icons, screenshots, and previews must be
   appropriate for a 4+ audience even when the app is rated higher; "for kids" wording
   is reserved for the Kids Category.
@@ -115,6 +156,26 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
 - Either way the submission lands in an "Unresolved Issues" state: remove the rejected
   item to let the rest proceed, or fix and resubmit, and reply in the same App Store
   Connect message thread.
+- **A hidden-functionality warning is not an ordinary rejection.** Developers in
+  2026 quote a Guideline 5.6 message saying "the app contains features that appear
+  to have been intentionally hidden during the review process", framed as "a pattern
+  of unusual behavior with the app that is commonly associated with fraudulent
+  activity" (developer.apple.com/forums/thread/848576, September 2026, the
+  developer's quotation). 5.6's live text says the account "will be terminated" for
+  conduct outside the Code of Conduct, and the guidelines' "After You Submit"
+  section says to "use App Store Connect to communicate directly with the App
+  Review team" about a rejection. Advice, not Apple policy: when the message does
+  not name the feature, reply in the message thread and ask which feature, screen,
+  or configuration Apple means before sending a build. When it does name it, fix
+  it and say in the reply what changed and why. Either way, remediation does not
+  wait on Apple: check every locale's metadata as well as the binary and fix what
+  you find. In the case a developer reported in November 2026, a fix-and-resubmit
+  (remote config removed, new build sent) was followed two to three days later by
+  a termination notice. That sequence does not show the resubmission caused the
+  termination, and the same account also had misleading metadata. The developer's
+  view that pushing the update was the mistake is his own guess; Apple's later
+  questions were about the localized metadata and the config. Details:
+  recent-changes.md, October 16, 2026 revision.
 
 ## Review timing, expedited review, appeals
 

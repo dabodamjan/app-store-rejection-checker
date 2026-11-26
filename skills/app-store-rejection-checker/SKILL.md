@@ -85,8 +85,8 @@ Build a picture of what the app actually is before judging it:
 - Dependencies: `Podfile.lock`, `Package.resolved`, `Cartfile.resolved`, vendored SDKs.
 - Configuration: every `Info.plist` (plus `INFOPLIST_KEY_*` entries inside
   `project.pbxproj`), `*.entitlements`, `PrivacyInfo.xcprivacy`, `*.storekit`.
-- Store metadata in the repo, if present: `fastlane/metadata/`, marketing copy, release
-  notes.
+- Store metadata in the repo, if present: `fastlane/metadata/` (one folder per
+  locale; read every locale, not only the primary), marketing copy, release notes.
 - Read enough source to know what the app does: app entry point, main views or view
   controllers, networking layer, any payment or auth code.
 
@@ -101,7 +101,8 @@ targets, or shared entitlements carrying their keys), state in the report that o
 the iOS/iPadOS surface is audited and the other platforms are out of scope.
 
 If App Store Connect metadata is not in the repo, ask the user to paste the app name,
-subtitle, description, keywords, age rating, screenshots description, creative assets
+subtitle, description, keywords (name, subtitle, and keywords for every localization),
+age rating, screenshots description, creative assets
 (product page header and search result images or videos, if any are configured), and
 the App Review Information fields (notes and demo account). The metadata checks are
 real rejection surfaces; skipping them silently would understate risk. If the user
@@ -144,7 +145,9 @@ This is the part a linter cannot do. Read the code and the copy, then judge:
   implement? Do screenshots (as described) show the app in use, or splash/marketing art?
   If the listing uses creative assets (2.3.14, since October 2026), do they stay on
   the app's actual content or brand, with no pricing, no unverifiable claims, and
-  nothing a 4+ audience should not see?
+  nothing a 4+ audience should not see? Does any localized name or subtitle add a
+  third-party brand, or describe a different kind of app, compared with the primary
+  locale (metadata-and-review-notes.md, localized names)?
 - **2.5.19 hidden, dormant, or undocumented features** (moved out of 2.3.1 in
   October 2026, now with explicit account-termination language): is every feature in
   the binary reachable and documented for the reviewer? Look for debug switches live
