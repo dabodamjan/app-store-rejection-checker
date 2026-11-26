@@ -82,16 +82,22 @@ Contents:
   app names" and says subtitles should not "reference other apps"; 4.1(c): "You
   cannot use another developer's icon, brand, or product name in your app's icon
   or name, without approval from the developer"; 5.2.1: don't include "misleading,
-  false, or copycat representations, names, or metadata". The 2.3.7 trademark
-  calibration in the previous bullet holds here too: a service the app really
-  integrates with is not the finding. A localized name that describes a different
+  false, or copycat representations, names, or metadata". A real integration is
+  not a blanket exemption. Ask three separate questions for each third-party name:
+  is it relevant to what the app does; does the developer have permission to use
+  it; and what does that field's own rule say. Name: 4.1(c) requires the other
+  developer's approval for their brand in an app name, integration or not.
+  Subtitle: 2.3.7 says subtitles should not reference other apps, integration or
+  not. Keywords: see below. A localized name that describes a different
   kind of app (a trading or investing name on a budgeting app) is a 2.3 accuracy
   finding even with no brand in it. Keywords: App Store Connect's keyword field
   help says "Names of other apps or companies aren't allowed", and localized
   keywords are searchable in every country or region where the App Store supports
   that language (localize-app-information help page), so check each locale's list
-  for them too. Confidence: review-risk when the phrase is a third party's name;
-  judgment-call for a descriptor that may overstate the app. One developer
+  for them too. Confidence: ask the developer about permission before scoring;
+  review-risk when a third party's name is in the name or subtitle without stated
+  permission, or in keywords at all; judgment-call for a descriptor that may
+  overstate the app. One developer
   reported in November 2026 that a single localized name carrying an unrelated
   trading company's name was the reason Apple gave for upholding an account
   termination (recent-changes.md, October 16, 2026 revision); that is one report,
@@ -156,15 +162,18 @@ A broken login for the reviewer is functionally a completeness rejection. Verify
   developer's quotation). 5.6's live text says the account "will be terminated" for
   conduct outside the Code of Conduct, and the guidelines' "After You Submit"
   section says to "use App Store Connect to communicate directly with the App
-  Review team" about a rejection. Advice drawn from a single reported case, not
-  Apple policy: reply in the message thread and ask which feature, screen, or
-  configuration Apple means before submitting anything. Then fix what is named,
-  check every locale's metadata as well as the binary, and say in the reply what
-  was removed and why. In the case a developer reported in November 2026, a quick
-  fix-and-resubmit (remote config removed, new build sent) was followed two to
-  three days later by a termination notice; the developer's own view was that
-  pushing the update was probably the mistake. Details: recent-changes.md,
-  October 16, 2026 revision.
+  Review team" about a rejection. Advice, not Apple policy: when the message does
+  not name the feature, reply in the message thread and ask which feature, screen,
+  or configuration Apple means before sending a build. When it does name it, fix
+  it and say in the reply what changed and why. Either way, remediation does not
+  wait on Apple: check every locale's metadata as well as the binary and fix what
+  you find. In the case a developer reported in November 2026, a fix-and-resubmit
+  (remote config removed, new build sent) was followed two to three days later by
+  a termination notice. That sequence does not show the resubmission caused the
+  termination, and the same account also had misleading metadata. The developer's
+  view that pushing the update was the mistake is his own guess; Apple's later
+  questions were about the localized metadata and the config. Details:
+  recent-changes.md, October 16, 2026 revision.
 
 ## Review timing, expedited review, appeals
 
