@@ -117,9 +117,11 @@ every app removed at once, running trials stopped converting, weekly subscriptio
 stopped renewing. What this adds to the checks, all inference from one case: audit
 every locale's name and subtitle for third-party names (metadata-and-review-notes.md,
 localized names), remove config left over from ended experiments (static-checks.md
-section 13), and answer a hidden-functionality warning with questions before any
-resubmission (metadata-and-review-notes.md, the same section as the warning).
-Source: the developer's own public posts on X, read 2026-11-26:
+section 13), and answer a hidden-functionality warning in the message thread: ask
+which feature Apple means when the message does not name one, and when it does,
+fix it and say what changed (metadata-and-review-notes.md, the same section as the
+warning). Source: the developer's own public posts on X (posts on X may not open
+without an account), read 2026-11-26:
 https://x.com/jdluk87/status/2123947040522784818 (Apple's two questions),
 https://x.com/jdluk87/status/2124660615591637127 (final decision),
 https://x.com/jdluk87/status/2122030394413637977 (effect on revenue). No Apple
