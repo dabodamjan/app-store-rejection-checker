@@ -94,10 +94,12 @@ Contents:
   help says "Names of other apps or companies aren't allowed", and localized
   keywords are searchable in every country or region where the App Store supports
   that language (localize-app-information help page), so check each locale's list
-  for them too. Confidence: ask the developer about permission before scoring;
-  review-risk when a third party's name is in the name or subtitle without stated
-  permission, or in keywords at all; judgment-call for a descriptor that may
-  overstate the app. One developer
+  for them too. Confidence, scored per field: app name, review-risk without stated
+  permission from the brand owner (4.1(c)), judgment-call with it, so ask the
+  developer about permission before scoring; subtitle, review-risk for any
+  reference to another app, permission or not (2.3.7); keywords, review-risk for
+  any other app's or company's name (keyword field help); judgment-call for a
+  descriptor that may overstate the app. One developer
   reported in November 2026 that a single localized name carrying an unrelated
   trading company's name was the reason Apple gave for upholding an account
   termination (recent-changes.md, October 16, 2026 revision); that is one report,
