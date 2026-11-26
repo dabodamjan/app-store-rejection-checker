@@ -98,6 +98,28 @@ conceal harmful content that only becomes active once an app is approved." That 
 the enforcement posture behind 2.5.19: an app that conceals functionality during
 review and reveals it after approval is treated as fraud, not as a metadata nit.
 
+**Developer-reported, November 2026: a termination after a hidden-functionality
+warning.** One developer's public account, not confirmed by Apple. A finance app ran
+a remote-config A/B test on its onboarding screens. The developer received the
+Guideline 5.6 warning other developers quote in 2026 (features that "appear to have
+been intentionally hidden"; metadata-and-review-notes.md, Metadata Rejected vs
+binary rejection), removed the config, and resubmitted. Two to three days later a
+termination notice arrived, citing section 3.2(f) of the Developer Program License
+Agreement by the developer's account. On appeal Apple asked, with a 48-hour
+deadline, why the app's name in the Russian localization differed from the other
+storefronts and what the "suspicious remote config" was; the answers were ASO and an
+old configuration the latest binary no longer used. The termination stood, and the
+reason the developer reports was that the Russian title misled users: that one
+localization was named "<App Name>: Pocket Options", where the second half came
+from an ASO tool's keyword suggestion and is the name of an unrelated trading
+company, not on the App Store, that the developer never looked up. Reported effect:
+every app removed at once, running trials stopped converting, weekly subscriptions
+stopped renewing. What this adds to the checks, all inference from one case: audit
+every locale's name and subtitle for third-party names (metadata-and-review-notes.md,
+localized names), remove config left over from ended experiments (static-checks.md
+section 13), and answer a hidden-functionality warning with questions before any
+resubmission (metadata-and-review-notes.md, the same section as the warning).
+
 Separate but adjacent, from the October 5, 2026 iPhone Duo announcement: "Starting
 April 2027, any apps or games submitted will need to include screenshots for iPhone
 Duo." Not a guideline change, but a submission blocker from that date.
