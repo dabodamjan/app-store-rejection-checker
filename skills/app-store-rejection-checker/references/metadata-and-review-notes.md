@@ -64,6 +64,39 @@ Contents:
   app names used without permission or with no relevant content in the app), not
   every trademark reference (naming a service the app legitimately integrates with
   is not itself a violation).
+- **Localized names, subtitles, and keywords (2.3.7, 4.1(c), 5.2.1)**: run this for
+  every locale, not only the primary one. Sources: one `fastlane/metadata/<locale>/`
+  folder per locale (`name.txt`, `subtitle.txt`, `keywords.txt`; values in
+  `default/` apply where a locale has none), or the pasted per-locale fields from
+  Step 2. A localized name is normal: App Store Connect's field description is "The
+  localized name of your app", and nothing in the guidelines requires the same name
+  in every storefront. A translation or a generic descriptor ("Budget Tracker" in
+  the locale's language) is fine. The risk is what a locale adds that the primary
+  name does not have. For each locale, compare name and subtitle against the
+  primary locale and flag any word or phrase that is neither a translation nor a
+  generic description of what the app does, above all a company, product, or brand
+  name the app does not own. The finding tells the developer to look the phrase up
+  (is it a company, a product, a registered trademark?) and to trace where it came
+  from; ASO tool keyword suggestions are one source of such phrases. Citations,
+  from the live text: 2.3.7 bars packing metadata with "trademarked terms, popular
+  app names" and says subtitles should not "reference other apps"; 4.1(c): "You
+  cannot use another developer's icon, brand, or product name in your app's icon
+  or name, without approval from the developer"; 5.2.1: don't include "misleading,
+  false, or copycat representations, names, or metadata". The 2.3.7 trademark
+  calibration in the previous bullet holds here too: a service the app really
+  integrates with is not the finding. A localized name that describes a different
+  kind of app (a trading or investing name on a budgeting app) is a 2.3 accuracy
+  finding even with no brand in it. Keywords: App Store Connect's keyword field
+  help says "Names of other apps or companies aren't allowed", and localized
+  keywords are searchable in every country or region where the App Store supports
+  that language (localize-app-information help page), so check each locale's list
+  for them too. Confidence: review-risk when the phrase is a third party's name;
+  judgment-call for a descriptor that may overstate the app. One developer
+  reported in November 2026 that a single localized name carrying an unrelated
+  trading company's name was the reason Apple gave for upholding an account
+  termination (recent-changes.md, October 16, 2026 revision); that is one report,
+  not a stated rule, but it is why a third-party name in any locale belongs near
+  the top of the findings.
 - **All-audiences metadata (2.3.8)**: icons, screenshots, and previews must be
   appropriate for a 4+ audience even when the app is rated higher; "for kids" wording
   is reserved for the Kids Category.
