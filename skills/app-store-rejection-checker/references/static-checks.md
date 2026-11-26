@@ -439,6 +439,21 @@ Static signals, each from source, lockfiles, or build settings:
   the reviewer may land on must itself pass 3.1.2 and 2.1(b), and 2.3.1(a) wants it
   described. The fix is a review-notes line naming the variants and what
   each shows, plus confirming every variant is reachable in the submitted build.
+- **Leftover config from ended experiments** (judgment-call; review-risk when the
+  key still gates a screen or flow): a remote-config key, experiment name, or
+  config fetch still in the binary, or still served by the backend, after the test
+  it belonged to ended. Signals: keys in the defaults (`setDefaults`, bundled
+  defaults plist) or `configValue(forKey:)` / `getValue` calls whose names mark a
+  finished test (`onboarding_ab_v2`, `exp_`, `test_`, `variant_`); a config URL
+  or endpoint fetched at launch whose result no code path reads; flags whose every
+  branch but one is unreachable. Ask the developer which experiments are live and
+  compare. The text says nothing about leftover config; the case for removing it
+  is that 2.5.19 asks for functionality "clear to end users and App Review", and a
+  developer reported in November 2026 that Apple's appeal questions asked what a
+  "suspicious remote config" the app pulled was, after the experiment had ended
+  (recent-changes.md, October 16, 2026 revision). Fix: delete the key, its
+  defaults, the fetch, and the dead branches in the binary, and stop serving the
+  key from the backend. Unused config is removed, not left switched off.
 - **Regional or account gating** (judgment-call; review-risk when the gated branch
   is a whole screen or capability the reviewer cannot reach): feature branches on
   `Storefront.current`, `SKStorefront.countryCode`, `Locale.current.region`, or the
